@@ -17,10 +17,11 @@ class Caps {
         }
     }
 
-    handler(event) {
+    handler(received) {
         // Main handling code for CAP
         const self = this;
-        const servcaps = event.arguments[1].split(' ');
+        const servcaps = received.split(':')[-1].split(' ');
+        const arguments = received.
         let cap;
         if (event.arguments[0] == "LS") {
             // Don't blindly assume server supports our requested caps, even though server sends a CAP NACK response
@@ -38,7 +39,7 @@ class Caps {
                 if (!self.availablecaps) {
                     self.bot.send("CAP END");
                 } else {
-                    self.bot.send("CAP REQ :" + self.availablecaps.join(" "));
+                    self.bot.send(`CAP REQ :${self.availablecaps.join(" ")}`);
                 }
             }
         } else if (event.arguments[0] == "ACK") {
@@ -59,7 +60,7 @@ class Caps {
                 }
             }
             if (newcaps.length) {
-                self.bot.send("CAP REQ :" + " ".join(newcaps));
+                self.bot.send(`CAP REQ :${newcaps.join()}`);
             }
         } else if (event.arguments[0] == "DEL") {
             for (c in servcaps) {
@@ -75,8 +76,17 @@ class Caps {
         }
     }
 
-    run(bot) {
-        this.bot.listen(self.handler, "cap");
+    run() {
+        this.bot.events.on("cap", (received, raw) => {
+            class Event() {
+                constructor(received) {
+                    let args1;
+                    [received, args1] = received.split(" :", 1)
+                    this.arguments = received.split(" ")[-1].concat(args1)
+                }
+            }
+            this.handler(new Event(received));
+        });
         this.bot.send("CAP LS 302");
     }
 }
