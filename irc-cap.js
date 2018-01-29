@@ -1,6 +1,7 @@
 class Caps {
-    constructor(caps) {
+    constructor(bot, caps) {
         const self = this;
+        self.bot = bot;
         self.caps = caps || [];
         self.availablecaps = [];
         self.stringcaps = [];
@@ -17,16 +18,17 @@ class Caps {
     }
 
     handler(event) {
+        // Main handling code for CAP
         const self = this;
         const servcaps = event.arguments[1].split(' ');
         let cap;
         if (event.arguments[0] == "LS") {
+            // Don't blindly assume server supports our requested caps, even though server sends a CAP NACK response
             for (let c in servcaps) {
-                let cap = c.split("=")[0];
+                let [cap, args] = c.split("=");
                 if (cap in self.stringcaps) {
                     self.availablecaps.push(cap);
-                    if (c.find('=') != -1) {
-                        let args = c.split('=')[1];
+                    if (typeof args != undefined) {
                         self.args[cap] = args.split(',');
                     } else {
                         self.args[cap] = null;
@@ -41,7 +43,7 @@ class Caps {
             }
         } else if (event.arguments[0] == "ACK") {
             for (cap in self.caps) {
-                if (typeof cap.run != undefined) {
+                if (typeof cap != "string" && cap.run != undefined) {
                     if (cap.name in servcaps) {
                         cap.run(self.bot, args = self.args[cap.name]);
                     }
@@ -74,7 +76,6 @@ class Caps {
     }
 
     run(bot) {
-        this.bot = bot;
         this.bot.listen(self.handler, "cap");
         this.bot.send("CAP LS 302");
     }
