@@ -62,13 +62,7 @@ class bot extends core {
 
 		if (received[0] != ":") { this.events.emit(received[0], received, data) }
            	this.events.emit(received[1], received, data); // handle all numerics and commands
-	
-		if (received[3] == ":test"){
 
-		    console.log(received.slice(4, -1).join(" "));
-		    this.send("PRIVMSG ##athena :" + eval(received[4])); // this is sooo unsafe
-
-		}
 	
 	    }
         })
