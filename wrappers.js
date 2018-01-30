@@ -1,9 +1,15 @@
 class connection_wrapper {
-    constructor(irc) {
-        this.send = irc.send
-        this.reply = irc.reply
-        this.msg = irc.privmsg
-        this.privmsg = irc.privmsg
+    constructor(self) {
+        this.send = self.send;
+        this.msg = this.privmsg;
+    }
+    
+    reply(event, message) {
+        this.privmsg(event.target, message);
+    }
+    
+    privmsg(target, message) {
+        this.send(`PRIVMSG ${target} :${message}`);
     }
 
     ping() {
