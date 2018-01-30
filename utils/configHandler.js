@@ -23,9 +23,9 @@ class config_handler {
         fs.readFile(this.path, (error, contents) => {
 
             if (error) {
-                
+
                 console.log("[ERROR]", error)
-            
+
             }
             else {
 
@@ -33,7 +33,7 @@ class config_handler {
                 console.log("[CONFIG] Loaded config from", this.path)
 
                 return this.config
-            
+
             }
 
         })
@@ -62,4 +62,4 @@ class config_handler {
 
 }
 
-module.exports.config_handler = config_handler 
+module.exports.config_handler = config_handler
