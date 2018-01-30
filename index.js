@@ -24,7 +24,6 @@ class bot extends core {
         this.config_handler =  new config.config_handler(config_file_path); // Initalise a new object with the config file
         this.config_handler.load(true); // Load the config
         this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
-        new caps(this, config.caps).run()
 
 	// Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
 	this.state = {
@@ -36,6 +35,7 @@ class bot extends core {
         // TCP TODO: Wrap socket in TLS
         this.socket = socket.Socket();
 
+        this.caps = new caps(this)
     }
 
     connect () {
