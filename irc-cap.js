@@ -75,20 +75,6 @@ class Caps {
             }
         }
     }
-
-    run() {
-        this.bot.events.on("cap", (received, raw) => {
-            class Event() {
-                constructor(received) {
-                    let args1;
-                    [received, args1] = received.split(" :", 1)
-                    this.arguments = received.split(" ")[-1].concat(args1)
-                }
-            }
-            this.handler(new Event(received));
-        });
-        this.bot.send("CAP LS 302");
-    }
 }
 
 module.exports = Cap;
