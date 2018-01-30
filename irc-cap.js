@@ -1,8 +1,8 @@
 class Caps {
-    constructor(bot, caps) {
+    constructor(bot) {
         const self = this;
         self.bot = bot;
-        self.caps = caps || [];
+        self.caps = self.bot.config.caps || [];
         self.availablecaps = [];
         self.stringcaps = [];
         self.args = {};
