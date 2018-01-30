@@ -4,6 +4,7 @@ const events = require("events");
 
 const config = require("./utils/configHandler.js");
 const core = require("./core.js");
+const caps = require("./irc-caps.js");
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
 // Main Bot Class
@@ -34,6 +35,7 @@ class bot extends core {
         // TCP TODO: Wrap socket in TLS
         this.socket = socket.Socket();
 
+        this.caps = new caps(this)
     }
 
     connect () {
@@ -44,6 +46,7 @@ class bot extends core {
             // TODO: Move to auth module
             this.socket.write("NICK `Athena\r\n")
             this.socket.write("USER Athena Athena irc.freenode.net :Totally not Athena\r\n")
+            this.socket.write("CAP LS 302\r\n")
             
         })
 
