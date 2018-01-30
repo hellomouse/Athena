@@ -46,6 +46,7 @@ class bot extends core {
             // TODO: Move to auth module
             this.socket.write("NICK `Athena\r\n")
             this.socket.write("USER Athena Athena irc.freenode.net :Totally not Athena\r\n")
+            this.socket.write("CAP LS 302\r\n")
             
         })
 
