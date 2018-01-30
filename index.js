@@ -25,10 +25,10 @@ class bot extends core {
         this.config_handler.load(true); // Load the config
         this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
 
-	// Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
-	this.state = {
-	    "channels": {}
-	}    
+        // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
+        this.state = {
+            "channels": {}
+        }
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before the initalisation of the core class
 
@@ -47,27 +47,27 @@ class bot extends core {
             this.socket.write("NICK `Athena\r\n")
             this.socket.write("USER Athena Athena irc.freenode.net :Totally not Athena\r\n")
             this.socket.write("CAP LS 302\r\n")
-            
+
         })
 
         this.socket.on('data', (data) => {
 
-	    let parsed = data.toString().split("\r\n");
-	    for (let i=0; i<parsed.length;i++){
+            let parsed = data.toString().split("\r\n");
+            for (let i=0; i < parsed.length ;i++) {
 
-		let data = parsed[i];
+                let data = parsed[i];
 
-		if (!data){ continue } // Get rid of pesky new lines
+                if (!data){ continue } // Get rid of pesky new lines
 
-            	console.log("[RECV]",  data);
+                console.log("[RECV]",  data);
 
-            	let received = data.toString().split(" "); // Easier to parse
+                let received = data.toString().split(" "); // Easier to parse
 
-		if (received[0] != ":") { this.events.emit(received[0], received, data) }
-           	this.events.emit(received[1], received, data); // handle all numerics and commands
+                if (received[0] != ":") { this.events.emit(received[0], received, data) }
+                else { this.events.emit(received[1], received, data); } // handle all numerics and commands
 
-	
-	    }
+
+            }
         })
 
     }
