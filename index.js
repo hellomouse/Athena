@@ -4,6 +4,7 @@ const events = require("events");
 
 const config = require("./utils/configHandler.js");
 const core = require("./core.js");
+const wrappers = require("./wrappers.js");
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
 // Main Bot Class
@@ -17,6 +18,7 @@ class bot extends core {
 
         // Event handler
         this.events =  new events.EventEmitter();
+        this.irc = new wrappers(this);
 
         // Config
         this.config_file_path = this.config_file_path;
@@ -24,10 +26,10 @@ class bot extends core {
         this.config_handler.load(true); // Load the config
         this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
 
-	// Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
-	this.state = {
-	    "channels": {}
-	}    
+        // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
+        this.state = {
+            "channels": {}
+        }    
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before the initalisation of the core class
 
