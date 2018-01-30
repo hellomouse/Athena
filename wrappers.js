@@ -3,11 +3,11 @@ class connection_wrapper {
         this.send = self.send;
         this.msg = this.privmsg;
     }
-    
+
     reply(event, message) {
         this.privmsg(event.target, message);
     }
-    
+
     privmsg(target, message) {
         this.send(`PRIVMSG ${target} :${message}`);
     }
