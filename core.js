@@ -53,7 +53,7 @@ class core {
         })
 
         this.on_cap = this.bot.events.on("cap", (received, raw) => {
-            class Event() {
+            class Event {
                 constructor(received) {
                     let args1;
                     [received, args1] = received.split(" :", 1);
