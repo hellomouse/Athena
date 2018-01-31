@@ -1,4 +1,5 @@
 const socket = require("net");
+const tls = require("tls");
 const fs = require("fs");
 const events = require("events");
 
@@ -32,8 +33,8 @@ class bot extends core {
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before the initalisation of the core class
 
-        // TCP TODO: Wrap socket in TLS
-        this.socket = socket.Socket();
+        this.socket = new socket.Socket();
+        if (config.ssl) this.socket = new tls.TLSSocket(this.socket, {"cert": config.sasl.cert, "key": config.sasl.key, "passphrase": config.sasl.key_passphrase})
 
         this.caps = new caps(this)
     }
