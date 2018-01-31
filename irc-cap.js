@@ -25,12 +25,11 @@ class Caps {
 
     }
 
-    handler (received) {
+    handler (event) {
 
         // Main handling code for CAP
         const self = this;
-        const servcaps = received.split(':')[-1].split(' ');
-        const arguments = received.
+        const servcaps = event.arguments[1];
         let cap;
 
         if (event.arguments[0] == "LS") {
@@ -44,7 +43,7 @@ class Caps {
 
                     self.availablecaps.push(cap);
 
-                    if (typeof args != undefined) {
+                    if (typeof args !== undefined) {
 
                         self.args[cap] = args.split(',');
 
@@ -72,11 +71,11 @@ class Caps {
 
             for (cap in self.caps) {
 
-                if (typeof cap != "string" && cap.run != undefined) {
+                if (typeof cap != "string" && cap.run !== undefined) {
 
                     if (cap.name in servcaps) {
 
-                        cap.run(self.bot, args = self.args[cap.name]);
+                        cap.run(self.bot, self.args[cap.name]);
 
                     }
 
@@ -107,20 +106,21 @@ class Caps {
 
         } else if (event.arguments[0] == "DEL") {
 
-            for (c in servcaps) {
+            for (let c in servcaps) {
 
                 if (c in self.availablecaps) {
 
-                    self.availablecaps.remove(c);
+                    let index = self.availablecaps.indexOf(c);
+                    self.availablecaps.splice(index, 1);
 
                 }
 
                 if (c in self.stringcaps) {
 
-                    let index = self.stringcaps.index(c);
+                    let index = self.stringcaps.indexOf(c);
 
-                    self.stringcaps.remove(c);
-                    self.caps.splice(index, 1)
+                    self.stringcaps.splice(index, 1);
+                    self.caps.splice(index, 1);
 
                 }
 
