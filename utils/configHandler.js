@@ -12,7 +12,7 @@ class config_handler {
     async load (sync) {
 
         // We would normally load config once when bot is run
-        if (sync){
+        if (sync) {
 
             this.config = JSON.parse(fs.readFileSync(this.path));
             return this.config;
@@ -26,8 +26,7 @@ class config_handler {
 
                 console.log("[ERROR]", error);
 
-            }
-            else {
+            } else {
 
                 this.config = JSON.parse(contents)
                 console.log("[CONFIG] Loaded config from", this.path);
@@ -49,8 +48,7 @@ class config_handler {
 
                 console.log("[CONFIG] ERROR: Failed saving - ", error);
 
-            }
-            else {
+            } else {
 
                 console.log("[CONFIG] Saved!");
 
