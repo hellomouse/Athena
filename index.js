@@ -5,6 +5,7 @@ const events = require("events");
 
 const config = require("./utils/configHandler.js");
 const core = require("./core.js");
+const wrappers = require('./wrappers.js');
 const caps = require("./irc-caps.js");
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
@@ -19,6 +20,7 @@ class bot extends core {
 
         // Event handler
         this.events =  new events.EventEmitter();
+        this.irc = new wrappers(this);
 
         // Config
         this.config_file_path = this.config_file_path;
