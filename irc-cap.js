@@ -77,4 +77,4 @@ class Caps {
     }
 }
 
-module.exports = Cap;
+module.exports = Caps;
