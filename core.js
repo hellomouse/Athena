@@ -52,7 +52,7 @@ class core {
 
         });
 
-        this.on_cap = this.bot.events.on("cap", (received, raw) => {
+        this.on_cap = this.events.on("cap", (received, raw) => {
             class Event {
                 constructor (received) {
 

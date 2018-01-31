@@ -97,3 +97,5 @@ class connection_wrapper {
         this.privmsg(user, `\x01${message}\x01\x01`)
     }
 }
+
+module.exports = connection_wrapper
