@@ -16,28 +16,28 @@ class core {
             // Respond to ping event
             this.send("PONG");
 
-        })
+        });
 
         this.on_nick_in_use = this.events.on("433", (received, raw) => {
 
             this.nickname = this.nickname.concat("_");
-            this.send("NICK " + this.nickname);
+            this.send(`NICK ${this.nickname}`);
 
-        })
+        });
 
         this.on_nick_in_use = this.events.on("001", (received, raw) => {
 
             Object.keys(this.config["channels"]).forEach((channel) => {
 
-                this.send("JOIN " + channel);
+                this.send(`JOIN ${channel}`);
 
-            })
+            });
 
-        })
+        });
 
         this.on_name = this.events.on("353", (received, raw) => {
 
-            let channel = received[4]
+            let channel = received[4];
             let users = raw.split(":")[2].split(" ");
             if (!this.state["channels"].hasOwnProperty(channel)) {
 
@@ -50,24 +50,29 @@ class core {
 
             }
 
-        })
+        });
 
         this.on_cap = this.bot.events.on("cap", (received, raw) => {
             class Event {
-                constructor(received) {
+                constructor (received) {
+
                     let args1;
                     [received, args1] = received.split(" :", 1);
                     this.arguments = received.split(" ")[-1].concat(args1);
+
                 }
+
             }
+
             this.caps.handler(new Event(raw));
+
         });
 
     }
 
     send (message) {
 
-        this.socket.write(message + "\r\n");
+        this.socket.write(`${message}\r\n`);
         console.log("[SENT]", message);
 
     }
