@@ -54,13 +54,18 @@ class core {
 
         this.on_cap = this.bot.events.on("cap", (received, raw) => {
             class Event {
-                constructor(received) {
+                constructor (received) {
+
                     let args1;
                     [received, args1] = received.split(" :", 1);
                     this.arguments = received.split(" ")[-1].concat(args1);
+
                 }
+
             }
+
             this.caps.handler(new Event(raw));
+
         });
 
     }
