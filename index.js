@@ -16,11 +16,14 @@ class bot extends core {
 
         super();
 
+        this.irc = new wrappers(this);
         this.config_file_path = config_file_path;
+
+        this.socket = new socket.Socket();
+        if (config.ssl) this.socket = new tls.TLSSocket(this.socket, {"cert": config.sasl.cert, "key": config.sasl.key, "passphrase": config.sasl.key_passphrase})
 
         // Event handler
         this.events =  new events.EventEmitter();
-        this.irc = new wrappers(this);
 
         // Config
         this.config_file_path = this.config_file_path;
@@ -34,9 +37,6 @@ class bot extends core {
         }
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before the initalisation of the core class
-
-        this.socket = new socket.Socket();
-        if (config.ssl) this.socket = new tls.TLSSocket(this.socket, {"cert": config.sasl.cert, "key": config.sasl.key, "passphrase": config.sasl.key_passphrase})
 
         this.caps = new caps(this)
     }

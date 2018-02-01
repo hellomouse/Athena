@@ -1,5 +1,6 @@
 class connection_wrapper {
     constructor(self) {
+        this.bot = self; // We're not extending this class so this is a solution
         this.send = self.send;
         this.msg = this.privmsg;
     }
@@ -9,88 +10,88 @@ class connection_wrapper {
     }
 
     privmsg(target, message) {
-        this.send(`PRIVMSG ${target} :${message}`);
+        this.bot.send(`PRIVMSG ${target} :${message}`);
     }
 
     ping() {
-        this.send(`PING :${(new Date()).getTime()}`);
+        this.bot.send(`PING :${(new Date()).getTime()}`);
     }
 
     part(chan) {
-        this.send(`PART ${chan}`)
+        this.bot.send(`PART ${chan}`)
     }
 
     nick(nick) {
-        this.send(`NICK ${nick}`)
+        this.bot.send(`NICK ${nick}`)
     }
 
     join(chan, key) {
         if (typeof key == "string") {
-            this.send(`JOIN ${chan} ${key}`)
+            this.bot.send(`JOIN ${chan} ${key}`)
         } else {
-            this.send(`JOIN ${chan}`)
+            this.bot.send(`JOIN ${chan}`)
         }
     }
 
     invite(chan, user) {
-        this.send(`INVITE ${user} ${chan}`)
+        this.bot.send(`INVITE ${user} ${chan}`)
     }
 
     action(channel, message) {
-        this.send(`PRIVMSG ${channel} :\x01ACTION ${message}\x01`)
+        this.bot.send(`PRIVMSG ${channel} :\x01ACTION ${message}\x01`)
     }
 
     kick(channel, user, message) {
         user = user.replace(" ", "").replace(":", "")
-        this.send(`KICK ${channel} ${user} :${message}`)
+        this.bot.send(`KICK ${channel} ${user} :${message}`)
     }
 
     remove(channel, user, message) {
-        this.send(`REMOVE ${channel} ${user} :${message}`)
+        this.bot.send(`REMOVE ${channel} ${user} :${message}`)
     }
 
     op(channel, nick) {
-        this.send(`MODE ${channel} +o ${nick}`)
+        this.bot.send(`MODE ${channel} +o ${nick}`)
     }
 
     deop(channel, nick) {
-        this.send(`MODE ${channel} -o ${nick}`)
+        this.bot.send(`MODE ${channel} -o ${nick}`)
     }
 
     ban(channel, nick) {
-        this.send(`MODE ${channel} +b ${nick}`)
+        this.bot.send(`MODE ${channel} +b ${nick}`)
     }
 
     unban(channel, nick) {
-        this.send(`MODE ${channel} -b ${nick}`)
+        this.bot.send(`MODE ${channel} -b ${nick}`)
     }
 
     quiet(channel, nick) {
-        this.send(`MODE ${channel} +q ${nick}`)
+        this.bot.send(`MODE ${channel} +q ${nick}`)
     }
 
     unquiet(channel, nick) {
-        this.send(`MODE ${channel} -q ${nick}`)
+        this.bot.send(`MODE ${channel} -q ${nick}`)
     }
 
     unvoice(channel, nick) {
-        this.send(`MODE ${channel} -v ${nick}`)
+        this.bot.send(`MODE ${channel} -v ${nick}`)
     }
 
     voice(channel, nick) {
-        this.send(`MODE ${channel} +v ${nick}`)
+        this.bot.send(`MODE ${channel} +v ${nick}`)
     }
 
     mode(channel, nick, mode) {
-        this.send(`MODE ${channel} ${mode} ${nick}`)
+        this.bot.send(`MODE ${channel} ${mode} ${nick}`)
     }
 
     notice(user, message) {
-        this.send(`NOTICE ${user} :${message}`)
+        this.bot.send(`NOTICE ${user} :${message}`)
     }
 
     quit(message) {
-        this.send(`QUIT :${message}`)
+        this.bot.send(`QUIT :${message}`)
     }
 
     ctcp(user, message) {
