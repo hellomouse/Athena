@@ -66,8 +66,13 @@ class bot extends core {
 
                 let received = data.toString().split(" "); // Easier to parse
 
-                if (received[0] != ":") { this.events.emit(received[0], received, data) }
-                else { this.events.emit(received[1], received, data); } // handle all numerics and commands
+                if (received[0].startsWith(":")) {
+                    // handle all numerics and commands
+                    this.events.emit(received[1], received, data)
+                } else {
+                    // Handle PING
+                    this.events.emit(received[0], received, data);
+                }
 
 
             }
