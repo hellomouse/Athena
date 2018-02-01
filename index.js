@@ -47,9 +47,9 @@ class bot extends core {
             console.log('Connected');
 
             // TODO: Move to auth module
-            this.socket.write("NICK `Athena\r\n")
-            this.socket.write("USER Athena Athena irc.freenode.net :Totally not Athena\r\n")
-            this.socket.write("CAP LS 302\r\n")
+            this.send("NICK `Athena")
+            this.send("USER Athena Athena irc.freenode.net :Totally not Athena")
+            this.send("CAP LS")
 
         })
 
@@ -66,8 +66,13 @@ class bot extends core {
 
                 let received = data.toString().split(" "); // Easier to parse
 
-                if (received[0] != ":") { this.events.emit(received[0], received, data) }
-                else { this.events.emit(received[1], received, data); } // handle all numerics and commands
+                if (received[0].startsWith(":")) {
+                    // handle all numerics and commands
+                    this.events.emit(received[1], received, data)
+                } else {
+                    // Handle PING
+                    this.events.emit(received[0], received, data);
+                }
 
 
             }

@@ -15,6 +15,12 @@ class config_handler {
         if (sync) {
 
             this.config = JSON.parse(fs.readFileSync(this.path));
+            if (this.config.sasl.cert) {
+                this.config.sasl.cert = fs.readFileSync(this.config.sasl.cert)
+            }
+            if (this.config.sasl.key) {
+                this.config.sasl.key = fs.readFileSync(this.config.sasl.key)
+            }
             return this.config;
 
         }
@@ -29,6 +35,28 @@ class config_handler {
             } else {
 
                 this.config = JSON.parse(contents)
+                if (this.config.sasl.cert) {
+                    let cert;
+                    fs.readFile(this.config.sasl.cert, (error, contents) => {
+                        if (error) {
+                            console.error("[ERROR]", error)
+                        } else {
+                            cert = contents;
+                        }
+                    });
+                    this.config.sasl.cert = cert
+                }
+                if (this.config.sasl.key) {
+                    let key;
+                    fs.readFile(this.config.sasl.key, (error, contents) => {
+                        if (error) {
+                            console.error("[ERROR]", error)
+                        } else {
+                            key = contents;
+                        }
+                    });
+                    this.config.sasl.key = key
+                }
                 console.log("[CONFIG] Loaded config from", this.path);
 
                 return this.config;

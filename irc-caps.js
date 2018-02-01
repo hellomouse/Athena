@@ -54,16 +54,15 @@ class Caps {
                     }
 
                 }
+            }
 
-                if (!self.availablecaps) {
+            if (!self.availablecaps.length) {
 
-                    self.bot.send("CAP END");
+                self.bot.send("CAP END");
 
-                } else {
+            } else {
 
-                    self.bot.send(`CAP REQ :${self.availablecaps.join(" ")}`);
-
-                }
+                self.bot.send(`CAP REQ :${self.availablecaps.join(" ")}`);
 
             }
 
