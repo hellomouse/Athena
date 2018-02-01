@@ -52,13 +52,13 @@ class core {
 
         });
 
-        this.on_cap = this.events.on("cap", (received, raw) => {
+        this.on_cap = this.events.on("CAP", (received, raw) => {
             class Event {
                 constructor (received) {
 
                     let args1;
                     [received, args1] = received.split(" :", 1);
-                    this.arguments = received.split(" ")[-1].concat(args1);
+                    this.arguments = received.split(" ").splice(-1, 1).concat(args1);
 
                 }
 
