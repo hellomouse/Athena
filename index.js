@@ -47,9 +47,9 @@ class bot extends core {
             console.log('Connected');
 
             // TODO: Move to auth module
-            this.socket.write("NICK `Athena\r\n")
-            this.socket.write("USER Athena Athena irc.freenode.net :Totally not Athena\r\n")
-            this.socket.write("CAP LS 302\r\n")
+            this.send("NICK `Athena")
+            this.send("USER Athena Athena irc.freenode.net :Totally not Athena")
+            this.send("CAP LS")
 
         })
 
