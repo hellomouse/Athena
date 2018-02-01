@@ -25,7 +25,7 @@ class core {
 
         });
 
-        this.on_nick_in_use = this.events.on("001", (received, raw) => {
+        this.on_welcome = this.events.on("001", (received, raw) => {
 
             Object.keys(this.config["channels"]).forEach((channel) => {
 
