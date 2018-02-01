@@ -3,6 +3,15 @@
     "nickname": "`Athena",
     "channels": {
         "##Athena": {}
-    }
+    },
+    "caps": [],
+    "sasl": {
+        "username": "",
+        "password": "",
+        "cert": "",
+        "key": "",
+        "key_passphrase": ""
+    },
+    "ssl": false
 
 }
