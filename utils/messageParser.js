@@ -7,12 +7,12 @@ function parser (raw) {
     var argument2 = ""; // In commands such as MODE and PRIVMSG argument are after :
     // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
     //                                          Command ^   Channel ^    ^ argument!!!
-    let raw; // Variable for raw message parsing in code
+    let raw_msg = this.raw; // Variable for raw message parsing in code
 
     // IRCv3.2 Message Tags
-    if (this.raw.startsWith("@")) {
+    if (raw_msg.startsWith("@")) {
 
-        [tags, raw] = this.raw.split(" ", 1) // Split raw into tags and other raw...
+        [tags, raw_msg] = this.raw.split(" ", 1) // Split raw into tags and other raw...
         tags = tags.replace("@", "", 1) // Let's find the tags!
         tags = tags.split(";"); // Here are the tags!
 
@@ -33,9 +33,9 @@ function parser (raw) {
         }
     }
 
-    if (raw.startsWith(" :")) { // Check to see if there are arguments
+    if (raw_msg.startsWith(" :")) { // Check to see if there are arguments
 
-        [raw, argument] = raw.split(" :", 2);
+        [raw_msg, argument] = raw_msg.split(" :", 2);
         // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
         //        ^-------------------------------------------------------^  ^-----------------------------------^
         //          this.raw ^                                                            argument ^
@@ -43,36 +43,36 @@ function parser (raw) {
 
     }
 
-    if (raw.startsWith(":")) {
+    if (raw_msg.startsWith(":")) {
 
-        raw = raw.slice(1, -1).split(" "); // If the message starts With : then remove it then split it into a list | +1
-        this.source = new user(raw[0]);
-        this.command = raw[1]
-        this.arguments = raw.slice(3);
+        raw_msg = raw_msg.slice(1, -1).split(" "); // If the message starts With : then remove it then split it into a list | +1
+        this.source = new user(raw_msg[0]);
+        this.command = raw_msg[1]
+        this.arguments = raw_msg.slice(3);
         this.args = this.arguments; // Alias to this.arguments
 
-        if (raw.length > 2 && this.command != "ACCOUNT") {
+        if (raw_msg.length > 2 && this.command != "ACCOUNT") {
 
-            this.target = raw[2];
+            this.target = raw_msg[2];
 
         }
 
-        if (raw.length > 3) {
+        if (raw_msg.length > 3) {
 
-            argument2 = raw.slice(3).join(" ");
+            argument2 = raw_msg.slice(3).join(" ");
 
         }
 
         if (this.command == "ACCOUNT") {
 
-            argument2 = raw[2];
+            argument2 = raw_msg[2];
 
         }
 
     } else {
 
-        raw = raw.split(" ")
-        this.command = raw[0];
+        raw_msg = raw_msg.split(" ")
+        this.command = raw_msg[0];
 
         if (argument.length) {
 
