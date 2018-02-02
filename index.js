@@ -1,12 +1,13 @@
+const events = require("events");
 const socket = require("net");
 const tls = require("tls");
 const fs = require("fs");
-const events = require("events");
 
-const config = require("./utils/configHandler.js");
-const core = require("./core.js");
-const wrappers = require('./wrappers.js');
-const caps = require("./irc-caps.js");
+const config = require("./utils/configHandler");
+const parser = require("./utils/messageParser");
+const wrappers = require('./wrappers');
+const caps = require("./irc-caps");
+const core = require("./core");
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
 // Main Bot Class
@@ -61,6 +62,12 @@ class bot extends core {
                 let data = parsed[i];
 
                 if (!data){ continue } // Get rid of pesky new lines
+
+                let parse = new parser(data);
+                if (parse.user == undefined ){
+                    parse.user = {}
+                }
+                console.log("Command:", parse.command, "| Userhost:", parse.user.userhost, "| Nick", parse.user.nick, "| Host", parse.user.host, "| Ident", parse.user.ident, "| Target:", parse.target, "| Args:", parse.args);
 
                 console.log("[RECV]",  data);
 
