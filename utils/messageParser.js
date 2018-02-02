@@ -1,12 +1,13 @@
 function parser (raw) {
     this.tags = []
-    this.raw = raw.toString(); // Raw string sent from server
+    this.raw = raw.toString(); // Raw string sent from server | This is a const, it should never be changed
 
     this.arguments = [];
     var argument = "";
     var argument2 = ""; // In commands such as MODE and PRIVMSG argument are after :
     // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
     //                                          Command ^   Channel ^    ^ argument!!!
+    let raw; // Variable for raw message parsing in code
 
     // IRCv3.2 Message Tags
     if (this.raw.startsWith("@")) {
@@ -32,9 +33,9 @@ function parser (raw) {
         }
     }
 
-    if (this.raw.indexOf(" :") > -1) { // Check to see if there are arguments
+    if (raw.startsWith(" :")) { // Check to see if there are arguments
 
-        [this.raw, argument] = this.raw.split(" :", 2);
+        [raw, argument] = raw.split(" :", 2);
         // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
         //        ^-------------------------------------------------------^  ^-----------------------------------^
         //          this.raw ^                                                            argument ^
@@ -42,23 +43,23 @@ function parser (raw) {
 
     }
 
-    if (this.raw.startsWith(":")) {
+    if (raw.startsWith(":")) {
 
-        this.raw = this.raw.slice(1, -1).split(" "); // If the message starts With : then remove it then split it into a list | +1
-        this.source = new user(this.raw[0]);
-        this.command = this.raw[1]
-        this.arguments = this.raw.slice(3);
+        raw = raw.slice(1, -1).split(" "); // If the message starts With : then remove it then split it into a list | +1
+        this.source = new user(raw[0]);
+        this.command = raw[1]
+        this.arguments = raw.slice(3);
         this.args = this.arguments; // Alias to this.arguments
 
-        if (this.raw.length > 2 && this.command != "ACCOUNT") {
+        if (raw.length > 2 && this.command != "ACCOUNT") {
 
-            this.target = this.raw[2];
+            this.target = raw[2];
 
         }
 
-        if (this.raw.length > 3) {
+        if (raw.length > 3) {
 
-            argument2 = this.raw.slice(3).join(" ");
+            argument2 = raw.slice(3).join(" ");
 
         }
 
@@ -70,8 +71,8 @@ function parser (raw) {
 
     } else {
 
-        this.raw = this.raw.split(" ")
-        this.command = this.raw[0];
+        raw = raw.split(" ")
+        this.command = raw[0];
 
         if (argument.length) {
 
