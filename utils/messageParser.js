@@ -19,7 +19,7 @@ function parser (raw) {
         tags = tags.replace("@", "", 1) // Let's find the tags!
         tags = tags.split(";"); // Here are the tags!
 
-        for (tag in tags) {
+        for (let tag in tags) {
 
             if ("=" in tag) {
 
