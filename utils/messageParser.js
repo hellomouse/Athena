@@ -14,7 +14,8 @@ function parser (raw) {
     // IRCv3.2 Message Tags
     if (raw_msg.startsWith("@")) {
 
-        [tags, raw_msg] = this.raw.split(" ", 1) // Split raw into tags and other raw...
+        let tags;
+        [tags, raw_msg] = split(this.raw, " ", 1) // Split raw into tags and other raw...
         tags = tags.replace("@", "", 1) // Let's find the tags!
         tags = tags.split(";"); // Here are the tags!
 
@@ -22,7 +23,7 @@ function parser (raw) {
 
             if ("=" in tag) {
 
-                let tag = tag.split("=", 1);
+                tag = split(tag, "=", 1);
                 let tag_parsed = {};
                 tag_parsed[tag[0]] = tag[1]; // Set tag to it's value
                 this.tags.push(tag_parsed);
@@ -37,7 +38,7 @@ function parser (raw) {
 
     if (raw_msg.indexOf(" :") > -1) { // Check to see if there are arguments
 
-        [raw_msg, argument] = raw_msg.split(" :", 2);
+        [raw_msg, argument] = split(raw_msg, " :", 1);
         // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
         //        ^-------------------------------------------------------^  ^-----------------------------------^
         //          this.raw ^                                                            argument ^
@@ -90,8 +91,8 @@ function parser (raw) {
 
     }
 
-    if (argument2.startsWith(":")) { argument = argument2.split(":", 1) } else {
-        argument2 = argument2.split(" :", 1)
+    if (argument2.startsWith(":")) { argument2 = split(argument2, ":", 1) } else {
+        argument2 = split(argument2, " :", 1)
     }
 
     for (let arg in argument2[0].split(" ")) {
@@ -124,6 +125,17 @@ function user (userhost) {
     if (this.ident == undefined) { this.ident = null } else {
         this.ident = this.ident.split("@")[0];
     }
+
+}
+
+
+function split (string, sep, maxCount) {
+
+    // Function to imitate Python's str.split method, since JavaScript can't split x times
+    string = string.split(sep);
+    let first = string.slice(0, maxCount);
+    let second = string.slice(maxCount).join(sep);
+    return [...first, second];
 
 }
 
