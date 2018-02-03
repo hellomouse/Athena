@@ -3,6 +3,8 @@ function parser (raw) {
     this.raw = raw.toString(); // Raw string sent from server | This is a const, it should never be changed
 
     this.arguments = [];
+    this.args = this.arguments; // Alias to this.arguments
+
     var argument = "";
     var argument2 = ""; // In commands such as MODE and PRIVMSG argument are after :
     // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
@@ -49,7 +51,6 @@ function parser (raw) {
         this.source = new user(raw_msg[0]);
         this.command = raw_msg[1]
         this.arguments = raw_msg.slice(3);
-        this.args = this.arguments; // Alias to this.arguments
 
         if (raw_msg.length > 2 && this.command != "ACCOUNT") {
 
