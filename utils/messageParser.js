@@ -51,7 +51,6 @@ function parser (raw) {
         raw_msg = raw_msg.slice(1).split(" "); // If the message starts With : then remove it then split it into a list | +1
         this.source = new user(raw_msg[0]);
         this.command = raw_msg[1]
-        this.arguments = raw_msg.slice(3);
 
         if (raw_msg.length > 2 && this.command != "ACCOUNT") {
 
