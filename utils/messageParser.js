@@ -50,7 +50,7 @@ function parser (raw) {
 
         raw_msg = raw_msg.slice(1).split(" "); // If the message starts With : then remove it then split it into a list | +1
         this.source = new user(raw_msg[0]);
-        this.command = raw_msg[1]
+        this.command = raw_msg[1];
 
         if (raw_msg.length > 2 && this.command != "ACCOUNT") {
 
@@ -90,24 +90,22 @@ function parser (raw) {
 
     }
 
-    if (argument2.startsWith(":")) { argument2 = split(argument2, ":", 1) } else {
-        argument2 = split(argument2, " :", 1)
-    }
+    argument2 = argument2.startsWith(":") ? split(argument2, ":", 1) : split(argument2, " :", 1);
 
     for (let arg in argument2[0].split(" ")) {
 
-        if (arg.length) {
+        if (arg.length > 1) {
 
-            this.arguments.push(argument2);
+            this.arguments.push(arg);
 
         }
 
     }
 
     console.log(argument)
-    if (argument.length > 1) {
+    if (argument2.length > 1) {
 
-        this.arguments.push(argument[1]);
+        this.arguments.push(argument2[1]);
 
     }
 
