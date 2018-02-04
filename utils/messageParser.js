@@ -75,17 +75,17 @@ function parser (raw) {
         raw_msg = raw_msg.split(" ")
         this.command = raw_msg[0];
 
-        if (argument.length) {
+    }
 
-            if (argument2.length) {
+    if (argument.length) {
 
-                argument2 = `${argument2} :${argument}`;
+        if (argument2.length) {
 
-            } else {
+            argument2 = `${argument2} :${argument}`;
 
-                argument2 = `:${argument}`;
-            }
+        } else {
 
+            argument2 = `:${argument}`;
         }
 
     }
