@@ -1,4 +1,7 @@
 function parser (raw) {
+    // Initialise these variables here so they have a fallback value if they don't get redfined elsewhere
+    this.source = null;
+    this.target = null;
     this.tags = []
     this.raw = raw.toString(); // Raw string sent from server | This is a const, it should never be changed
 
