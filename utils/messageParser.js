@@ -42,7 +42,6 @@ function parser (raw) {
         // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
         //        ^-------------------------------------------------------^  ^-----------------------------------^
         //          this.raw ^                                                            argument ^
-        console.log("BHUSB", argument);
 
     }
 
@@ -102,7 +101,6 @@ function parser (raw) {
 
     }
 
-    console.log(argument)
     if (argument2.length > 1) {
 
         this.arguments.push(argument2[1]);
