@@ -69,16 +69,7 @@ class bot extends core {
 
                 console.log("[RECV]",  data);
 
-                let received = data.toString().split(" "); // Easier to parse
-
-                if (received[0].startsWith(":")) {
-                    // handle all numerics and commands
-                    this.events.emit(received[1], received, data)
-                } else {
-                    // Handle PING
-                    this.events.emit(received[0], received, data);
-                }
-
+                this.events.emit(parse.command, this.irc, parse);
 
             }
         })

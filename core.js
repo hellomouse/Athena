@@ -12,20 +12,20 @@ class core {
 
         this.nickname = this.config["nickname"];
 
-        this.on_ping = this.events.on("PING", received => {
+        this.on_ping = this.events.on("PING", irc => {
             // Respond to ping event
             this.send("PONG");
 
         });
 
-        this.on_nick_in_use = this.events.on("433", (received, raw) => {
+        this.on_nick_in_use = this.events.on("433", (irc, event) => {
 
             this.nickname = this.nickname.concat("_");
-            this.send(`NICK ${this.nickname}`);
+            irc.nick(this.nickname);
 
         });
 
-        this.on_welcome = this.events.on("001", (received, raw) => {
+        this.on_welcome = this.events.on("001", (irc, event) => {
 
             Object.keys(this.config["channels"]).forEach((channel) => {
 
@@ -35,10 +35,10 @@ class core {
 
         });
 
-        this.on_name = this.events.on("353", (received, raw) => {
+        this.on_name = this.events.on("353", (irc, event) => {
 
-            let channel = received[4];
-            let users = raw.split(":")[2].split(" ");
+            let channel = event.arguments[1];
+            let users = event.arguments[2].split(" ");
             if (!this.state["channels"].hasOwnProperty(channel)) {
 
                 this.state["channels"][channel] = {
@@ -52,19 +52,9 @@ class core {
 
         });
 
-        this.on_cap = this.events.on("CAP", (received, raw) => {
-            class Event {
-                constructor (received) {
+        this.on_cap = this.events.on("CAP", (irc, event) => {
 
-                    let args1;
-                    [received, args1] = received.split(" :", 1);
-                    this.arguments = received.split(" ").splice(-1, 1).concat(args1);
-
-                }
-
-            }
-
-            this.caps.handler(new Event(raw));
+            this.caps.handler(event);
 
         });
 
