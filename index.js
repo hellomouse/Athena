@@ -48,9 +48,9 @@ class bot extends core {
             console.log('Connected');
 
             // TODO: Move to auth module
-            this.send("NICK `Athena")
-            this.send("USER Athena Athena irc.freenode.net :Totally not Athena")
-            this.send("CAP LS")
+            this.send(`NICK ${this.config.nickname}`);
+            this.send(`USER ${this.config.ident} * * :${this.config.realname}`);
+            this.send("CAP LS");
 
         })
 

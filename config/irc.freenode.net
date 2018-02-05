@@ -1,6 +1,8 @@
 {
 
     "nickname": "`Athena",
+    "realname": "Totally not Athena",
+    "ident": "Athena",
     "channels": {
         "##Athena": {}
     },
