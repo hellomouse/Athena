@@ -29,7 +29,7 @@ class Caps {
 
         // Main handling code for CAP
         const self = this;
-        const servcaps = event.arguments[1];
+        const servcaps = event.arguments[1] != "*"? event.arguments[1] : event.arguments[2];
         let cap;
 
         if (event.arguments[0] == "LS") {
@@ -56,14 +56,16 @@ class Caps {
                 }
             }
 
-            if (!self.availablecaps.length) {
+            if (event.arguments[1] == "*") {} else {
+                if (!self.availablecaps.length) {
 
-                self.bot.send("CAP END");
+                    self.bot.send("CAP END");
 
-            } else {
+                } else {
 
-                self.bot.send(`CAP REQ :${self.availablecaps.join(" ")}`);
+                    self.bot.send(`CAP REQ :${self.availablecaps.join(" ")}`);
 
+                }
             }
 
         } else if (event.arguments[0] == "ACK") {

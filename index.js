@@ -50,7 +50,7 @@ class bot extends core {
             // TODO: Move to auth module
             this.send(`NICK ${this.config.nickname}`);
             this.send(`USER ${this.config.ident} * * :${this.config.realname}`);
-            this.send("CAP LS");
+            this.send("CAP LS 302");
 
         })
 
@@ -65,9 +65,7 @@ class bot extends core {
 
                 let parse = new parser(data);
 
-                console.log("Command:", parse.command, "| Userhost:", parse.user.userhost, "| Nick", parse.user.nick, "| Host", parse.user.host, "| Ident", parse.user.ident, "| Target:", parse.target, "| Args:", parse.args);
-
-                console.log("[RECV]",  data);
+                console.debug("[RECV]",  data);
 
                 this.events.emit(parse.command, this.irc, parse);
 
