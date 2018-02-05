@@ -1,0 +1,25 @@
+{
+  "name": "athena",
+  "version": "1.0.0",
+  "description": "Simple, functional IRC Bot written in node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BWBellairs/Athena.git"
+  },
+  "keywords": [
+    "irc",
+    "es6",
+    "bot"
+  ],
+  "author": "Bradley \"BWBellairs\" Bellairs <BWBellairs@outlook.com>",
+  "contributors": ["wolfy1339 <webmaster@wolfy1339.com>"],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BWBellairs/Athena/issues"
+  },
+  "homepage": "https://github.com/BWBellairs/Athena#readme"
+}
