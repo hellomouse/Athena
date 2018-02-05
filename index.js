@@ -68,6 +68,7 @@ class bot extends core {
                 console.debug("[RECV]",  data);
 
                 this.events.emit(parse.command, this.irc, parse);
+                this.events.emit("all", this.irc, parse);
 
             }
         })
