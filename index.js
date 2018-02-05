@@ -64,9 +64,7 @@ class bot extends core {
                 if (!data){ continue } // Get rid of pesky new lines
 
                 let parse = new parser(data);
-                if (parse.user == undefined ){
-                    parse.user = {}
-                }
+
                 console.log("Command:", parse.command, "| Userhost:", parse.user.userhost, "| Nick", parse.user.nick, "| Host", parse.user.host, "| Ident", parse.user.ident, "| Target:", parse.target, "| Args:", parse.args);
 
                 console.log("[RECV]",  data);

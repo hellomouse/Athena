@@ -4,6 +4,7 @@ function parser (raw) {
     this.target = null;
     this.tags = []
     this.raw = raw.toString(); // Raw string sent from server | This is a const, it should never be changed
+    this.user = {};
 
     this.arguments = [];
     this.args = this.arguments; // Alias to this.arguments
