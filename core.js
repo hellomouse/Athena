@@ -12,7 +12,7 @@ class core {
 
         this.nickname = this.config["nickname"];
 
-        this.on_ping = this.events.on("PING", irc => {
+        this.on_ping = this.events.on("PING", (irc) => {
             // Respond to ping event
             this.send("PONG");
 
@@ -37,8 +37,8 @@ class core {
 
         this.on_name = this.events.on("353", (irc, event) => {
 
-            let channel = event.arguments[1];
-            let users = event.arguments[0].split(" ");
+            const channel = event.arguments[1];
+            const users = event.arguments[0].split(" ");
             if (!this.state["channels"].hasOwnProperty(channel)) {
 
                 this.state["channels"][channel] = {

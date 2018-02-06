@@ -1,26 +1,53 @@
+function user (userhost) {
+
+    this.userhost = userhost;
+    [this.nick, this.ident] = this.userhost.split("!");
+    if (this.nick === undefined) { this.nick = null; }
+    this.host = this.userhost.split("@")[1];
+
+    if (this.host === undefined) { this.host = null; }
+    if (this.ident == undefined) { this.ident = null; } else {
+        this.ident = this.ident.split("@")[0];
+    }
+
+}
+
+
+function split (string, sep, maxCount) {
+
+    // Function to imitate Python's str.split method, since JavaScript can't split x times
+    string = string.split(sep);
+    const first = string.slice(0, maxCount);
+    const second = string.slice(maxCount).join(sep);
+
+    return [...first, second];
+
+}
+
 function parser (raw) {
     // Initialise these variables here so they have a fallback value if they don't get redfined elsewhere
     this.source = null;
     this.target = null;
-    this.tags = []
+    this.tags = [];
     this.raw = raw.toString(); // Raw string sent from server | This is a const, it should never be changed
     this.user = {};
 
     this.arguments = [];
     this.args = this.arguments; // Alias to this.arguments
 
-    var argument = "";
-    var argument2 = ""; // In commands such as MODE and PRIVMSG argument are after :
-    // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
-    //                                          Command ^   Channel ^    ^ argument!!!
+    let argument = "";
+    let argument2 = ""; // In commands such as MODE and PRIVMSG argument are after :
+    /* [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
+                                                Command ^   Channel ^      ^ argument!!!
+    */
     let raw_msg = this.raw; // Variable for raw message parsing in code
 
     // IRCv3.2 Message Tags
     if (raw_msg.startsWith("@")) {
 
         let tags;
-        [tags, raw_msg] = split(this.raw, " ", 1) // Split raw into tags and other raw...
-        tags = tags.replace("@", "", 1) // Let's find the tags!
+        [tags, raw_msg] = split(this.raw, " ", 1); // Split raw into tags and other raw...
+        tags = tags.replace("@", "", 1); // Let's find the tags!
         tags = tags.split(";"); // Here are the tags!
 
         for (let tag in tags) {
@@ -28,7 +55,7 @@ function parser (raw) {
             if ("=" in tag) {
 
                 tag = split(tag, "=", 1);
-                let tag_parsed = {};
+                const tag_parsed = {};
                 tag_parsed[tag[0]] = tag[1]; // Set tag to it's value
                 this.tags.push(tag_parsed);
 
@@ -43,9 +70,11 @@ function parser (raw) {
     if (raw_msg.indexOf(" :") > -1) { // Check to see if there are arguments
 
         [raw_msg, argument] = split(raw_msg, " :", 1);
-        // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
-        //        ^-------------------------------------------------------^  ^-----------------------------------^
-        //          this.raw ^                                                            argument ^
+
+        /* [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
+                  ^-------------------------------------------------------^  ^-----------------------------------^
+                    This.raw ^                                                            argument ^
+        */
 
     }
 
@@ -75,7 +104,7 @@ function parser (raw) {
 
     } else {
 
-        raw_msg = raw_msg.split(" ")
+        raw_msg = raw_msg.split(" ");
         this.command = raw_msg[0];
 
     }
@@ -95,7 +124,7 @@ function parser (raw) {
 
     argument2 = argument2.startsWith(":") ? split(argument2, ":", 1) : split(argument2, " :", 1);
 
-    for (let arg in argument2[0].split(" ")) {
+    for (const arg in argument2[0].split(" ")) {
 
         if (arg.length > 1) {
 
@@ -110,31 +139,6 @@ function parser (raw) {
         this.arguments.push(argument2[1]);
 
     }
-
-}
-
-function user (userhost) {
-
-    this.userhost = userhost;
-    [this.nick, this.ident] = this.userhost.split("!");
-    if (this.nick === undefined) { this.nick = null; }
-    this.host = this.userhost.split("@")[1];
-
-    if (this.host === undefined) { this.host = null;}
-    if (this.ident == undefined) { this.ident = null } else {
-        this.ident = this.ident.split("@")[0];
-    }
-
-}
-
-
-function split (string, sep, maxCount) {
-
-    // Function to imitate Python's str.split method, since JavaScript can't split x times
-    string = string.split(sep);
-    let first = string.slice(0, maxCount);
-    let second = string.slice(maxCount).join(sep);
-    return [...first, second];
 
 }
 

@@ -16,10 +16,15 @@
     "bot"
   ],
   "author": "Bradley \"BWBellairs\" Bellairs <BWBellairs@outlook.com>",
-  "contributors": ["wolfy1339 <webmaster@wolfy1339.com>"],
+  "contributors": [
+    "wolfy1339 <webmaster@wolfy1339.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/BWBellairs/Athena/issues"
   },
-  "homepage": "https://github.com/BWBellairs/Athena#readme"
+  "homepage": "https://github.com/BWBellairs/Athena#readme",
+  "devDependencies": {
+    "eslint": "^4.17.0"
+  }
 }

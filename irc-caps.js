@@ -10,7 +10,7 @@ class Caps {
         self.args = {};
 
         // Iterate over list provided of caps and check if it is a string or a function
-        for (let cap in self.caps) {
+        for (const cap in self.caps) {
             if (typeof cap != "string") {
 
                 self.stringcaps.push(cap.name);
@@ -29,15 +29,15 @@ class Caps {
 
         // Main handling code for CAP
         const self = this;
-        const servcaps = event.arguments[1] != "*"? event.arguments[1] : event.arguments[2];
-        let cap;
+        const servcaps = event.arguments[1] != "*" ? event.arguments[1] : event.arguments[2];
+        let args, cap;
 
         if (event.arguments[0] == "LS") {
 
             // Don't blindly assume server supports our requested caps, even though server sends a CAP NACK response
-            for (let c in servcaps) {
+            for (const c in servcaps) {
 
-                let [cap, args] = c.split("=");
+                [cap, args] = c.split("=");
 
                 if (cap in self.stringcaps) {
 
@@ -45,7 +45,7 @@ class Caps {
 
                     if (typeof args !== undefined) {
 
-                        self.args[cap] = args.split(',');
+                        self.args[cap] = args.split(",");
 
                     } else {
 
@@ -56,7 +56,7 @@ class Caps {
                 }
             }
 
-            if (event.arguments[1] == "*") {} else {
+            if (event.arguments[1] != "*") {
                 if (!self.availablecaps.length) {
 
                     self.bot.send("CAP END");
@@ -86,9 +86,9 @@ class Caps {
 
         } else if (event.arguments[0] == "NEW") {
 
-            let newcaps = [];
+            const newcaps = [];
 
-            for (let c in self.stringcaps) {
+            for (const c in self.stringcaps) {
 
                 if (c in servcaps) {
 
@@ -107,18 +107,17 @@ class Caps {
 
         } else if (event.arguments[0] == "DEL") {
 
-            for (let c in servcaps) {
+            for (const c in servcaps) {
 
                 if (c in self.availablecaps) {
 
-                    let index = self.availablecaps.indexOf(c);
-                    self.availablecaps.splice(index, 1);
+                    self.availablecaps.splice(self.availablecaps.indexOf(c), 1);
 
                 }
 
                 if (c in self.stringcaps) {
 
-                    let index = self.stringcaps.indexOf(c);
+                    const index = self.stringcaps.indexOf(c);
 
                     self.stringcaps.splice(index, 1);
                     self.caps.splice(index, 1);
