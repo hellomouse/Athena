@@ -5,11 +5,12 @@ const fs = require("fs");
 
 const config = require("./utils/configHandler");
 const parser = require("./utils/messageParser");
-const wrappers = require('./wrappers');
+const wrappers = require("./wrappers");
 const caps = require("./irc-caps");
 const core = require("./core");
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
+
 // Main Bot Class
 class bot extends core {
 
@@ -21,7 +22,7 @@ class bot extends core {
         this.config_file_path = config_file_path;
 
         this.socket = new socket.Socket();
-        if (config.ssl) this.socket = new tls.TLSSocket(this.socket, {"cert": config.sasl.cert, "key": config.sasl.key, "passphrase": config.sasl.key_passphrase})
+        if (config.ssl) this.socket = new tls.TLSSocket(this.socket, {"cert": config.sasl.cert, "key": config.sasl.key, "passphrase": config.sasl.key_passphrase});
 
         // Event handler
         this.events =  new events.EventEmitter();
@@ -35,9 +36,9 @@ class bot extends core {
         // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
         this.state = {
             "channels": {}
-        }
+        };
 
-        super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation 
+        super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation
 
         this.caps = new caps(this);
     }
@@ -45,25 +46,25 @@ class bot extends core {
     connect () {
 
         this.socket.connect(6667, "irc.freenode.net", () => {
-            console.log('Connected');
+            console.log("Connected");
 
             // TODO: Move to auth module
             this.send(`NICK ${this.config.nickname}`);
             this.send(`USER ${this.config.ident} * * :${this.config.realname}`);
             this.send("CAP LS 302");
 
-        })
+        });
 
-        this.socket.on('data', (data) => {
+        this.socket.on("data", (data) => {
 
-            let parsed = data.toString().split("\r\n");
-            for (let i=0; i < parsed.length ;i++) {
+            const parsed = data.toString().split("\r\n");
+            for (let i = 0; i < parsed.length; i++) {
 
-                let data = parsed[i];
+                const data = parsed[i];
 
-                if (!data){ continue } // Get rid of pesky new lines
+                if (!data){ continue; } // Get rid of pesky new lines
 
-                let parse = new parser(data);
+                const parse = new parser(data);
 
                 console.log("[RECV]",  data);
 
@@ -71,25 +72,25 @@ class bot extends core {
                 this.events.emit("all", this.irc, parse);
 
             }
-        })
+        });
 
     }
 
 }
 
-let clients = {};
+const clients = {};
 fs.readdir("config", (error, contents) => {
 
-    if (error){ console.log("[FATAL]", error) } else {
+    if (error) { console.log("[FATAL]", error); } else {
 
-        for (let _=0;_<contents.length;_++) {
+        for (let _ = 0; _ < contents.length; _++) {
 
-            let configFile = contents[_];
-            clients[configFile] = new bot("./config/" + configFile);           
+            const configFile = contents[_];
+            clients[configFile] = new bot(`./config/${configFile}`);
             clients[configFile].connect();
 
         }
 
     }
 
-})
+});

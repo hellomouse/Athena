@@ -140,4 +140,4 @@ class connection_wrapper {
     }
 }
 
-module.exports = connection_wrapper
+module.exports = connection_wrapper;
