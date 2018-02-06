@@ -56,7 +56,7 @@ class Caps {
                 }
             }
 
-            if (event.arguments[1] == "*") {} else {
+            if (event.arguments[1] != "*") {
                 if (!self.availablecaps.length) {
 
                     self.bot.send("CAP END");

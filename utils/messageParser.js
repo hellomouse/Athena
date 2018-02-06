@@ -1,3 +1,29 @@
+function user (userhost) {
+
+    this.userhost = userhost;
+    [this.nick, this.ident] = this.userhost.split("!");
+    if (this.nick === undefined) { this.nick = null; }
+    this.host = this.userhost.split("@")[1];
+
+    if (this.host === undefined) { this.host = null; }
+    if (this.ident == undefined) { this.ident = null } else {
+        this.ident = this.ident.split("@")[0];
+    }
+
+}
+
+
+function split (string, sep, maxCount) {
+
+    // Function to imitate Python's str.split method, since JavaScript can't split x times
+    string = string.split(sep);
+    let first = string.slice(0, maxCount);
+    let second = string.slice(maxCount).join(sep);
+
+    return [...first, second];
+
+}
+
 function parser (raw) {
     // Initialise these variables here so they have a fallback value if they don't get redfined elsewhere
     this.source = null;
@@ -9,8 +35,8 @@ function parser (raw) {
     this.arguments = [];
     this.args = this.arguments; // Alias to this.arguments
 
-    var argument = "";
-    var argument2 = ""; // In commands such as MODE and PRIVMSG argument are after :
+    let argument = "";
+    let argument2 = ""; // In commands such as MODE and PRIVMSG argument are after :
     // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
     //                                          Command ^   Channel ^    ^ argument!!!
     let raw_msg = this.raw; // Variable for raw message parsing in code
@@ -45,7 +71,7 @@ function parser (raw) {
         [raw_msg, argument] = split(raw_msg, " :", 1);
         // [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
         //        ^-------------------------------------------------------^  ^-----------------------------------^
-        //          this.raw ^                                                            argument ^
+        //          This.raw ^                                                            argument ^
 
     }
 
@@ -110,31 +136,6 @@ function parser (raw) {
         this.arguments.push(argument2[1]);
 
     }
-
-}
-
-function user (userhost) {
-
-    this.userhost = userhost;
-    [this.nick, this.ident] = this.userhost.split("!");
-    if (this.nick === undefined) { this.nick = null; }
-    this.host = this.userhost.split("@")[1];
-
-    if (this.host === undefined) { this.host = null;}
-    if (this.ident == undefined) { this.ident = null } else {
-        this.ident = this.ident.split("@")[0];
-    }
-
-}
-
-
-function split (string, sep, maxCount) {
-
-    // Function to imitate Python's str.split method, since JavaScript can't split x times
-    string = string.split(sep);
-    let first = string.slice(0, maxCount);
-    let second = string.slice(maxCount).join(sep);
-    return [...first, second];
 
 }
 
