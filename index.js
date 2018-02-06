@@ -37,9 +37,9 @@ class bot extends core {
             "channels": {}
         }
 
-        super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before the initalisation of the core class
+        super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation 
 
-        this.caps = new caps(this)
+        this.caps = new caps(this);
     }
 
     connect () {
@@ -65,7 +65,7 @@ class bot extends core {
 
                 let parse = new parser(data);
 
-                console.debug("[RECV]",  data);
+                console.log("[RECV]",  data);
 
                 this.events.emit(parse.command, this.irc, parse);
                 this.events.emit("all", this.irc, parse);
@@ -77,5 +77,19 @@ class bot extends core {
 
 }
 
-let freenode = new bot("./config/irc.freenode.net");
-freenode.connect();
+let clients = {};
+fs.readdir("config", (error, contents) => {
+
+    if (error){ console.log("[FATAL]", error) } else {
+
+        for (let _=0;_<contents.length;_++) {
+
+            let configFile = contents[_];
+            clients[configFile] = new bot("./config/" + configFile);           
+            clients[configFile].connect();
+
+        }
+
+    }
+
+})

@@ -38,7 +38,7 @@ class core {
         this.on_name = this.events.on("353", (irc, event) => {
 
             let channel = event.arguments[1];
-            let users = event.arguments[2].split(" ");
+            let users = event.arguments[0].split(" ");
             if (!this.state["channels"].hasOwnProperty(channel)) {
 
                 this.state["channels"][channel] = {
