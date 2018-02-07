@@ -124,7 +124,7 @@ function parser (raw) {
 
     argument2 = argument2.startsWith(":") ? split(argument2, ":", 1) : split(argument2, " :", 1);
 
-    for (const arg in argument2[0].split(" ")) {
+    for (const arg of argument2[0].split(" ")) {
 
         if (arg.length > 1) {
 
