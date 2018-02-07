@@ -23,7 +23,6 @@ class bot extends core {
         this.config_file_path = config_file_path;
 
         this.socket = new socket.Socket();
-        if (config.ssl) this.socket = new tls.TLSSocket(this.socket, {"cert": config.sasl.cert, "key": config.sasl.key, "passphrase": config.sasl.key_passphrase});
 
         // Event handler
         this.events =  new events.EventEmitter();
@@ -34,6 +33,7 @@ class bot extends core {
         this.config_handler.load(true); // Load the config
         this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
 
+        if (this.config.ssl) this.socket = new tls.TLSSocket(this.socket, {"cert": this.config.sasl.cert, "key": this.config.sasl.key, "passphrase": this.config.sasl.key_passphrase});
         // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
         this.state = {
             "channels": {}
