@@ -35,7 +35,7 @@ class Caps {
         if (event.arguments[0] == "LS") {
 
             // Don't blindly assume server supports our requested caps, even though server sends a CAP NACK response
-            for (const c in servcaps) {
+            for (const c of servcaps) {
 
                 [cap, args] = c.split("=");
 
@@ -70,7 +70,7 @@ class Caps {
 
         } else if (event.arguments[0] == "ACK") {
 
-            for (cap in self.caps) {
+            for (cap of self.caps) {
 
                 if (typeof cap != "string" && cap.run !== undefined) {
 
@@ -88,7 +88,7 @@ class Caps {
 
             const newcaps = [];
 
-            for (const c in self.stringcaps) {
+            for (const c of self.stringcaps) {
 
                 if (c in servcaps) {
 
@@ -107,7 +107,7 @@ class Caps {
 
         } else if (event.arguments[0] == "DEL") {
 
-            for (const c in servcaps) {
+            for (const c of servcaps) {
 
                 if (c in self.availablecaps) {
 
