@@ -17,7 +17,7 @@ class Sasl {
 
         if (mechanisms.indexOf(this.method.toUpperCase()) > -1) {
 
-            if (this.method in ["plain", "external"]) {
+            if (["plain", "external"].indexOf(this.method) > -1) {
 
                 bot.send(`AUTHENTICATE ${this.method.toUpperCase()}`);
 
