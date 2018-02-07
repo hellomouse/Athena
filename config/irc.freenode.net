@@ -1,6 +1,10 @@
 {
 
-    "nickname": "`Athena",
+    "irc": {
+        "host": "irc.freenode.net",
+        "port": 6667
+    },
+    "nickname": "Athena",
     "realname": "Totally not Athena",
     "ident": "Athena",
     "channels": {

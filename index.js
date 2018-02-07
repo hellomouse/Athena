@@ -48,7 +48,7 @@ class bot extends core {
 
     connect () {
 
-        this.socket.connect(6667, "irc.freenode.net", () => {
+        this.socket.connect(this.config.irc.port, this.config.irc.host, () => {
             console.log("Connected");
 
             // TODO: Move to auth module
