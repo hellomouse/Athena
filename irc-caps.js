@@ -43,7 +43,7 @@ class Caps {
 
                     self.availablecaps.push(cap);
 
-                    if (typeof args !== undefined) {
+                    if (typeof args != "undefined") {
 
                         self.args[cap] = args.split(",");
 
