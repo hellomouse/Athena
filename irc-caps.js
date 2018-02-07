@@ -88,7 +88,7 @@ class Caps {
 
             for (const c of self.stringcaps) {
 
-                if (c in servcaps) {
+                if (servcaps.indexOf(c) > -1) { // Check if the server supports self new cap
 
                     self.availablecaps.push(c);
                     newcaps.push(c);
@@ -107,13 +107,13 @@ class Caps {
 
             for (const c of servcaps) {
 
-                if (c in self.availablecaps) {
+                if (self.availablecaps.indexOf(c) > -1) {
 
                     self.availablecaps.splice(self.availablecaps.indexOf(c), 1);
 
                 }
 
-                if (c in self.stringcaps) {
+                if (self.stringcaps.indexOf(c) > -1) {
 
                     const index = self.stringcaps.indexOf(c);
 
