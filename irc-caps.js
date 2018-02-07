@@ -73,11 +73,11 @@ class Caps {
             for (cap of self.caps) { // Iterate over self.caps so we have access to classes
 
                 if (typeof cap != "string" && self.availablecaps.indexOf(cap.name) > -1) { // Check that the cap is in self.availablecaps
-                    if (cap.hasOwnProperty("run")) { // Check if the cap has the `run` property
+                    //if (cap.hasOwnProperty("run")) { // Check if the cap has the `run` property
 
                         cap.run(self.bot, self.args[cap.name]); // Run the cap with the arguments collected during CAP LS
 
-                    }
+                    //}
                 }
 
             }
