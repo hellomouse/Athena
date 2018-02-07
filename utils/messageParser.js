@@ -126,7 +126,7 @@ function parser (raw) {
 
     for (const arg of argument2[0].split(" ")) {
 
-        if (arg.length > 1) {
+        if (arg.length >= 1) {
 
             this.arguments.push(arg);
 
