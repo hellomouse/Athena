@@ -8,6 +8,7 @@ const parser = require("./utils/messageParser");
 const wrappers = require("./wrappers");
 const caps = require("./irc-caps");
 const core = require("./core");
+const Sasl = require("./caps/sasl.js");
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
 
@@ -40,6 +41,8 @@ class bot extends core {
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation
 
+        this.sasl = new Sasl(this.config.sasl.username, this.config.sasl.password);
+        this.config.caps.push(this.sasl);
         this.caps = new caps(this);
     }
 

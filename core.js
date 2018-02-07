@@ -58,6 +58,24 @@ class core {
 
         });
 
+        this.on_authenticate = this.events.on("AUTHENTICATE", (irc, event) => {
+
+            this.sasl.on_authenticate(event);
+
+        });
+
+        this.on_saslfailed = this.events.on("904", (irc, event) => {
+
+            this.sasl.on_saslfailed(event);
+
+        });
+
+        this.on_saslsuccess = this.events.on("903", (irc, event) => {
+
+            this.sasl.on_saslsuccess(event);
+
+        });
+
     }
 
     send (message) {
