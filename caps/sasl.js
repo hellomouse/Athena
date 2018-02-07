@@ -12,7 +12,7 @@ class Sasl {
 
     run (bot, args) {
 
-        const mechanisms = typeof args != "undefined" ? args : ["EXTERNAL", "PLAIN"];
+        const mechanisms = (typeof args != "undefined" && args !== null) ? args : ["EXTERNAL", "PLAIN"];
         this.bot = bot;
 
         if (mechanisms.indexOf(this.method.toUpperCase()) > -1) {
