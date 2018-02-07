@@ -70,15 +70,13 @@ class Caps {
 
         } else if (event.arguments[0] == "ACK") {
 
-            for (cap of self.caps) {
+            for (cap of self.availablecaps) {
 
-                if (typeof cap != "string" && cap.run !== undefined) {
+                cap = self.caps[self.caps.indexOf(cap)];
 
-                    if (cap.name in servcaps) {
+                if (typeof cap != "undefined" && cap.hasOwnProperty("run")) {
 
-                        cap.run(self.bot, self.args[cap.name]);
-
-                    }
+                    cap.run(self.bot, self.args[cap.name]);
 
                 }
 
