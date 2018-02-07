@@ -10,7 +10,7 @@ class Caps {
         self.args = {};
 
         // Iterate over list provided of caps and check if it is a string or a function
-        for (const cap in self.caps) {
+        for (const cap of self.caps) {
             if (typeof cap != "string") {
 
                 self.stringcaps.push(cap.name);
@@ -29,7 +29,7 @@ class Caps {
 
         // Main handling code for CAP
         const self = this;
-        const servcaps = event.arguments[1] != "*" ? event.arguments[1] : event.arguments[2];
+        const servcaps = event.arguments[1] != "*" ? event.arguments[1].split(" ") : event.arguments[2].split(" ");
         let args, cap;
 
         if (event.arguments[0] == "LS") {
@@ -37,9 +37,9 @@ class Caps {
             // Don't blindly assume server supports our requested caps, even though server sends a CAP NACK response
             for (const c of servcaps) {
 
-                [cap, args] = c.split("=");
+                [cap, args] = c.trim().split("=");
 
-                if (cap in self.stringcaps) {
+                if (self.stringcaps.indexOf(cap) > -1) {
 
                     self.availablecaps.push(cap);
 
