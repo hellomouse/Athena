@@ -70,14 +70,14 @@ class Caps {
 
         } else if (event.arguments[0] == "ACK") {
 
-            for (cap of self.availablecaps) {
+            for (cap of self.caps) { // Iterate over self.caps so we have access to classes
 
-                cap = self.caps[self.caps.indexOf(cap)];
+                if (typeof cap != "string" && self.availablecaps.indexOf(cap.name) > -1) { // Check that the cap is in self.availablecaps
+                    if (cap.hasOwnProperty("run")) { // Check if the cap has the `run` property
 
-                if (typeof cap != "undefined" && cap.hasOwnProperty("run")) {
+                        cap.run(self.bot, self.args[cap.name]); // Run the cap with the arguments collected during CAP LS
 
-                    cap.run(self.bot, self.args[cap.name]);
-
+                    }
                 }
 
             }
