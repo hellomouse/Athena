@@ -106,6 +106,7 @@ function parser (raw) {
 
         raw_msg = raw_msg.split(" ");
         this.command = raw_msg[0];
+        this.arguments.push(raw_msg[1]);
 
     }
 
