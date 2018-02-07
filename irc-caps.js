@@ -88,9 +88,9 @@ class Caps {
 
             for (const c of self.stringcaps) {
 
-                if (servcaps.indexOf(c) > -1) { // Check if the server supports self new cap
+                if (servcaps.indexOf(c) > -1) { // Check if the server supports the CAPs we want
 
-                    self.availablecaps.push(c);
+                    self.availablecaps.push(c); // Add the new CAP to the list of available CAPs
                     newcaps.push(c);
 
                 }
@@ -99,7 +99,7 @@ class Caps {
 
             if (newcaps.length) {
 
-                self.bot.send(`CAP REQ :${newcaps.join()}`);
+                self.bot.send(`CAP REQ :${newcaps.join(" ")}`); // Request the new CAP
 
             }
 
