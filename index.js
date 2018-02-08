@@ -33,7 +33,8 @@ class bot extends core {
         this.config_handler.load(true); // Load the config
         this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
 
-        if (this.config.ssl) this.socket = new tls.TLSSocket(this.socket, {"cert": this.config.sasl.cert, "key": this.config.sasl.key, "passphrase": this.config.sasl.key_passphrase});
+        this.socket = this.config.ssl ? tls.connect(this.config.irc.port, this.config.irc.host, {"cert": this.config.sasl.cert, "key": this.config.sasl.key, "passphrase": this.config.sasl.key_passphrase}) : socket.connect(this.config.irc.port, this.config.irc.host);
+
         // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
         this.state = {
             "channels": {}
@@ -48,7 +49,7 @@ class bot extends core {
 
     connect () {
 
-        this.socket.connect(this.config.irc.port, this.config.irc.host, () => {
+        this.socket.once("connect", () => {
             console.log("Connected");
 
             // TODO: Move to auth module
