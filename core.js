@@ -10,9 +10,10 @@ class Core {
         this.config = config;
         this.state = state;
 
-        this.nickname = this.config["nickname"];
+        this.nickname = this.config.nickname;
 
-        this.on_ping = this.events.on("PING", (irc) => {
+        this.on_ping = this.events.on("PING", irc => {
+
             // Respond to ping event
             this.send("PONG");
 
@@ -27,7 +28,7 @@ class Core {
 
         this.on_welcome = this.events.on("001", (irc, event) => {
 
-            Object.keys(this.config["channels"]).forEach((channel) => {
+            Object.keys(this.config.channels).forEach(channel => {
 
                 this.send(`JOIN ${channel}`);
 
@@ -39,9 +40,9 @@ class Core {
 
             const channel = event.arguments[1];
             const users = event.arguments[0].split(" ");
-            if (!this.state["channels"].hasOwnProperty(channel)) {
+            if (!this.state.channels.hasOwnProperty(channel)) {
 
-                this.state["channels"][channel] = {
+                this.state.channels[channel] = {
                     users: users,
                     flags: [],
                     modes: [],
@@ -52,29 +53,16 @@ class Core {
 
         });
 
-        this.on_cap = this.events.on("CAP", (irc, event) => {
+        this.on_cap = this.events.on("CAP", (irc, event) => this.caps.handler(event));
 
-            this.caps.handler(event);
+        this.on_authenticate = this.events.on("AUTHENTICATE", (irc, event) => this.sasl.on_authenticate(event));
 
-        });
+        this.on_saslfailed = this.events.on("904", (irc, event) => this.sasl.on_saslfailed(event));
 
-        this.on_authenticate = this.events.on("AUTHENTICATE", (irc, event) => {
+        this.on_saslsuccess = this.events.on("903", (irc, event) => this.sasl.on_saslsuccess(event));
 
-            this.sasl.on_authenticate(event);
 
-        });
 
-        this.on_saslfailed = this.events.on("904", (irc, event) => {
-
-            this.sasl.on_saslfailed(event);
-
-        });
-
-        this.on_saslsuccess = this.events.on("903", (irc, event) => {
-
-            this.sasl.on_saslsuccess(event);
-
-        });
 
     }
 
