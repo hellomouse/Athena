@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# Certificates (for SASL EXTERNAL)
+*.pem
+*.crt
+*.key
+*.pfx
