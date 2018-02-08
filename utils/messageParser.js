@@ -1,5 +1,9 @@
+/** Class that gets different values from a users hostmask */
 class User {
 
+    /**
+    * @param {string} userhost - The userhost of the user
+    */
     constructor (userhost) {
 
         this.userhost = userhost;
@@ -13,10 +17,16 @@ class User {
 
 }
 
+/**
+ * Function to imitate Python's str.split method, since JavaScript can't split x times
+ * @func
+ * @param {string} string - The string you want split.
+ * @param {string} sep - The seperator by which you want the string to be split
+ * @param {number} maxCount - The maximum count of times you wish to split
+ */
 
 function split (string, sep, maxCount) {
 
-    // Function to imitate Python's str.split method, since JavaScript can't split x times
     string = string.split(sep);
     const first = string.slice(0, maxCount);
     const second = string.slice(maxCount).join(sep);
@@ -25,8 +35,13 @@ function split (string, sep, maxCount) {
 
 }
 
+/** Class that parses messages and returns different information about it */
 class Parser {
 
+    /**
+    * @func
+    * @param {string} raw - The raw message from the socket
+    */
     constructor (raw) {
 
         // Initialise these variables here so they have a fallback value if they don't get redfined elsewhere
@@ -69,9 +84,9 @@ class Parser {
 
                 }
 
-}
+            }
 
-}
+        }
 
         if (raw_msg.indexOf(" :") > -1) { // Check to see if there are arguments
 
@@ -126,7 +141,7 @@ class Parser {
 
                 argument2 = `:${argument}`;
 
-}
+            }
 
         }
 
@@ -148,8 +163,24 @@ class Parser {
 
         }
 
-    }
+        for (const i in this.arguments) {
 
+            if (this.arguments[i].startsWith("+")) {
+
+                this.arguments[i] = this.arguments[i].slice(1);
+                this.is_identified = true;
+
+            } else if (this.arguments[i].startsWith("-")) {
+
+                    this.arguments[i] = this.arguments[i].slice(1);
+                    this.is_identified = false;
+
+            }
+
+        }
+
+    }
 }
+
 
 module.exports = Parser;

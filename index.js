@@ -12,9 +12,15 @@ const Sasl = require("./caps/sasl.js");
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
 
-// Main Bot Class
+/**
+* Main Bot Class
+* @extends Core
+*/
 class Bot extends Core {
 
+    /**
+    * @param {string} config_file_path - The path to the config file chosen
+    */
     constructor (config_file_path) {
 
         super();
@@ -56,6 +62,10 @@ class Bot extends Core {
 
     }
 
+    /**
+    * Socket connection related stuff.
+    * @function
+    */
     connect () {
 
         this.socket.once("connect", () => {
@@ -72,6 +82,7 @@ class Bot extends Core {
         this.socket.on("data", data => {
 
             const parsed = data.toString().split("\r\n");
+
             for (let i = 0; i < parsed.length; i++) {
 
                 const data = parsed[i];

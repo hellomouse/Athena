@@ -1,5 +1,12 @@
+/** Class to handle all SASL authentification processes */
 class Sasl {
 
+    /**
+    * @func
+    * @param {string} username
+    * @param {string} password
+    * @param {string} [method]
+    */
     constructor (username, password, method) {
 
         this.username = username;
@@ -10,6 +17,11 @@ class Sasl {
 
     }
 
+    /**
+    * @func
+    * @param {object} bot
+    * @param {array} [args]
+    */
     run (bot, args) {
 
         const mechanisms = typeof args != "undefined" && args !== null ? args : ["EXTERNAL", "PLAIN"];
@@ -35,6 +47,10 @@ class Sasl {
 
     }
 
+    /**
+    * @func
+    * @param {object} event
+    */
     on_authenticate (event) {
 
         let password;
@@ -56,6 +72,10 @@ class Sasl {
 
     }
 
+    /**
+    * @func
+    * @param {object} event
+    */
     on_saslfailed (event) {
 
         this.retries += 1;
@@ -92,6 +112,10 @@ class Sasl {
 
     }
 
+    /**
+    * @func
+    * @param {object} event
+    */
     on_saslsuccess (event) {
 
         this.bot.send("CAP END");

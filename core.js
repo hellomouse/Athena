@@ -1,5 +1,4 @@
-// Contains vital methods used to interact with the irc server properly
-
+/** Contains vital methods used to interact with the irc server properly */
 class Core {
 
     constructor () {}
@@ -63,6 +62,11 @@ class Core {
 
     }
 
+    /**
+    * Function to send messages and log them aferwards
+    * @func
+    * @param {string} message - The message you want to send
+    */
     send (message) {
 
         this.socket.write(`${message}\r\n`);

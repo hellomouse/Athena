@@ -1,7 +1,11 @@
 const fs = require("fs");
 
+/** Class that holds the config */
 class ConfigHandler {
 
+    /**
+    * @param {string} config_file_path - The path to the config
+    */
     constructor (config_file_path) {
 
         this.path = config_file_path;
@@ -9,6 +13,12 @@ class ConfigHandler {
 
     }
 
+    /**
+    * Function to load config file specified in class constructor
+    * @async
+    * @param {boolean} sync - Use async or synchronous methods
+    * @return {object}
+    */
     async load (sync) {
 
         // We would normally load config once when bot is run
@@ -26,7 +36,7 @@ class ConfigHandler {
 
             }
 
-        return this.config || {};
+            return this.config || {};
 
         }
 
@@ -88,6 +98,10 @@ class ConfigHandler {
 
     }
 
+    /**
+    * Function to save config file
+    * @async
+    */
     async save () {
 
         const config = JSON.stringify(this.config);
