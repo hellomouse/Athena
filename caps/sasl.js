@@ -51,6 +51,7 @@ class Sasl {
             }
 
             this.bot.send(`AUTHENTICATE ${password}`);
+
         }
 
     }
@@ -96,6 +97,7 @@ class Sasl {
         this.bot.send("CAP END");
 
     }
+
 }
 
 Sasl.name = "sasl";

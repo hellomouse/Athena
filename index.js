@@ -66,11 +66,11 @@ class Bot extends Core {
 
                 const data = parsed[i];
 
-                if (!data){ continue; } // Get rid of pesky new lines
+                if (!data) continue; // Get rid of pesky new lines
 
                 const parse = new Parser(data);
 
-                console.log("[RECV]",  data);
+                console.log("[RECV]", data);
 
                 this.events.emit(parse.command, this.irc, parse);
                 this.events.emit("all", this.irc, parse);
