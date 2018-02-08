@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-class config_handler {
+class ConfigHandler {
 
     constructor (config_file_path) {
 
@@ -88,4 +88,4 @@ class config_handler {
 
 }
 
-module.exports.config_handler = config_handler;
+module.exports.ConfigHandler = ConfigHandler;

@@ -1,6 +1,6 @@
 // Contains vital methods used to interact with the irc server properly
 
-class core {
+class Core {
 
     constructor () {}
 
@@ -87,4 +87,4 @@ class core {
 
 }
 
-module.exports = core;
+module.exports = Core;

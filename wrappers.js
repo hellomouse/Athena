@@ -1,4 +1,4 @@
-class connection_wrapper {
+class ConnectionWrapper {
 
     constructor (self) {
 
@@ -143,4 +143,4 @@ class connection_wrapper {
 
 }
 
-module.exports = connection_wrapper;
+module.exports = ConnectionWrapper;

@@ -4,32 +4,30 @@ const tls = require("tls");
 const fs = require("fs");
 
 const config = require("./utils/configHandler");
-const parser = require("./utils/messageParser");
-const wrappers = require("./wrappers");
-const caps = require("./irc-caps");
-const core = require("./core");
+const Parser = require("./utils/messageParser");
+const Wrappers = require("./wrappers");
+const Caps = require("./irc-caps");
+const Core = require("./core");
 const Sasl = require("./caps/sasl.js");
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
 
 // Main Bot Class
-class bot extends core {
+class Bot extends Core {
 
     constructor (config_file_path) {
 
         super();
 
-        this.irc = new wrappers(this);
+        this.irc = new Wrappers(this);
         this.config_file_path = config_file_path;
 
-        this.socket = new socket.Socket();
-
         // Event handler
-        this.events =  new events.EventEmitter();
+        this.events = new events.EventEmitter();
 
         // Config
         this.config_file_path = this.config_file_path;
-        this.config_handler =  new config.config_handler(config_file_path); // Initalise a new object with the config file
+        this.config_handler = new config.ConfigHandler(config_file_path); // Initalise a new object with the config file
         this.config_handler.load(true); // Load the config
         this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
 
@@ -42,9 +40,9 @@ class bot extends core {
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation
 
-        this.sasl = new Sasl(this.config.sasl.username, this.config.sasl.password);
+        this.sasl = new Sasl(this.config.sasl.username, this.config.sasl.password, "external");
         this.config.caps.push(this.sasl);
-        this.caps = new caps(this);
+        this.caps = new Caps(this);
 
     }
 
@@ -70,7 +68,7 @@ class bot extends core {
 
                 if (!data){ continue; } // Get rid of pesky new lines
 
-                const parse = new parser(data);
+                const parse = new Parser(data);
 
                 console.log("[RECV]",  data);
 
@@ -93,7 +91,7 @@ fs.readdir("config", (error, contents) => {
         for (let _ = 0; _ < contents.length; _++) {
 
             const configFile = contents[_];
-            clients[configFile] = new bot(`./config/${configFile}`);
+            clients[configFile] = new Bot(`./config/${configFile}`);
             clients[configFile].connect();
 
         }
