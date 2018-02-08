@@ -61,9 +61,6 @@ class Core {
 
         this.on_saslsuccess = this.events.on("903", (irc, event) => this.sasl.on_saslsuccess(event));
 
-
-
-
     }
 
     send (message) {
