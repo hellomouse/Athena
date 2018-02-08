@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/BWBellairs/Athena#readme",
   "devDependencies": {
-    "eslint": "^4.17.0"
+    "eslint": "^4.17.0",
+    "eslint-config-google": "^0.9.1"
   }
 }
