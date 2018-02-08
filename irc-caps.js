@@ -11,6 +11,7 @@ class Caps {
 
         // Iterate over list provided of caps and check if it is a string or a function
         for (const cap of self.caps) {
+
             if (typeof cap != "string") {
 
                 self.stringcaps.push(cap.name);
@@ -54,9 +55,11 @@ class Caps {
                     }
 
                 }
+
             }
 
             if (event.arguments[1] != "*") {
+
                 if (!self.availablecaps.length) {
 
                     self.bot.send("CAP END");
@@ -66,6 +69,7 @@ class Caps {
                     self.bot.send(`CAP REQ :${self.availablecaps.join(" ")}`);
 
                 }
+
             }
 
         } else if (event.arguments[0] == "ACK") {

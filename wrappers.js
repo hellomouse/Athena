@@ -1,4 +1,5 @@
 class connection_wrapper {
+
     constructor (self) {
 
         this.bot = self; // We're not extending this class so this is a solution
@@ -77,6 +78,7 @@ class connection_wrapper {
     deop (channel, nick) {
 
         this.bot.send(`MODE ${channel} -o ${nick}`);
+
     }
 
     ban (channel, nick) {
@@ -138,6 +140,7 @@ class connection_wrapper {
         this.privmsg(user, `\x01${message}\x01\x01`);
 
     }
+
 }
 
 module.exports = connection_wrapper;

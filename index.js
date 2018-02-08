@@ -45,11 +45,13 @@ class bot extends core {
         this.sasl = new Sasl(this.config.sasl.username, this.config.sasl.password);
         this.config.caps.push(this.sasl);
         this.caps = new caps(this);
+
     }
 
     connect () {
 
         this.socket.once("connect", () => {
+
             console.log("Connected");
 
             // TODO: Move to auth module
@@ -76,6 +78,7 @@ class bot extends core {
                 this.events.emit("all", this.irc, parse);
 
             }
+
         });
 
     }
