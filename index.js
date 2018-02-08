@@ -59,7 +59,7 @@ class Bot extends Core {
 
         });
 
-        this.socket.on("data", (data) => {
+        this.socket.on("data", data => {
 
             const parsed = data.toString().split("\r\n");
             for (let i = 0; i < parsed.length; i++) {

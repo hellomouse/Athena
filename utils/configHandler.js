@@ -70,7 +70,7 @@ class ConfigHandler {
     async save () {
 
         const config = JSON.stringify(this.config);
-        await fs.writeFile(this.path, config, (error) => {
+        await fs.writeFile(this.path, config, error => {
 
             if (error) {
 
