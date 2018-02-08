@@ -12,7 +12,7 @@ class Caps {
         // Iterate over list provided of caps and check if it is a string or a function
         for (const cap of self.caps) {
 
-            self.stringcaps.push(typeof cap != string ? cap.name : cap);
+            self.stringcaps.push(typeof cap != "string" ? cap.name : cap);
 
         }
 
