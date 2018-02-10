@@ -62,3 +62,10 @@ typings/
 *.crt
 *.key
 *.pfx
+
+# Backup files and temporary files
+*~
+*.bak
+
+# JSDoc output
+out/*
