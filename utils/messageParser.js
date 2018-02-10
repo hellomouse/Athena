@@ -163,22 +163,6 @@ class Parser {
 
         }
 
-        for (const i in this.arguments) {
-
-            if (this.arguments[i].startsWith("+")) {
-
-                this.arguments[i] = this.arguments[i].slice(1);
-                this.is_identified = true;
-
-            } else if (this.arguments[i].startsWith("-")) {
-
-                    this.arguments[i] = this.arguments[i].slice(1);
-                    this.is_identified = false;
-
-            }
-
-        }
-
     }
 }
 
