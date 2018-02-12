@@ -29,7 +29,6 @@
     "eslint-config-google": "^0.9.1"
   },
   "dependencies": {
-    "cli-color": "^1.2.0",
     "winston": "^2.4.0"
   }
 }
