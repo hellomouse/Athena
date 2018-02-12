@@ -17,7 +17,7 @@ const logger = new (winston.Logger)({
 winston.addColors({
     silly: clc.blue,
     debug: clc.cyan,
-    info: clc.green,
+    info: clc.white,
     warn: clc.yellow,
     error: clc.red,
     verbose: clc.magenta
