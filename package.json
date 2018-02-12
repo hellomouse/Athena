@@ -27,5 +27,8 @@
   "devDependencies": {
     "eslint": "^4.17.0",
     "eslint-config-google": "^0.9.1"
+  },
+  "dependencies": {
+    "winston": "^2.4.0"
   }
 }
