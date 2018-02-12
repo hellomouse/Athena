@@ -60,6 +60,10 @@ module.exports = {
             {
                 "allowSingleLine": true
             }
+        ],
+        "object-curly-spacing": [
+            "error",
+            "always"
         ]
     }
 }

@@ -41,7 +41,7 @@ class Bot extends Core {
         if (this.config.ssl) {
 
             /* eslint-disable max-len */
-            this.socket = tls.connect(this.config.irc.port, this.config.irc.host, {"cert": this.config.sasl.cert, "key": this.config.sasl.key, "passphrase": this.config.sasl.key_passphrase});
+            this.socket = tls.connect(this.config.irc.port, this.config.irc.host, { "cert": this.config.sasl.cert, "key": this.config.sasl.key, "passphrase": this.config.sasl.key_passphrase });
             /* elsint-enable max-len */
 
         } else {
