@@ -1,3 +1,5 @@
+const log = require("./utils/logging");
+
 /** Contains vital methods used to interact with the irc server properly */
 class Core {
 
@@ -70,7 +72,7 @@ class Core {
     send (message) {
 
         this.socket.write(`${message}\r\n`);
-        console.log("[SENT]", message);
+        log.debug("[SENT]", message);
 
     }
 

@@ -3,6 +3,7 @@ const socket = require("net");
 const tls = require("tls");
 const fs = require("fs");
 
+const log = require("./utils/logging");
 const config = require("./utils/configHandler");
 const Parser = require("./utils/messageParser");
 const Wrappers = require("./wrappers");
@@ -70,7 +71,7 @@ class Bot extends Core {
 
         this.socket.once("connect", () => {
 
-            console.log("Connected");
+            log.info("Connected");
 
             // TODO: Move to auth module
             this.send(`NICK ${this.config.nickname}`);
@@ -91,7 +92,7 @@ class Bot extends Core {
 
                 const parse = new Parser(data);
 
-                console.log("[RECV]", data);
+                log.debug("[RECV]", data);
 
                 this.events.emit(parse.command, this.irc, parse);
                 this.events.emit("all", this.irc, parse);
@@ -107,7 +108,7 @@ class Bot extends Core {
 const clients = {};
 fs.readdir("config", (error, contents) => {
 
-    if (error) console.log("[FATAL]", error);
+    if (error) log.error("[FATAL]", error);
     else {
 
         for (let _ = 0; _ < contents.length; _++) {
