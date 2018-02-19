@@ -78,7 +78,7 @@ class Core {
     send (message) {
 
         this.socket.write(`${message}\r\n`);
-        log.debug("[SENT]", message);
+        log.debug("[SENT] %s", message);
 
     }
 

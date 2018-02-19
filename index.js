@@ -92,7 +92,7 @@ class Bot extends Core {
 
                 const parse = new Parser(data);
 
-                log.debug("[RECV]", data);
+                log.debug("[RECV] %s", data);
 
                 this.events.emit(parse.command, this.irc, parse);
                 this.events.emit("all", this.irc, parse);
