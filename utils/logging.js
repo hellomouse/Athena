@@ -1,39 +1,29 @@
-const winston = require("winston");
+const winston = require('winston');
 
 const timestamps = winston.format((info, opts) => {
-
     if (opts.format) {
-
-        info.timestamp = typeof opts.format === "function" ?
+        info.timestamp = typeof opts.format === 'function' ?
             opts.format() :
-            require("fecha").format(new Date(), opts.format);
-
+            require('fecha').format(new Date(), opts.format);
     }
 
     if (!info.timestamp) {
-
         info.timestamp = new Date().toLocaleString();
-
     }
 
     if (opts.alias) {
-
         info[opts.alias] = info.timestamp;
-
     }
 
     return info;
-
 });
 
 const formatter = winston.format(info => {
-
-    const MESSAGE = Symbol.for("message");
+    const MESSAGE = Symbol.for('message');
 
     info[MESSAGE] = `[${info.timestamp}] [${info.level}] ${info.message}`;
 
     return info;
-
 });
 
 /* eslint-disable new-cap */
@@ -43,7 +33,7 @@ const logger = new (winston.createLogger)({
         new (winston.transports.Console)({
             colorize: true,
             timestamp: () => new Date().toLocaleString(),
-            level: "debug",
+            level: 'debug',
             json: false,
             format: winston.format.combine(
                 winston.format.colorize({ all: true }),
@@ -53,19 +43,19 @@ const logger = new (winston.createLogger)({
             )
         }),
         new (winston.transports.File)({
-            filename: "messages.log",
+            filename: 'messages.log',
             timestamp: true
         })
     ]
 });
 
 winston.addColors({
-    silly: "blue",
-    debug: "cyan",
-    info: "white",
-    warn: "yellow",
-    error: "red",
-    verbose: "magenta"
+    silly: 'blue',
+    debug: 'cyan',
+    info: 'white',
+    warn: 'yellow',
+    error: 'red',
+    verbose: 'magenta'
 });
 
 module.exports = logger;

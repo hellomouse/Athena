@@ -13,14 +13,6 @@ module.exports = {
     "extends": ["eslint:recommended", "google"],
     "rules": {
         "require-jsdoc": "off",
-        "space-before-function-paren": [
-            "error",
-            "always"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
         "comma-dangle": [
             "error",
             "never"
@@ -28,7 +20,7 @@ module.exports = {
         "padded-blocks": [
             "error",
             {
-                "blocks": "always"
+                "blocks": "never"
             }
         ],
         "arrow-parens": [
@@ -64,6 +56,19 @@ module.exports = {
         "object-curly-spacing": [
             "error",
             "always"
+        ],
+        "space-unary-ops": [
+            "error",
+            {
+                "words": true,
+                "nonwords": false
+            }
+        ],
+        "padding-line-between-statements": [
+            "error",
+            { "blankLine": "always", "prev": "*", "next": "return" },
+            { "blankLine": "always", "prev": ["const", "let"], "next": "*" },
+            { "blankLine": "any", "prev": ["const", "let"], "next": ["const", "let"]}
         ]
     }
 }
