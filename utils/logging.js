@@ -1,16 +1,62 @@
 const winston = require("winston");
 
-function timestamps () {
+const timestamps = winston.format((info, opts) => {
 
-    return `[${new Date().toLocaleString()}]`;
+    if (opts.format) {
 
-}
+        info.timestamp = typeof opts.format === "function" ?
+            opts.format() :
+            require("fecha").format(new Date(), opts.format);
 
-const logger = new (winston.Logger)({
-     transports: [
-         new (winston.transports.Console)({ colorize: true, timestamp: timestamps, level: "debug" }),
-         new (winston.transports.File)({ filename: "messages.log", timestamp: true })
-     ]
+    }
+
+    if (!info.timestamp) {
+
+        info.timestamp = new Date().toLocaleString();
+
+    }
+
+    if (opts.alias) {
+
+        info[opts.alias] = info.timestamp;
+
+    }
+
+    return info;
+
+});
+
+const formatter = winston.format(info => {
+
+    const MESSAGE = Symbol.for("message");
+
+    info[MESSAGE] = `[${info.timestamp}] [${info.level}] ${info.message}`;
+
+    return info;
+
+});
+
+/* eslint-disable new-cap */
+const logger = new (winston.createLogger)({
+    /* elsint-enable new-cap */
+    transports: [
+        new (winston.transports.Console)({
+            colorize: true,
+            timestamp: () => new Date().toLocaleString(),
+            level: "debug",
+            json: false,
+            format: winston.format.combine(
+                winston.format.colorize({ all: true }),
+                winston.format.splat(),
+                timestamps(),
+                formatter()
+            )
+        }),
+        new (winston.transports.File)({
+            filename: "messages.log",
+            timestamp: true
+        })
+    ]
 });
 
 winston.addColors({
