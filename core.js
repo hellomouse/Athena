@@ -24,7 +24,7 @@ class Core {
 
         this.on_welcome = this.events.on('001', (irc, event) => {
             Object.keys(this.config.channels).forEach(channel => {
-                this.send(`JOIN ${channel}`);
+                irc.join(channel, this.config.channels[channel].key);
             });
         });
 
