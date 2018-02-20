@@ -21,7 +21,7 @@ class Sasl {
     * @param {array} [args]
     */
     run(bot, args) {
-        const mechanisms = typeof args !== 'undefined' && args !== null ? args : ['EXTERNAL', 'PLAIN'];
+        const mechanisms = args || ['EXTERNAL', 'PLAIN'];
 
         this.bot = bot;
 

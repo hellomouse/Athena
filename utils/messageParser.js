@@ -7,9 +7,9 @@ class User {
     constructor(userhost) {
         this.userhost = userhost;
         [this.nick, this.ident] = this.userhost.split('!');
-        this.nick = this.nick !== undefined ? this.nick : null;
+        this.nick = this.nick || null;
         this.host = this.userhost.split('@')[1];
-        this.host = this.host !== undefined ? this.host : null;
+        this.host = this.host || null;
         this.ident = this.ident !== undefined ? this.ident.split('@')[0] : null;
     }
 
