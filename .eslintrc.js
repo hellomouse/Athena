@@ -12,7 +12,18 @@ module.exports = {
     },
     "extends": ["eslint:recommended", "google"],
     "rules": {
-        "require-jsdoc": "off",
+        "require-jsdoc": [
+            "warn",
+            {
+                "require": {
+                    "FunctionDeclaration": true,
+                    "MethodDefinition": true,
+                    "ClassDeclaration": true,
+                    "ArrowFunctionExpression": true,
+                    "FunctionExpression": true
+                }
+            }
+        ],
         "comma-dangle": [
             "error",
             "never"
@@ -71,7 +82,7 @@ module.exports = {
             { "blankLine": "any", "prev": ["const", "let"], "next": ["const", "let"]}
         ],
         "eqeqeq": [
-            "error",
+            "warn",
             "smart"
         ],
         "no-redeclare": [
