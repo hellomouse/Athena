@@ -91,5 +91,11 @@ module.exports = {
                 "builtinGlobals": true
             }
         ],
+        "no-shadow": "error",
+        "no-useless-return": "error",
+        "no-cond-assign": "error",
+        "block-scoped-var": "error",
+        "no-else-return": "error",
+        "no-undef-init": "error"
     }
 }
