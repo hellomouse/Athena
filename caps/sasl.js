@@ -21,7 +21,7 @@ class Sasl {
     * @param {array} [args]
     */
     run(bot, args) {
-        const mechanisms = typeof args != 'undefined' && args !== null ? args : ['EXTERNAL', 'PLAIN'];
+        const mechanisms = typeof args !== 'undefined' && args !== null ? args : ['EXTERNAL', 'PLAIN'];
 
         this.bot = bot;
 
@@ -43,10 +43,10 @@ class Sasl {
     on_authenticate(event) {
         let password;
 
-        if (event.arguments[0] == '+') {
-            if (this.method == 'plain') {
+        if (event.arguments[0] === '+') {
+            if (this.method === 'plain') {
                 password = Buffer.from(`${this.username}\x00${this.username}\x00${this.password}`).toString('base64');
-            } else if (this.method == 'external') {
+            } else if (this.method === 'external') {
                 password = '+';
             }
 
@@ -61,8 +61,8 @@ class Sasl {
     on_saslfailed(event) {
         this.retries += 1;
 
-        if (this.method == 'external') {
-            if (this.retries == 2) {
+        if (this.method === 'external') {
+            if (this.retries === 2) {
                 this.retries = 1;
                 this.method = 'plain';
 
@@ -70,8 +70,8 @@ class Sasl {
             } else {
                 this.bot.send('AUTHENTICATE EXTERNAL');
             }
-        } else if (this.method == 'plain') {
-            if (this.retries != 2) {
+        } else if (this.method === 'plain') {
+            if (this.retries !== 2) {
                 this.bot.send('AUTHENTICATE PLAIN');
             } else {
                 this.bot.send('AUTHENTICATE *');

@@ -91,7 +91,7 @@ class Parser {
             this.source = new User(raw_msg[0]);
             this.command = raw_msg[1];
 
-            if (raw_msg.length > 2 && this.command != 'ACCOUNT') {
+            if (raw_msg.length > 2 && this.command !== 'ACCOUNT') {
                 this.target = raw_msg[2];
             }
 
@@ -99,7 +99,7 @@ class Parser {
                 argument2 = raw_msg.slice(3).join(' ');
             }
 
-            if (this.command == 'ACCOUNT') {
+            if (this.command === 'ACCOUNT') {
                 argument2 = raw_msg[2];
             }
         } else {

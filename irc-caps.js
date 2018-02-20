@@ -11,17 +11,17 @@ class Caps {
 
         // Iterate over list provided of caps and check if it is a string or a function
         for (const cap of self.caps) {
-            self.stringcaps.push(typeof cap != 'string' ? cap.name : cap);
+            self.stringcaps.push(typeof cap !== 'string' ? cap.name : cap);
         }
     }
 
     handler(event) {
         // Main handling code for CAP
         const self = this;
-        const servcaps = event.arguments[1] != '*' ? event.arguments[1].split(' ') : event.arguments[2].split(' ');
+        const servcaps = event.arguments[1] !== '*' ? event.arguments[1].split(' ') : event.arguments[2].split(' ');
         let args, cap;
 
-        if (event.arguments[0] == 'LS') {
+        if (event.arguments[0] === 'LS') {
             // Don't blindly assume server supports our requested caps, even though server sends a CAP NACK response
             for (const c of servcaps) {
                 [cap, args] = c.trim().split('=');
@@ -29,7 +29,7 @@ class Caps {
                 if (self.stringcaps.indexOf(cap) > -1) {
                     self.availablecaps.push(cap);
 
-                    if (typeof args != 'undefined') {
+                    if (typeof args !== 'undefined') {
                         self.args[cap] = args.split(',');
                     } else {
                         self.args[cap] = null;
@@ -37,16 +37,16 @@ class Caps {
                 }
             }
 
-            if (event.arguments[1] != '*') {
+            if (event.arguments[1] !== '*') {
                 if (!self.availablecaps.length) {
                     self.bot.send('CAP END');
                 } else {
                     self.bot.send(`CAP REQ :${self.availablecaps.join(' ')}`);
                 }
             }
-        } else if (event.arguments[0] == 'ACK') {
+        } else if (event.arguments[0] === 'ACK') {
             for (cap of self.caps) { // Iterate over self.caps so we have access to classes
-                if (typeof cap != 'string' && self.availablecaps.indexOf(cap.name) > -1) { // Check that the cap is in self.availablecaps
+                if (typeof cap !== 'string' && self.availablecaps.indexOf(cap.name) > -1) { // Check that the cap is in self.availablecaps
                     // if (cap.hasOwnProperty("run")) { // Check if the cap has the `run` property
 
                         cap.run(self.bot, self.args[cap.name]); // Run the cap with the arguments collected during CAP LS
@@ -54,7 +54,7 @@ class Caps {
                     // }
                 }
             }
-        } else if (event.arguments[0] == 'NEW') {
+        } else if (event.arguments[0] === 'NEW') {
             const newcaps = [];
 
             for (const c of self.stringcaps) {
@@ -67,7 +67,7 @@ class Caps {
             if (newcaps.length) {
                 self.bot.send(`CAP REQ :${newcaps.join(' ')}`); // Request the new CAP
             }
-        } else if (event.arguments[0] == 'DEL') {
+        } else if (event.arguments[0] === 'DEL') {
             for (const c of servcaps) {
                 if (self.availablecaps.indexOf(c) > -1) {
                     self.availablecaps.splice(self.availablecaps.indexOf(c), 1);

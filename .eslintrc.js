@@ -69,6 +69,10 @@ module.exports = {
             { "blankLine": "always", "prev": "*", "next": "return" },
             { "blankLine": "always", "prev": ["const", "let"], "next": "*" },
             { "blankLine": "any", "prev": ["const", "let"], "next": ["const", "let"]}
+        ],
+        "eqeqeq": [
+            "error",
+            "smart"
         ]
     }
 }

@@ -58,7 +58,7 @@ class ConnectionWrapper {
     * @param {string} [key] - Channel key.
     */
     join(chan, key) {
-        this.bot.send(typeof key == 'string' ? `JOIN ${chan} ${key}` : `JOIN ${chan}`);
+        this.bot.send(typeof key === 'string' ? `JOIN ${chan} ${key}` : `JOIN ${chan}`);
     }
 
     /**
