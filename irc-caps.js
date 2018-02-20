@@ -1,23 +1,20 @@
 class Caps {
 
     constructor(bot) {
-        const self = this;
-
-        self.bot = bot;
-        self.caps = self.bot.config.caps || [];
-        self.availablecaps = [];
-        self.stringcaps = [];
-        self.args = {};
+        this.bot = bot;
+        this.caps = this.bot.config.caps || [];
+        this.availablecaps = [];
+        this.stringcaps = [];
+        this.args = {};
 
         // Iterate over list provided of caps and check if it is a string or a function
-        for (const cap of self.caps) {
-            self.stringcaps.push(typeof cap !== 'string' ? cap.name : cap);
+        for (const cap of this.caps) {
+            this.stringcaps.push(typeof cap !== 'string' ? cap.name : cap);
         }
     }
 
     handler(event) {
         // Main handling code for CAP
-        const self = this;
         const servcaps = event.arguments[1] !== '*' ? event.arguments[1].split(' ') : event.arguments[2].split(' ');
         let args, cap;
 
@@ -26,58 +23,58 @@ class Caps {
             for (const c of servcaps) {
                 [cap, args] = c.trim().split('=');
 
-                if (self.stringcaps.indexOf(cap) > -1) {
-                    self.availablecaps.push(cap);
+                if (this.stringcaps.indexOf(cap) > -1) {
+                    this.availablecaps.push(cap);
 
                     if (typeof args !== 'undefined') {
-                        self.args[cap] = args.split(',');
+                        this.args[cap] = args.split(',');
                     } else {
-                        self.args[cap] = null;
+                        this.args[cap] = null;
                     }
                 }
             }
 
             if (event.arguments[1] !== '*') {
-                if (!self.availablecaps.length) {
-                    self.bot.send('CAP END');
+                if (!this.availablecaps.length) {
+                    this.bot.send('CAP END');
                 } else {
-                    self.bot.send(`CAP REQ :${self.availablecaps.join(' ')}`);
+                    this.bot.send(`CAP REQ :${this.availablecaps.join(' ')}`);
                 }
             }
         } else if (event.arguments[0] === 'ACK') {
-            for (cap of self.caps) { // Iterate over self.caps so we have access to classes
-                if (typeof cap !== 'string' && self.availablecaps.indexOf(cap.name) > -1) { // Check that the cap is in self.availablecaps
-                    // if (cap.hasOwnProperty("run")) { // Check if the cap has the `run` property
-
-                        cap.run(self.bot, self.args[cap.name]); // Run the cap with the arguments collected during CAP LS
-
-                    // }
+            for (cap of this.caps) { // Iterate over this.caps so we have access to classes
+                if (typeof cap !== 'string' && this.availablecaps.indexOf(cap.name) > -1) { // Check that the cap is in this.availablecaps
+                    if (typeof cap.run === 'function') { // Check if the cap has the `run` property
+                        cap.run(this.bot, this.args[cap.name]); // Run the cap with the arguments collected during CAP LS
+                    } else {
+                        continue;
+                    }
                 }
             }
         } else if (event.arguments[0] === 'NEW') {
             const newcaps = [];
 
-            for (const c of self.stringcaps) {
+            for (const c of this.stringcaps) {
                 if (servcaps.indexOf(c) > -1) { // Check if the server supports the CAPs we want
-                    self.availablecaps.push(c); // Add the new CAP to the list of available CAPs
+                    this.availablecaps.push(c); // Add the new CAP to the list of available CAPs
                     newcaps.push(c);
                 }
             }
 
             if (newcaps.length) {
-                self.bot.send(`CAP REQ :${newcaps.join(' ')}`); // Request the new CAP
+                this.bot.send(`CAP REQ :${newcaps.join(' ')}`); // Request the new CAP
             }
         } else if (event.arguments[0] === 'DEL') {
             for (const c of servcaps) {
-                if (self.availablecaps.indexOf(c) > -1) {
-                    self.availablecaps.splice(self.availablecaps.indexOf(c), 1);
+                if (this.availablecaps.indexOf(c) > -1) {
+                    this.availablecaps.splice(this.availablecaps.indexOf(c), 1);
                 }
 
-                if (self.stringcaps.indexOf(c) > -1) {
-                    const index = self.stringcaps.indexOf(c);
+                if (this.stringcaps.indexOf(c) > -1) {
+                    const index = this.stringcaps.indexOf(c);
 
-                    self.stringcaps.splice(index, 1);
-                    self.caps.splice(index, 1);
+                    this.stringcaps.splice(index, 1);
+                    this.caps.splice(index, 1);
                 }
             }
         }
