@@ -26,13 +26,12 @@ class Bot extends Core {
         super();
 
         this.irc = new Wrappers(this);
-        this.config_file_path = config_file_path;
 
         // Event handler
         this.events = new events.EventEmitter();
 
         // Config
-        this.config_file_path = this.config_file_path;
+        this.config_file_path = config_file_path;
         this.config_handler = new config.ConfigHandler(config_file_path); // Initalise a new object with the config file
         this.config_handler.load(true); // Load the config
         this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
