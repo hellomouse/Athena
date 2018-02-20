@@ -70,8 +70,8 @@ class Bot extends Core {
             this.send('CAP LS 302');
         });
 
-        this.socket.on('data', data => {
-            const parsed = data.toString().split('\r\n');
+        this.socket.on('data', recv => {
+            const parsed = recv.toString().split('\r\n');
 
             for (let i = 0; i < parsed.length; i++) {
                 const data = parsed[i];

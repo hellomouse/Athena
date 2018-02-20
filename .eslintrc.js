@@ -73,6 +73,12 @@ module.exports = {
         "eqeqeq": [
             "error",
             "smart"
-        ]
+        ],
+        "no-redeclare": [
+            "error",
+            {
+                "builtinGlobals": true
+            }
+        ],
     }
 }
