@@ -38,14 +38,15 @@ class ConfigHandler {
                 log.error(error);
             } else {
                 this.config = JSON.parse(contents);
+
                 if (this.config.sasl.cert) {
                     let cert;
 
-                    fs.readFile(this.config.sasl.cert, (error, contents) => {
-                        if (error) {
-                            log.error(error);
+                    fs.readFile(this.config.sasl.cert, (err, cnts) => {
+                        if (err) {
+                            log.error(err);
                         } else {
-                            cert = contents;
+                            cert = cnts;
                         }
                     });
                     this.config.sasl.cert = cert;
@@ -53,11 +54,11 @@ class ConfigHandler {
                 if (this.config.sasl.key) {
                     let key;
 
-                    fs.readFile(this.config.sasl.key, (error, contents) => {
-                        if (error) {
-                            log.error(error);
+                    fs.readFile(this.config.sasl.key, (err, cnts) => {
+                        if (err) {
+                            log.error(err);
                         } else {
-                            key = contents;
+                            key = cnts;
                         }
                     });
                     this.config.sasl.key = key;
