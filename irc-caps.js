@@ -1,5 +1,13 @@
+/**
+* @class
+
+*/
 class Caps {
 
+    /**
+    * @func
+    * @param {Bot} bot
+    */
     constructor(bot) {
         this.bot = bot;
         this.caps = this.bot.config.caps || [];
@@ -13,6 +21,10 @@ class Caps {
         }
     }
 
+    /**
+    * @func
+    * @param {Parser} event
+    */
     handler(event) {
         // Main handling code for CAP
         const servcaps = event.arguments[1] !== '*' ? event.arguments[1].split(' ') : event.arguments[2].split(' ');
