@@ -9,7 +9,7 @@ class Caps {
 
         // Iterate over list provided of caps and check if it is a string or a function
         for (const cap of this.caps) {
-            this.stringcaps.push(typeof cap !== 'string' ? cap.name : cap);
+            this.stringcaps.push(cap.name || cap);
         }
     }
 
