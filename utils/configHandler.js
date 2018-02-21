@@ -1,4 +1,5 @@
 const fs = require('fs');
+const log = require('./logging.js');
 
 /** Class that holds the config */
 class ConfigHandler {
@@ -34,7 +35,7 @@ class ConfigHandler {
         // Just in case we need to have an async load
         await fs.readFile(this.path, (error, contents) => {
             if (error) {
-                console.log('[ERROR]', error);
+                log.error(error);
             } else {
                 this.config = JSON.parse(contents);
                 if (this.config.sasl.cert) {
@@ -42,7 +43,7 @@ class ConfigHandler {
 
                     fs.readFile(this.config.sasl.cert, (error, contents) => {
                         if (error) {
-                            console.error('[ERROR]', error);
+                            log.error(error);
                         } else {
                             cert = contents;
                         }
@@ -54,14 +55,14 @@ class ConfigHandler {
 
                     fs.readFile(this.config.sasl.key, (error, contents) => {
                         if (error) {
-                            console.error('[ERROR]', error);
+                            log.error(error);
                         } else {
                             key = contents;
                         }
                     });
                     this.config.sasl.key = key;
                 }
-                console.log('[CONFIG] Loaded config from', this.path);
+                log.info('[CONFIG] Loaded config from %s', this.path);
             }
 
             return this.config || {};
@@ -77,9 +78,9 @@ class ConfigHandler {
 
         await fs.writeFile(this.path, config, error => {
             if (error) {
-                console.log('[CONFIG] ERROR: Failed saving - ', error);
+                log.error('[CONFIG] ERROR: Failed saving - ', error);
             } else {
-                console.log('[CONFIG] Saved!');
+                log.info('[CONFIG] Saved!');
             }
         });
     }
