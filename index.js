@@ -37,9 +37,11 @@ class Bot extends Core {
         this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
 
         if (this.config.ssl) {
-            /* eslint-disable max-len */
-            this.socket = tls.connect(this.config.irc.port, this.config.irc.host, { 'cert': this.config.sasl.cert, 'key': this.config.sasl.key, 'passphrase': this.config.sasl.key_passphrase });
-            /* elsint-enable max-len */
+            this.socket = tls.connect(this.config.irc.port, this.config.irc.host, {
+                'cert': this.config.sasl.cert,
+                'key': this.config.sasl.key,
+                'passphrase': this.config.sasl.key_passphrase
+            });
         } else {
             this.socket = socket.connect(this.config.irc.port, this.config.irc.host);
          }
