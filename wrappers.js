@@ -105,35 +105,35 @@ class ConnectionWrapper {
     }
 
     op(channel, nick) {
-        this.bot.send(`MODE ${channel} +o ${nick}`);
+        this.mode(channel, nick, '+o');
     }
 
     deop(channel, nick) {
-        this.bot.send(`MODE ${channel} -o ${nick}`);
+        this.mode(channel, nick, '-o');
     }
 
     ban(channel, nick) {
-        this.bot.send(`MODE ${channel} +b ${nick}`);
+        this.mode(channel, nick, '+b');
     }
 
     unban(channel, nick) {
-        this.bot.send(`MODE ${channel} -b ${nick}`);
+        this.mode(channel, nick, '-b');
     }
 
     quiet(channel, nick) {
-        this.bot.send(`MODE ${channel} +q ${nick}`);
+        this.mode(channel, nick, '+q');
     }
 
     unquiet(channel, nick) {
-        this.bot.send(`MODE ${channel} -q ${nick}`);
+        this.mode(channel, nick, '-q');
     }
 
     unvoice(channel, nick) {
-        this.bot.send(`MODE ${channel} -v ${nick}`);
+        this.mode(channel, nick, '-v');
     }
 
     voice(channel, nick) {
-        this.bot.send(`MODE ${channel} +v ${nick}`);
+        this.mode(channel, nick, '+v');
     }
 
     mode(channel, nick, mode) {
