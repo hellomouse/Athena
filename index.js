@@ -95,7 +95,7 @@ class Bot extends Core {
 const clients = {};
 
 fs.readdir('config', (error, contents) => {
-    if (error) log.error('[FATAL]', error);
+    if (error) log.error('[FATAL] %s', error);
     else {
         for (let _ = 0; _ < contents.length; _++) {
             const configFile = contents[_];

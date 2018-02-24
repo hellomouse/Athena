@@ -104,18 +104,42 @@ class ConnectionWrapper {
         this.bot.send(`REMOVE ${channel} ${user} :${message}`);
     }
 
+    /**
+    * Gives operator status (+o) specified user from the specified channel.
+    * @func
+    * @param {string} channel - Channel where you wish to give user from.
+    * @param {string} nick - User whom you would like to give operator status to in specified channel.
+    */
     op(channel, nick) {
         this.mode(channel, nick, '+o');
     }
 
+    /**
+    * Removes operator status (-o) specified user from the specified channel.
+    * @func
+    * @param {string} channel - Channel where you wish to give user from.
+    * @param {string} nick - User whom you would like to remove operator status from specified channel.
+    */
     deop(channel, nick) {
         this.mode(channel, nick, '-o');
     }
 
+    /**
+    * Bans (+b) specified user from the specified channel.
+    * @func
+    * @param {string} channel - Channel where you wish to ban the user from.
+    * @param {string} nick - User whom you would like to ban from specified channel.
+    */
     ban(channel, nick) {
         this.mode(channel, nick, '+b');
     }
 
+    /**
+    * Unbans (-b) specified user from the specified channel.
+    * @func
+    * @param {string} channel - Channel where you wish to unban the user from.
+    * @param {string} nick - User whom you would like to unban from specified channel.
+    */
     unban(channel, nick) {
         this.mode(channel, nick, '-b');
     }
