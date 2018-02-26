@@ -46,7 +46,7 @@ class Parser {
         if (raw_msg.startsWith('@')) {
             let tags;
 
-            [tags, raw_msg] = split(this.raw, ' ', 1); // Split raw into tags and other raw...
+            [tags, raw_msg] = split(this.raw, ' ', 1); // Split raw into tags and the IRC message
             tags = tags.slice(1).split(';'); // Let's find the tags!
 
             for (let tag of tags) {
