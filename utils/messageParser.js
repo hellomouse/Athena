@@ -112,6 +112,8 @@ class Parser {
         if (argument2.length > 1) {
             this.arguments.push(argument2[1]);
         }
+
+        this.text_type = require('../resources/numerics.json')[this.command] || this.command;
     }
 }
 
