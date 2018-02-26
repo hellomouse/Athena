@@ -47,8 +47,7 @@ class Parser {
             let tags;
 
             [tags, raw_msg] = split(this.raw, ' ', 1); // Split raw into tags and other raw...
-            tags = tags.replace('@', '', 1); // Let's find the tags!
-            tags = tags.split(';'); // Here are the tags!
+            tags = tags.slice(1).split(';'); // Let's find the tags!
 
             for (let tag of tags) {
                 if ('=' in tag) {
