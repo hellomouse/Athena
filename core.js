@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
 
@@ -13,15 +11,6 @@ class Core {
         this.config = config;
         this.state = state;
         this.plugins = new Plugins(this);
-        fs.readdir('./plugins', (err, files) => {
-            for (let file of files) {
-                const plugin = require('./' + path.join('plugins', file));
-
-                for (let cmd of Object.keys(plugin)) {
-                    this.plugins.add_cmd(cmd, plugin[cmd]);
-                }
-            }
-        });
 
         this.nickname = this.config.nickname;
 

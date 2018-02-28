@@ -1,9 +1,20 @@
 /* eslint-disable require-jsdoc */
 const log = require('./logging.js');
+const { readdir } = require('fs');
+const { join } = require('path');
 
 class Plugins {
     constructor(bot) {
         this.bot = bot;
+        readdir('./plugins', (err, files) => {
+            for (let file of files) {
+                const plugin = require('../' + join('plugins', file));
+
+                for (let cmd of Object.keys(plugin)) {
+                    this.add_cmd(cmd, plugin[cmd]);
+                }
+            }
+        });
     }
 
     add_cmd(name, func) {
