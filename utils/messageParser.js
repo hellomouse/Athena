@@ -1,4 +1,4 @@
-const split = require('./utils/python').split;
+const { split } = require('node-python-funcs');
 
 /** Class that gets different values from a users hostmask */
 class User {

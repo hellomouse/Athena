@@ -1,4 +1,4 @@
-const { range } = require('./utils/python');
+const { range } = require('node-python-funcs');
 
 /** Class that provides methods for IRC commands */
 class ConnectionWrapper {

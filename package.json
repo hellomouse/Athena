@@ -29,6 +29,7 @@
     "eslint-config-google": "^0.9.1"
   },
   "dependencies": {
+    "node-python-funcs": "0.0.3",
     "winston": "^3.0.0-rc1"
   }
 }
