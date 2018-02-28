@@ -1,3 +1,5 @@
+const { range } = require('./utils/python');
+
 /** Class that provides methods for IRC commands */
 class ConnectionWrapper {
 
@@ -30,7 +32,15 @@ class ConnectionWrapper {
     * @param {string} message - The message you wish to send.
     */
     privmsg(target, message) {
-        this.bot.send(`PRIVMSG ${target} :${message}`);
+        const MSGLEN = 400 - `PRIVMSG ${target} :\r\n`.length;
+        let strings = [];
+
+        for (let i of range(0, message.length, MSGLEN)) {
+            strings.push(message.slice(i, i + MSGLEN));
+        }
+        for (let msg of strings) {
+            this.bot.send(`PRIVMSG ${target} :${msg}`);
+        }
     }
 
     ping() {
