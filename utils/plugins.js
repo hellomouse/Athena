@@ -1,9 +1,15 @@
-/* eslint-disable require-jsdoc */
 const log = require('./logging.js');
 const { readdir } = require('fs');
 const { join } = require('path');
 
+/**
+* Class that holds methods for calling and adding commands
+* @class
+*/
 class Plugins {
+    /**
+    * @param {object} bot - The `this` object from the upstream class.
+    */
     constructor(bot) {
         this.bot = bot;
         readdir('./plugins', (err, files) => {
@@ -17,10 +23,22 @@ class Plugins {
         });
     }
 
+    /**
+    * Adds a comand to the class
+    * @func
+    * @param {string} name
+    * @param {function} func
+    */
     add_cmd(name, func) {
         this[name] = func;
     }
 
+    /**
+    * Calls a command previously added to the class
+    * @param {Parser} event
+    * @param {ConnectionWrapper} irc
+    * @param {array} args
+    */
     call_command(event, irc, args) {
         if (this[args[0]] !== undefined) {
             try {

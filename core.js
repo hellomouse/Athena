@@ -4,6 +4,7 @@ const Plugins = require('./utils/plugins');
 /** Contains vital methods used to interact with the irc server properly */
 class Core {
 
+    /** */
     constructor() {}
 
     init(events, config, state) {

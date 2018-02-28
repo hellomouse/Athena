@@ -43,6 +43,9 @@ class ConnectionWrapper {
         }
     }
 
+    /**
+    * @func
+    */
     ping() {
         this.bot.send(`PING :${(new Date()).getTime()}`);
     }
@@ -158,34 +161,66 @@ class ConnectionWrapper {
         this.mode(channel, nick, '-b');
     }
 
+    /**
+    * @param {string} channel
+    * @param {string} nick
+    */
     quiet(channel, nick) {
         this.mode(channel, nick, '+q');
     }
 
+    /**
+    * @param {string} channel
+    * @param {string} nick
+    */
     unquiet(channel, nick) {
         this.mode(channel, nick, '-q');
     }
 
+    /**
+    * @param {string} channel
+    * @param {string} nick
+    */
     unvoice(channel, nick) {
         this.mode(channel, nick, '-v');
     }
 
+    /**
+    * @param {string} channel
+    * @param {string} nick
+    */
     voice(channel, nick) {
         this.mode(channel, nick, '+v');
     }
 
+    /**
+    * @param {string} channel
+    * @param {string} nick
+    * @param {string} mode
+    */
     mode(channel, nick, mode) {
         this.bot.send(`MODE ${channel} ${mode} ${nick}`);
     }
 
+    /**
+    * @param {string} user
+    * @param {string} message
+    */
     notice(user, message) {
         this.bot.send(`NOTICE ${user} :${message}`);
     }
 
+    /**
+    * @param {string} message
+    */
     quit(message) {
         this.bot.send(`QUIT :${message}`);
     }
 
+    /**
+    * @param {string} user
+    * @param {string} message
+    */
     ctcp(user, message) {
         this.privmsg(user, `\x01${message}\x01\x01`);
     }
