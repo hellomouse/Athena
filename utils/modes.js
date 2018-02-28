@@ -54,7 +54,7 @@ function requiresParam(mode) {
 }
 
 module.exports = {
-    modes: modes,
-    requiresParams: requiresParams,
-    requiresParam: requiresParam
+    modes,
+    requiresParams,
+    requiresParam
 };
