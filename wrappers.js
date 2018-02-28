@@ -32,10 +32,10 @@ class ConnectionWrapper {
     * @param {string} message - The message you wish to send.
     */
     privmsg(target, message) {
-        const MSGLEN = 400 - `PRIVMSG ${target} :\r\n`.length;
+        const MSGLEN = 512 - Buffer.byteLength(`PRIVMSG ${target} :\r\n`);
         let strings = [];
 
-        for (let i of range(0, message.length, MSGLEN)) {
+        for (let i of range(0, Buffer.byteLength(message), MSGLEN)) {
             strings.push(message.slice(i, i + MSGLEN));
         }
         for (let msg of strings) {
