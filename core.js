@@ -1,4 +1,7 @@
+const fs = require('fs');
+const path = require('path');
 const log = require('./utils/logging');
+const Plugins = require('./utils/plugins');
 
 /** Contains vital methods used to interact with the irc server properly */
 class Core {
@@ -9,6 +12,16 @@ class Core {
         this.events = events;
         this.config = config;
         this.state = state;
+        this.plugins = new Plugins(this);
+        fs.readdir('./plugins', (err, files) => {
+            for (let file of files) {
+                const plugin = require('./' + path.join('plugins', file));
+
+                for (let cmd of Object.keys(plugin)) {
+                    this.plugins.add_cmd(cmd, plugin[cmd]);
+                }
+            }
+        });
 
         this.nickname = this.config.nickname;
 
@@ -57,6 +70,15 @@ class Core {
         this.on_nick = this.events.on('NICK', (irc, event) => {
             if (event.source.nick === this.config.nickname) {
                 this.config.nickname = event.arguments[0];
+            }
+        });
+
+        this.on_privmsg = this.events.on('PRIVMSG', (irc, event) => {
+            let args = event.arguments.join(' ').split(' '); // Split arguments by spaces
+
+            if (args[0].startsWith('*')) {
+                args[0] = args[0].slice(1);
+                this.plugins.call_command(event, irc, args);
             }
         });
     }
