@@ -7,6 +7,13 @@ class Core {
     /** */
     constructor() {}
 
+    /**
+    * Init the class
+    * @func
+    * @param {object} events - Events emmiter
+    * @param {object} config - Bot config
+    * @param {object} state - Temporary bot db
+    */
     init(events, config, state) {
         this.events = events;
         this.config = config;
