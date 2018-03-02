@@ -214,14 +214,14 @@ class Plugins {
     * @param {ConnectionWrapper} irc
     * @param {array} args
     */
-    call_command(event, irc, args) {
+    async call_command(event, irc, args) {
         irc.send = this.bot._send;
         if (this.commands[args[0]] !== undefined) {
             try {
                 let cmd = this.commands[args[0]];
                 let { perms, min_args } = cmd.opts;
 
-                if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
+                if (await check_perms(this.bot.config, event.source.host, event.target, perms)) {
                     if (args.length >= min_args) {
                         cmd(this.bot, event, irc, args.slice(1));
                     } else {

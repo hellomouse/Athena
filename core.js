@@ -350,8 +350,10 @@ class Core {
     * @param {string} message - The message you want to send
     */
     async immediateSend(message) {
-        this.socket.write(`${message}\r\n`);
-        log.debug('[SENT] %s', strip_formatting(message));
+        const { promisify } = require('util');
+
+        await promisify(this.socket.write(`${message}\r\n`));
+        await log.debug('[SENT] %s', strip_formatting(message));
     }
 
 }
