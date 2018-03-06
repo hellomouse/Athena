@@ -44,7 +44,7 @@ class Core {
 
             if (!this.state.channels.hasOwnProperty(channel)) {
                 this.state.channels[channel] = {
-                    users: users,
+                    users,
                     flags: [],
                     modes: [],
                     key: null
@@ -61,7 +61,7 @@ class Core {
         this.on_saslsuccess = this.events.on('903', (irc, event) => this.sasl.on_saslsuccess(event));
 
         this.on_alreadyregistered = this.events.on('462', (irc, event) => { /* eslint-disable max-len */
-            log.error('[ERROR] Either you aren\'t registered and are trying to use SASL or you\'re trying to re-do the USER command');
+            log.error('Either you aren\'t registered and are trying to use SASL or you\'re trying to re-do the USER command');
         });
 
         this.on_nick = this.events.on('NICK', (irc, event) => {
