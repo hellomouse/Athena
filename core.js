@@ -38,18 +38,30 @@ class Core {
             });
         });
 
+        this.on_join = this.events.on('JOIN', (irc, event) => {
+            let channel = event.target;
+            let args = event.arguments;
+
+            if (event.source.nick === this.config.nickname) {
+                log.info('Joining %s', channel);
+                if (!this.state.channels.hasOwnProperty(channel)) {
+                    this.state.channels[channel] = {
+                        users: [],
+                        flags: [],
+                        modes: [],
+                        key: null
+                    };
+                }
+                irc.send('WHO {0} nuhs%nhuac'.format(event.target));
+                irc.send('NAMES {0}'.format(event.target));
+            }
+        });
+
         this.on_name = this.events.on('353', (irc, event) => {
             const channel = event.arguments[1];
             const users = event.arguments[0].split(' ');
 
-            if (!this.state.channels.hasOwnProperty(channel)) {
-                this.state.channels[channel] = {
-                    users,
-                    flags: [],
-                    modes: [],
-                    key: null
-                };
-            }
+            this.state.channels[channel].users.push(...users);
         });
 
         this.on_cap = this.events.on('CAP', (irc, event) => this.caps.handler(event));
