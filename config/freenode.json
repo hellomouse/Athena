@@ -2,9 +2,9 @@
 
     "irc": {
         "host": "irc.freenode.net",
-        "port": 6667
+        "port": 6697
     },
-    "nickname": "`Athena",
+    "nickname": "Athena",
     "realname": "Totally not Athena",
     "ident": "Athena",
     "channels": {
@@ -12,12 +12,12 @@
     },
     "caps": ["account-notify", "extended-join", "multi-prefix"],
     "sasl": {
-        "username": "",
-        "password": "",
-        "cert": "",
-        "key": "",
+        "username": null,
+        "password": null,
+        "cert": null,
+        "key": null,
         "key_passphrase": null
     },
-    "ssl": false
+    "ssl": true
 
 }
