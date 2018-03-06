@@ -28,12 +28,11 @@ class Caps {
     handler(event) {
         // Main handling code for CAP
         const servcaps = event.arguments[1] !== '*' ? event.arguments[1].split(' ') : event.arguments[2].split(' ');
-        let args, cap;
 
         if (event.arguments[0] === 'LS') {
             // Don't blindly assume server supports our requested caps, even though server sends a CAP NACK response
             for (const c of servcaps) {
-                [cap, args] = c.trim().split('=');
+                const [cap, args] = c.trim().split('=');
 
                 if (this.stringcaps.indexOf(cap) > -1) {
                     this.availablecaps.push(cap);
@@ -54,7 +53,7 @@ class Caps {
                 }
             }
         } else if (event.arguments[0] === 'ACK') {
-            for (cap of this.caps) { // Iterate over this.caps so we have access to classes
+            for (const cap of this.caps) { // Iterate over this.caps so we have access to classes
                 if (typeof cap !== 'string' && this.availablecaps.indexOf(cap.name) > -1) { // Check that the cap is in this.availablecaps
                     if (typeof cap.run === 'function') { // Check if the cap has the `run` property
                         cap.run(this.bot, this.args[cap.name]); // Run the cap with the arguments collected during CAP LS
