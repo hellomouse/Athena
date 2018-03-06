@@ -44,7 +44,14 @@ const logger = new (winston.createLogger)({
         }),
         new (winston.transports.File)({
             filename: 'messages.log',
-            timestamp: true
+            timestamp: true,
+            level: 'debug',
+            json: false,
+            format: winston.format.combine(
+                winston.format.splat(),
+                timestamps(),
+                formatter()
+            )
         })
     ]
 });
