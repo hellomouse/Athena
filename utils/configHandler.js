@@ -35,33 +35,27 @@ class ConfigHandler {
         // Just in case we need to have an async load
         await fs.readFile(this.path, (error, contents) => {
             if (error) {
-                log.error(error);
+                log.error(error.stack);
             } else {
                 this.config = JSON.parse(contents);
 
                 if (this.config.sasl.cert) {
-                    let cert;
-
                     fs.readFile(this.config.sasl.cert, (err, cnts) => {
                         if (err) {
-                            log.error(err);
+                            log.error(err.stack);
                         } else {
-                            cert = cnts;
+                            this.config.sasl.cert = cnts;
                         }
                     });
-                    this.config.sasl.cert = cert;
                 }
                 if (this.config.sasl.key) {
-                    let key;
-
                     fs.readFile(this.config.sasl.key, (err, cnts) => {
                         if (err) {
-                            log.error(err);
+                            log.error(err.stack);
                         } else {
-                            key = cnts;
+                            this.config.sasl.key = cnts;
                         }
                     });
-                    this.config.sasl.key = key;
                 }
                 log.info('[CONFIG] Loaded config from %s', this.path);
             }
