@@ -58,6 +58,7 @@ class Core {
 
                 irc.send(`WHO ${event.target} nuhs%nhuac`);
                 irc.send(`NAMES ${event.target}`);
+                irc.mode(event.target, '', ''); // Get modes for the DB
             } else {
                 // Extended join methods
                 if (args.length > 0) {
@@ -65,8 +66,7 @@ class Core {
                     let hostmask = event.source;
                     let account = args[0] !== '*' ? args[0] : null;
 
-                    // this.userdb.add_entry(channel, nick, hostmask, account);
-                    () => (nick, hostmask, account); // Fake using these
+                    this.state.channels.add_entry(channel, nick, hostmask, account);
                 }
 
                 irc.send(`WHO ${event.source.nick} nuhs%nhuac`);
@@ -77,7 +77,13 @@ class Core {
             const channel = event.arguments[1];
             const users = event.arguments[2].split(' ');
 
-            this.state.channels[channel].names.push(...users);
+            for (let i of users) {
+                if (i.startsWith('@') || i.startsWith('+')) {
+                    this.state.channels[channel].names.push(i.slice(1));
+                } else {
+                    this.state.channels[channel].names.push(i);
+                }
+            }
         });
 
         this.on_whox = this.events.on('354', (irc, event) => {
@@ -92,6 +98,10 @@ class Core {
 
                 this.state.channels.add_entry(channel, nick, hostmask, account);
             }
+        });
+
+        this.on_channelmodeis = this.events.on('324', (irc, event) => {
+            this.state.channels[event.arguments[0]].modes.push(...event.arguments[1].slice(1).split(''));
         });
 
         this.on_cap = this.events.on('CAP', (irc, event) => this.caps.handler(event));
