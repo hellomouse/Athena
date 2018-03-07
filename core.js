@@ -72,7 +72,7 @@ class Core {
 
         this.on_name = this.events.on('353', (irc, event) => {
             const channel = event.arguments[1];
-            const users = event.arguments[1].split(' ');
+            const users = event.arguments[2].split(' ');
 
             this.state.channels[channel].users.push(...users);
         });
