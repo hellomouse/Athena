@@ -36,9 +36,8 @@ class ConnectionWrapper {
         let strings = [];
 
         for (let i of range(0, Buffer.byteLength(message), MSGLEN)) {
-            strings.push(message.slice(i, i + MSGLEN));
-        }
-        for (let msg of strings) {
+            let msg = message.slice(i, i + MSGLEN);
+
             this.bot.send(`PRIVMSG ${target} :${msg}`);
         }
     }
