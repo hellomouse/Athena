@@ -1,3 +1,4 @@
+const Dict = require('node-python-funcs').dict;
 const { hasattr, callable } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
@@ -46,12 +47,13 @@ class Core {
             if (event.source.nick === this.config.nickname) {
                 log.info('Joining %s', channel);
                 if (!this.state.channels.hasOwnProperty(channel)) {
-                    this.state.channels[channel] = {
-                        users: [],
+                    this.state.channels[channel] = new Dict({
+                        users: {},
+                        names: [],
                         flags: [],
                         modes: [],
                         key: null
-                    };
+                    });
                 }
 
                 irc.send(`WHO ${event.target} nuhs%nhuac`);
@@ -75,7 +77,7 @@ class Core {
             const channel = event.arguments[1];
             const users = event.arguments[2].split(' ');
 
-            this.state.channels[channel].users.push(...users);
+            this.state.channels[channel].names.push(...users);
         });
 
         this.on_cap = this.events.on('CAP', (irc, event) => this.caps.handler(event));
