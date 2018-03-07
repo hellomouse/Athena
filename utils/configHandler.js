@@ -25,6 +25,7 @@ class ConfigHandler {
             if (this.config.sasl.cert) {
                 this.config.sasl.cert = fs.readFileSync(this.config.sasl.cert);
             }
+
             if (this.config.sasl.key) {
                 this.config.sasl.key = fs.readFileSync(this.config.sasl.key);
             }
@@ -48,6 +49,7 @@ class ConfigHandler {
                         }
                     });
                 }
+
                 if (this.config.sasl.key) {
                     fs.readFile(this.config.sasl.key, (err, cnts) => {
                         if (err) {
@@ -57,6 +59,7 @@ class ConfigHandler {
                         }
                     });
                 }
+
                 log.info('[CONFIG] Loaded config from %s', this.path);
             }
 
