@@ -7,14 +7,12 @@ class ChannelDB extends dict {
     constructor(irc) {
         let contents = {};
 
-        fs.readFile('userdb.json', (err, data) => {
-            if (err) {
-                log.error('An error happened while loading the userdb');
-                log.error(err.stack);
-            } else {
-                contents = JSON.parse(data.toString());
-            }
-        });
+        try {
+            contents = JSON.parse(fs.readFileSync('userdb.json').toString());
+        } catch (err) {
+            log.error('An error occured while loading the database file.');
+            log.error(err.stack);
+        }
         super(contents);
         this.irc = irc;
     }
