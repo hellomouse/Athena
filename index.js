@@ -44,7 +44,7 @@ class Bot extends Core {
             });
         } else {
             this.socket = socket.connect(this.config.irc.port, this.config.irc.host);
-         }
+        }
 
         // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
         this.state = {
