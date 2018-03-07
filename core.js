@@ -53,8 +53,8 @@ class Core {
                     };
                 }
 
-                irc.send('WHO {0} nuhs%nhuac'.format(event.target));
-                irc.send('NAMES {0}'.format(event.target));
+                irc.send(`WHO ${event.target} nuhs%nhuac`);
+                irc.send(`NAMES ${event.target}`);
             } else {
                 // Extended join methods
                 if (args.length > 0) {
@@ -66,7 +66,7 @@ class Core {
                     () => (nick, hostmask, account); // Fake using these
                 }
 
-                irc.send('WHO {0} nuhs%nhuac'.format(event.source.nick));
+                irc.send(`WHO ${event.source.nick} nuhs%nhuac`);
             }
         });
 
