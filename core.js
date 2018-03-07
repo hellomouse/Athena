@@ -80,6 +80,20 @@ class Core {
             this.state.channels[channel].names.push(...users);
         });
 
+        this.on_whox = this.events.on('354', (irc, event) => {
+            let nick = event.arguments[3];
+
+            if (nick !== 'ChanServ') {
+                let args = event.arguments;
+                let [ident, host] = args.slice(1, 3);
+                let hostmask = `${nick}!${ident}@${host}`;
+                let channel = args[0];
+                let account = args[4] !== '0' ? args[4] : null;
+
+                this.state.channels.add_entry(channel, nick, hostmask, account);
+            }
+        });
+
         this.on_cap = this.events.on('CAP', (irc, event) => this.caps.handler(event));
 
         this.on_authenticate = this.events.on('AUTHENTICATE', (irc, event) => this.sasl.on_authenticate(event));

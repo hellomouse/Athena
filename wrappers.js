@@ -9,8 +9,11 @@ class ConnectionWrapper {
     */
     constructor(self) {
         this.bot = self; // We're not extending this class so this is a solution
-        this.send = self.send;
         this.msg = this.privmsg;
+    }
+
+    send(message) {
+        this.bot.send(message);
     }
 
     /**
