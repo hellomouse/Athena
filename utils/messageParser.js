@@ -113,6 +113,15 @@ class Parser {
             this.arguments.push(argument2[1]);
         }
 
+        if (this.type === 'privmsg') {
+            let string_args = this.arguments.join(' ');
+
+            if (string_args.startsWith('\x01')) {
+                this.command = 'CTCP';
+                this.arguments = string_args.replace('\x01', '').split(' ');
+            }
+        }
+
         this.text_type = require('../resources/numerics.json')[this.command] || this.command;
     }
 }

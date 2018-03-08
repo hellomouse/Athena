@@ -1,3 +1,4 @@
+const { hasattr, callable } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
 
@@ -101,6 +102,24 @@ class Core {
             if (args[0].startsWith('*')) {
                 args[0] = args[0].slice(1);
                 this.plugins.call_command(event, irc, args);
+            }
+        });
+
+        this.on_ctcp = this.events.on('CTCP', (irc, event) => {
+            if (hasattr(this, 'ctcp')) {
+                let ctcp_message = ' '.join(event.arguments).toUpperCase();
+
+                if (Object.keys(this.ctcp).includes(ctcp_message)) {
+                    let result;
+
+                    if (callable(this.ctcp[ctcp_message])) {
+                        result = this.ctcp[ctcp_message]();
+                    } else {
+                        result = this.ctcp[ctcp_message];
+                    }
+
+                    irc.notice(event.source.nick, `${ctcp_message} ${result}`);
+                }
             }
         });
     }
