@@ -1,3 +1,7 @@
+
+/** TODO: Separate channel modes into actual channels modes
+* and modes that can be set on users in channels
+*/
 let modes = {
     umodes: {
         g: 'Ignore private messages from unidentified users',
@@ -7,25 +11,27 @@ let modes = {
         w: 'See wallops',
         Z: 'Secure connection'
     },
-    channel: {
+    'channel-users': {
         a: 'Admin',
         b: 'Ban',
+        e: 'Ban exemption',
+        I: 'Invite exemption',
+        q: 'Quiet'
+    },
+    channel: {
         B: 'amsg restriction',
         c: 'resrict colour codes',
         C: 'CTCP restriction',
-        e: 'Ban exemption',
         f: 'Forward',
         F: 'Enable forwaring',
         g: 'Allow open inviting',
         i: 'Invite only',
-        I: 'Invite exemption',
         j: 'Join throttle',
         k: 'Password protected',
         l: 'Join limit',
         m: 'Moderated',
         n: 'Prevent external messages',
         p: 'Private',
-        q: 'Quiet',
         Q: 'Block forwarded users',
         r: 'Block unidentified users',
         s: 'Secret',
@@ -42,15 +48,58 @@ let modes = {
     }
 };
 
+let allModes = [];
+
+for (let i=0; i<Object.values(modes); i++) {
+    // Compress all mods into one array
+    allModes.concat(Object.keys(Object.values(modes)[i]));
+}
+
 let requiresParams = ['b', 'e', 'f', 'I', 'j', 'k', 'l', 'q'];
 
 /**
 * @func
 * @param {string} mode
-* @return {bool} - True if mode requires param
+* @return {bool}
 */
 function requiresParam(mode) {
     return requiresParams.includes(mode);
+}
+
+
+/**
+* @func
+* @param {string} mode
+* @return {bool}
+*/
+function isMode(mode) {
+    return allModes.includes(mode);
+}
+
+/**
+* @func
+* @param {string} userhost - userhost of bot
+* @param {string} channel - Channel modes could be applied to
+* @param {array} modes - array of modes to be applied to/in the channel
+*/
+function compileModes(userhost, channel, modes) {
+    const MSGLEN = Buffer.byteLength(`${userhost} MODE ${channel} \r\n`); // Calculates characters remaining
+
+    let finalmodes = {};
+
+    for (let i=0; i<modes.length; i++) {
+        let reference = modes[i];
+        let [mode, target] = reference.split(' '); // ['+o', 'foo']
+        let operator;
+
+        [operator, mode] = mode.split(''); ['+', 'o'];
+
+        if (!isMode(mode)) continue; // We continue to the next mode
+
+        if (!Object.keys(finalmodes).includes(target)) finalmodes[target] = [];
+
+        finalmodes[target].append([operator, mode]);
+    }
 }
 
 module.exports = {
