@@ -48,7 +48,7 @@ module.exports = {
                 "tabWidth": 4,
                 "ignoreComments": true,
                 "ignoreTrailingComments": true,
-                "ignoreUrls": true,
+                "ignoreUrls": true
             }
         ],
         "id-match": "off", // Google sets this
@@ -79,7 +79,7 @@ module.exports = {
             "error",
             { "blankLine": "always", "prev": "*", "next": "return" },
             { "blankLine": "always", "prev": ["const", "let"], "next": "*" },
-            { "blankLine": "any", "prev": ["const", "let"], "next": ["const", "let"]}
+            { "blankLine": "any", "prev": ["const", "let"], "next": ["const", "let"] }
         ],
         "eqeqeq": [
             "warn",
@@ -96,6 +96,10 @@ module.exports = {
         "no-cond-assign": "error",
         "block-scoped-var": "error",
         "no-else-return": "error",
-        "no-undef-init": "error"
+        "no-undef-init": "error",
+        "quote-props": [
+            "error",
+            "as-needed"
+        ]
     }
-}
+};
