@@ -39,9 +39,9 @@ class Bot extends Core {
 
         if (this.config.ssl) {
             this.socket = tls.connect(this.config.irc.port, this.config.irc.host, {
-                'cert': this.config.sasl.cert,
-                'key': this.config.sasl.key,
-                'passphrase': this.config.sasl.key_passphrase
+                cert: this.config.sasl.cert,
+                key: this.config.sasl.key,
+                passphrase: this.config.sasl.key_passphrase
             });
         } else {
             this.socket = socket.connect(this.config.irc.port, this.config.irc.host);
@@ -49,7 +49,7 @@ class Bot extends Core {
 
         // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
         this.state = {
-            'channels': {}
+            channels: {}
         };
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation
