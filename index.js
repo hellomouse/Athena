@@ -5,6 +5,7 @@ const fs = require('fs');
 
 const log = require('./utils/logging');
 const config = require('./utils/configHandler');
+const { strip_formatting } = require('./utils/general');
 const Parser = require('./utils/messageParser');
 const Wrappers = require('./wrappers');
 const Caps = require('./irc-caps');
@@ -82,7 +83,7 @@ class Bot extends Core {
 
                 const parse = new Parser(data);
 
-                log.debug('[RECV] %s', data);
+                log.debug('[RECV] %s', strip_formatting(data));
 
                 this.events.emit(parse.command, this.irc, parse);
                 this.events.emit('all', this.irc, parse);
