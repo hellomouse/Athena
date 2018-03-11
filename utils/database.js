@@ -4,7 +4,7 @@ const log = require('./logging');
 
 /* eslint-disable require-jsdoc, new-cap */
 class ChannelDB extends dict {
-    constructor(irc) {
+    constructor(wrappers) {
         let contents = {};
 
         try {
@@ -14,7 +14,9 @@ class ChannelDB extends dict {
             log.error(err.stack);
         }
         super(contents);
-        this.irc = irc;
+        let irc = Symbol();
+
+        this[irc] = wrappers;
     }
 
     change_attr(name, attr, value, channel=null) {
@@ -66,7 +68,7 @@ class ChannelDB extends dict {
         try {
             host = `*!*@${this[channel]['users'][nick].host}`;
         } catch (e) {
-            this.irc.send(`WHO ${channel} nuhs%nhuac`);
+            this[Symbol.from('irc')].send(`WHO ${channel} nuhs%nhuac`);
             host = `*!*@${this[channel]['users'][nick].host}`;
         }
 
