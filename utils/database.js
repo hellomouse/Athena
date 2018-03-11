@@ -21,11 +21,11 @@ class ChannelDB extends dict {
 
     change_attr(name, attr, value, channel=null) {
         if (channel !== null) {
-            this[channel]['users'][name][attr] = value;
+            this[channel].users[name][attr] = value;
         } else {
             for (let chan of this) {
                 try {
-                    this[chan]['users'][name][attr] = value;
+                    this[chan].users[name][attr] = value;
                 } catch (e) {
                     continue;
                 }
@@ -35,11 +35,11 @@ class ChannelDB extends dict {
 
     remove_entry(event, nick) {
         try {
-            delete this[event.target]['users'][nick];
+            delete this[event.target].users[nick];
         } catch (e) {
-            for (let i of this[event.target]['users'].values()) {
-                if (i['host'] === event.source.host) {
-                    delete this[event.target]['users'][i.hostmask.split('!')[0]];
+            for (let i of this[event.target].users.values()) {
+                if (i.host === event.source.host) {
+                    delete this[event.target].users[i.hostmask.split('!')[0]];
                     break;
                 }
             }
@@ -66,10 +66,10 @@ class ChannelDB extends dict {
         let host;
 
         try {
-            host = `*!*@${this[channel]['users'][nick].host}`;
+            host = `*!*@${this[channel].users[nick].host}`;
         } catch (e) {
             this[Symbol.from('irc')].send(`WHO ${channel} nuhs%nhuac`);
-            host = `*!*@${this[channel]['users'][nick].host}`;
+            host = `*!*@${this[channel].users[nick].host}`;
         }
 
         return host;
