@@ -25,12 +25,12 @@
   },
   "homepage": "https://github.com/BWBellairs/Athena#readme",
   "devDependencies": {
-    "eslint": "^4.17.0",
+    "eslint": "^4.18.2",
     "eslint-config-google": "^0.9.1"
   },
   "dependencies": {
     "node-python-funcs": "0.0.4",
-    "winston": "^3.0.0-rc1"
+    "winston": "^3.0.0-rc2"
   },
   "engines": {
     "node": ">=6"
