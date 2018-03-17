@@ -55,7 +55,8 @@ class Bot extends Core {
 
         // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
         this.state = {
-            channels: new ChannelDB()
+            channels: new ChannelDB(),
+            server: {}
         };
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation

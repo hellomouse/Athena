@@ -1,7 +1,11 @@
 const Dict = require('node-python-funcs').dict;
-const { hasattr, callable } = require('node-python-funcs');
+const { hasattr, callable, partition } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
+
+function isObject(thing) {
+    return thing instanceof Object && !(thing instanceof Array);
+}
 
 /** Contains vital methods used to interact with the irc server properly */
 class Core {
@@ -145,6 +149,80 @@ class Core {
                     }
 
                     irc.notice(event.source.nick, `${ctcp_message} ${result}`);
+                }
+            }
+        });
+
+        this.on_featurelist = this.events.on('005', (irc, event) => {
+            for (let param of event.arguments.slice(-1)) {
+                let split = partition(param, '=');
+                let name = split[0];
+                let value = split[2];
+
+                if (!Object.keys(this.ISUPPORT).includes(name)) {
+                    this.ISUPPORT[name] = {};
+                }
+                if (value !== '') {
+                    if (value.indexOf(',') > -1) {
+                        for (let param1 of value.split(',')) {
+                            if (value.indexOf(')') > -1) {
+                                let name1, value1;
+
+                                if (param1.indexOf(')') > -1) {
+                                    split = partition(param1, ':');
+
+                                    name1 = split[0];
+                                    value1 = split[2];
+                                }
+                                this.ISUPPORT[name][name1] = value1;
+                            } else {
+                                if (Object.keys(this.ISUPPORT).includes(name) && isObject(this.ISUPPORT[name])) {
+                                    this.ISUPPORT[name] = [];
+                                }
+                                this.ISUPPORT[name].push(param1);
+                            }
+                        }
+                    } else {
+                        if (value.indexOf(')') > -1) {
+                            let [name1, value1] = value.split(':');
+
+                            this.ISUPPORT[name][name1] = value1;
+                        } else if (name === 'PREFIX') {
+                            let count = 0;
+
+                            value = value.split(')');
+                            value[0] = value[0].lstrip('(');
+                            let types = value[0].split(new RegExp('^(.*o)(.*h)?(.*)$')).slice(1, -1);
+                            let levels = {
+                                op: types[0],
+                                halfop: types[1] || '',
+                                voice: types[2]
+                            };
+
+                            this.server.prefixes = {};
+
+                            for (let mode of value[0]) {
+                                let name1 = mode;
+                                let value1 = value[1][count];
+
+                                count += 1;
+                                for (let level of levels.items()) {
+                                    if (level[1].indexOf(mode) > -1) {
+                                        this.server.prefixes[value1] = {
+                                            mode: mode,
+                                            level: level[0]
+                                        };
+                                        break;
+                                    }
+                                }
+                                this.ISUPPORT[name][name1] = value1;
+                            }
+                        } else {
+                            this.ISUPPORT[name] = value;
+                        }
+                    }
+                } else {
+                    this.ISUPPORT[name] = value;
                 }
             }
         });
