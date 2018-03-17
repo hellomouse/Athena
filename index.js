@@ -76,9 +76,7 @@ class Bot extends Core {
         this.socket.on('data', recv => {
             const parsed = recv.toString().split('\r\n');
 
-            for (let i = 0; i < parsed.length; i++) {
-                const data = parsed[i];
-
+            for (let data of parsed) {
                 if (!data) continue; // Get rid of pesky new lines
 
                 const parse = new Parser(data);
