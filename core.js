@@ -27,6 +27,8 @@ class Core {
         this.plugins = new Plugins(this);
 
         this.nickname = this.config.nickname;
+        this.ISUPPORT = this.state.server.ISUPPORT = {};
+        this.chanels = this.state.channels;
 
         this.on_ping = this.events.on('PING', irc => {
             // Respond to ping event
@@ -82,7 +84,9 @@ class Core {
             const users = event.arguments[2].split(' ');
 
             for (let i of users) {
-                if (i.startsWith('@') || i.startsWith('+')) {
+                if (i.startsWith('@+')) {
+                    this.state.channels[channel].names.push(i.slice(2));
+                } else if (i.startsWith('@') || i.startsWith('+')) {
                     this.state.channels[channel].names.push(i.slice(1));
                 } else {
                     this.state.channels[channel].names.push(i);
