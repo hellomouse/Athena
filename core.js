@@ -112,6 +112,20 @@ class Core {
             this.state.channels[event.arguments[0]].modes.push(...event.arguments[1].slice(1).split(''));
         });
 
+        this.on_account = this.events.on('ACCOUNT', (irc, event) => {
+            this.userdb.change_attr(event.source.nick, 'account', event.target);
+        });
+
+        this.on_chghost = this.events.on('CHGHOST', (irc, event) => {
+            let args = event.arguments;
+
+            if (args.length) {
+                this.userdb.change_attr(event.source.nick, 'ident', event.target);
+                this.userdb.change_attr(event.source.nick, 'host', args[0]);
+            } else
+                this.userdb.change_attr(event.source.nick, 'host', event.target);
+        });
+
         this.on_cap = this.events.on('CAP', (irc, event) => this.caps.handler(event));
 
         this.on_authenticate = this.events.on('AUTHENTICATE', (irc, event) => this.sasl.on_authenticate(event));
