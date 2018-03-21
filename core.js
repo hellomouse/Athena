@@ -63,20 +63,20 @@ class Core {
                     });
                 }
 
-                irc.send(`WHO ${event.target} nuhs%nhuac`);
-                irc.send(`NAMES ${event.target}`);
+                this.send(`WHO ${event.target} nuhs%nhuac`);
+                this.send(`NAMES ${event.target}`);
                 irc.mode(event.target, '', ''); // Get modes for the DB
             } else {
                 // Extended join methods
                 if (args.length > 0) {
                     let nick = event.source.nick;
-                    let hostmask = event.source;
+                    let hostmask = event.source.userhost;
                     let account = args[0] !== '*' ? args[0] : null;
 
                     this.state.channels.add_entry(channel, nick, hostmask, account);
                 }
 
-                irc.send(`WHO ${event.source.nick} nuhs%nhuac`);
+                this.send(`WHO ${event.source.nick} nuhs%nhuac`);
             }
         });
 
@@ -175,7 +175,7 @@ class Core {
 
         this._update_seen_db = (event, irc, nick, str_args) => {
             let timestamp = this._get_time(event.tags);
-            let udb = this.channels.users[event.target][nick];
+            let udb = this.channels[event.target].users[nick];
 
             if (udb !== undefined) {
                 if (udb.seen === null)
@@ -184,7 +184,7 @@ class Core {
 
                 udb.seen.sort((a, b)=> a.time > b.time).slice(-5);
             } else {
-                irc.send(`WHO ${event.target} nuhs%nhuac`);
+                this.send(`WHO ${event.target} nuhs%nhuac`);
             }
         };
 
