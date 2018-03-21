@@ -39,12 +39,17 @@ class Bot extends Core {
 
         if (this.config.ssl) {
             this.socket = tls.connect(this.config.irc.port, this.config.irc.host, {
+                localaddress: this.config.bindhost,
                 cert: this.config.sasl.cert,
                 key: this.config.sasl.key,
                 passphrase: this.config.sasl.key_passphrase
             });
         } else {
-            this.socket = socket.connect(this.config.irc.port, this.config.irc.host);
+            this.socket = socket.connect({
+                localaddress: this.config.bindhost,
+                port: this.config.irc.port,
+                host: this.config.irc.host
+            });
         }
 
         // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
