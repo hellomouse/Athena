@@ -44,7 +44,7 @@ class Plugins {
             try {
                 let cmd = this[args[0]];
 
-                cmd(this.bot, event, irc, args);
+                cmd(this.bot, event, irc, args.slice(1));
             } catch (e) {
                 log.error(e.stack);
             }
