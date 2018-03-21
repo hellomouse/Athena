@@ -2,6 +2,7 @@ const Dict = require('node-python-funcs').dict;
 const { hasattr, callable, partition } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
+const { strip_formatting } = require('./utils/general');
 
 function isObject(thing) {
     return thing instanceof Object && !(thing instanceof Array);
@@ -28,7 +29,7 @@ class Core {
 
         this.nickname = this.config.nickname;
         this.ISUPPORT = this.state.server.ISUPPORT = {};
-        this.chanels = this.state.channels;
+        this.channels = this.state.channels;
 
         this.on_ping = this.events.on('PING', irc => {
             // Respond to ping event
@@ -151,7 +152,41 @@ class Core {
                 args[0] = args[0].slice(1);
                 this.plugins.call_command(event, irc, args);
             }
+            this._update_seen_db(event, irc, event.source.nick, args.join(' '));
         });
+
+        this._get_time = tags => {
+            let timestamp;
+
+            if (tags.length) {
+                for (let i of tags) {
+                    if (i['time'] !== undefined) {
+                        timestamp = Date.parse(i['time']);
+                    } else {
+                        continue;
+                    }
+                }
+            } else {
+                timestamp = Date.parse(new Date());
+            }
+
+            return timestamp;
+        };
+
+        this._update_seen_db = (event, irc, nick, str_args) => {
+            let timestamp = this._get_time(event.tags);
+            let udb = this.channels.users[event.target][nick];
+
+            if (udb !== undefined) {
+                if (udb.seen === null)
+                    udb.seen = [];
+                udb.seen.push({ time: timestamp, message: strip_formatting(str_args) });
+
+                udb.seen.sort((a, b)=> a.time > b.time).slice(-5);
+            } else {
+                irc.send(`WHO ${event.target} nuhs%nhuac`);
+            }
+        };
 
         this.on_ctcp = this.events.on('CTCP', (irc, event) => {
             if (hasattr(this, 'ctcp')) {
