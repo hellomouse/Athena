@@ -5,9 +5,9 @@
 */
 function strip_formatting(msg) {
     /* eslint-disable no-control-regex */
-    let ccodes = ['\u0000f', '\u00016', '\u0001d', '\u0001f', '\u00002'];
+    let ccodes = ['\x0f', '\x16', '\x1d', '\x1f', '\x02'];
 
-    ccodes.push(new RegExp('\\u00003([1-9][0-6]?)?,?([1-9][0-6]?)?', 'g'));
+    ccodes.push(new RegExp('\\x03([1-9][0-6]?)?,?([1-9][0-6]?)?', 'g'));
     /* eslint-enable no-control-regex */
 
     for (let cc of ccodes)
