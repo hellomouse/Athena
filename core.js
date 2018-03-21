@@ -167,7 +167,7 @@ class Core {
                     }
                 }
             } else {
-                timestamp = Date.parse(new Date());
+                timestamp = Date.now();
             }
 
             return timestamp;
