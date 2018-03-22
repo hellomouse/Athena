@@ -116,9 +116,13 @@ class Parser {
         if (this.type === 'privmsg') {
             let string_args = this.arguments.join(' ');
 
-            if (string_args.startsWith('\x01')) {
+            /* eslint-disable no-control-regex */
+            if (string_args.startsWith('\x01ACTION')) {
+                this.command = 'ACTION';
+                this.arguments = string_args.replace(/\x01/g, '').split(' ');
+            } else if (string_args.startsWith('\x01')) {
                 this.command = 'CTCP';
-                this.arguments = string_args.replace('\x01', '').split(' ');
+                this.arguments = string_args.replace(/\x01/g, '').split(' ');
             }
         }
 
