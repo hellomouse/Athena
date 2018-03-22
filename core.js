@@ -182,7 +182,8 @@ class Core {
                     udb.seen = [];
                 udb.seen.push({ time: timestamp, message: strip_formatting(str_args) });
 
-                udb.seen.sort((a, b)=> a.time > b.time).slice(-5);
+                udb.seen.sort((a, b)=> a.time > b.time);
+                udb.seen = udb.seen.slice(-5);
             } else {
                 this.send(`WHO ${event.target} nuhs%nhuac`);
             }
