@@ -34,15 +34,14 @@ class ConnectionWrapper {
     privmsg(target, message) {
         const config = this.bot.config;
         const channel = target.startsWith('#') ? target : this.state.channel.keys()[0];
-        const db = this.bot.state.channels[channel]['users'][config.nickname];
-        // The maximum length for messages is 512bytes total including nick, ident & host
-        const MAXLEN = 512 - 1 - Buffer.byteLength(db.hostmask); // 1 for beggining double colon
+        const db = this.bot.state.channels[channel].users[config.nickname];
+        // The maximum length for messages is 512 bytes total including nick, ident & host
+        const MAXLEN = 512 - 2 - Buffer.byteLength(db.hostmask); // 1 for beggining double colon
         const MSGLEN = MAXLEN - Buffer.byteLength(`PRIVMSG ${target} :\r\n`);
+        let msg = Buffer.from(message);
 
-        for (let i of range(0, Buffer.byteLength(message), MSGLEN)) {
-            let msg = message.slice(i, i + MSGLEN);
-
-            this.bot.send(`PRIVMSG ${target} :${msg}`);
+        for (let i of range(0, msg.byteLength, MSGLEN)) {
+            this.bot.send(`PRIVMSG ${target} :${msg.slice(i, i + MSGLEN).toString()}`);
         }
     }
 
