@@ -178,7 +178,7 @@ class Core {
             let udb = this.channels[event.target].users[nick];
 
             if (udb !== undefined) {
-                if (udb.seen === null)
+                if (udb.seen === null || udb.seen === undefined)
                     udb.seen = [];
                 udb.seen.push({ time: timestamp, message: strip_formatting(str_args) });
 
