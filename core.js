@@ -208,7 +208,7 @@ class Core {
         });
 
         this.on_featurelist = this.events.on('005', (irc, event) => {
-            for (let param of event.arguments.slice(-1)) {
+            for (let param of event.arguments.slice(0, -1)) {
                 let split = partition(param, '=');
                 let name = split[0];
                 let value = split[2];
