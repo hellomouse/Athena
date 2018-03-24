@@ -114,13 +114,14 @@ class Core {
         });
 
         this._update_user_modes = (event, mode) => {
-            let [channel, user, setby, timestamp] = event.arguments
+            let [channel, user] = arguments.slice(0, 2);
+            // let [channel, user, setby, timestamp] = event.arguments;
 
             if (user.startsWith('$a:')) {
                 user = user.slice(3);
-                this.channels[channel][user].modes.push(mode)
+                this.channels[channel][user].modes.push(mode);
             } else {
-                this.channels[channel][user].modes.push(mode)
+                this.channels[channel][user].modes.push(mode);
             }
         };
 
@@ -128,7 +129,7 @@ class Core {
 
         this.on_banlist = this.events.on('367', (irc, event) => this._update_user_modes(event, 'b'));
 
-        this.on_quietlist = this.events.on('728', (irc, event) => this._update_user_modes(event, 'q'))
+        this.on_quietlist = this.events.on('728', (irc, event) => this._update_user_modes(event, 'q'));
 
         this.on_account = this.events.on('ACCOUNT', (irc, event) => {
             this.userdb.change_attr(event.source.nick, 'account', event.target);
