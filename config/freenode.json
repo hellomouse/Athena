@@ -10,7 +10,7 @@
     "channels": {
         "##Athena": {}
     },
-    "caps": ["account-notify", "extended-join", "multi-prefix"],
+    "caps": ["account-notify", "extended-join", "multi-prefix", "chghost"],
     "sasl": {
         "username": null,
         "password": null,

@@ -11,6 +11,7 @@ const Wrappers = require('./wrappers');
 const Caps = require('./irc-caps');
 const Core = require('./core');
 const Sasl = require('./caps/sasl.js');
+const ChannelDB = require('./utils/database');
 
 // TODO: Add more options to config: e.g ssl, sasl, nick etc
 
@@ -54,7 +55,8 @@ class Bot extends Core {
 
         // Temporary database for storing channel data etc (Should this be moved to an actual proper db?)
         this.state = {
-            channels: {}
+            channels: new ChannelDB(),
+            server: {}
         };
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation
