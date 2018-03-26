@@ -92,7 +92,7 @@ function compileModes(userhost, channel, modes) {
         let [mode, target] = reference.split(' '); // ['+o', 'foo']
         let operator;
 
-        [operator, mode] = mode.split(''); ['+', 'o'];
+        [operator, mode] = mode.split(''); // ['+', 'o'];
 
         if (!isMode(mode)) continue; // We continue to the next mode
 
