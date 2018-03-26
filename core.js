@@ -313,7 +313,7 @@ class Core {
     */
     send(message) {
         this.socket.write(`${message}\r\n`);
-        log.debug('[SENT] %s', message);
+        log.debug('[SENT] %s', strip_formatting(message));
     }
 
 }
