@@ -50,9 +50,9 @@ let modes = {
 
 let allModes = [];
 
-for (let i=0; i<Object.values(modes); i++) {
+for (let i of Object.values(modes)) {
     // Compress all mods into one array
-    allModes.concat(Object.keys(Object.values(modes)[i]));
+    allModes.concat(Object.keys(i));
 }
 
 let requiresParams = ['b', 'e', 'f', 'I', 'j', 'k', 'l', 'q'];
@@ -87,8 +87,8 @@ function compileModes(userhost, channel, modes) {
 
     let finalmodes = {};
 
-    for (let i=0; i<modes.length; i++) {
-        let reference = modes[i];
+    for (let i of modes) {
+        let reference = i;
         let [mode, target] = reference.split(' '); // ['+o', 'foo']
         let operator;
 
