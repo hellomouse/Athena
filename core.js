@@ -46,9 +46,9 @@ class Core {
             log.error(event.arguments.join(' '));
         };
 
-        this.on_ping = irc => {
+        this.on_ping = async irc => {
             // Respond to ping event
-            this.send('PONG');
+            await this.send('PONG');
         };
 
         this.on_nicknameinuse = async (irc, event) => {
@@ -58,7 +58,7 @@ class Core {
 
         this.on_welcome = async (irc, event) => {
             Object.keys(this.config.channels).forEach(channel => {
-                irc.join(channel, this.config.channels[channel].key);
+                await irc.join(channel, this.config.channels[channel].key);
             });
         };
 
@@ -79,9 +79,9 @@ class Core {
                     });
                 }
 
-                this.send(`WHO ${event.target} nuhs%nhuacr`);
-                this.send(`NAMES ${event.target}`);
-                irc.mode(event.target, '', ''); // Get modes for the DB
+                await this.send(`WHO ${event.target} nuhs%nhuac`);
+                await this.send(`NAMES ${event.target}`);
+                await irc.mode(event.target, '', ''); // Get modes for the DB
             } else {
                 // Extended join methods
                 if (args.length > 0) {
@@ -89,10 +89,10 @@ class Core {
                     let hostmask = event.source.userhost;
                     let account = args[0] !== '*' ? args[0] : null;
 
-                    this.state.channels.add_entry(channel, nick, hostmask, account);
+                    await this.state.channels.add_entry(channel, nick, hostmask, account);
                 }
 
-                this.send(`WHO ${event.source.nick} nuhs%nhuacr`);
+                await this.send(`WHO ${event.source.nick} nuhs%nhuacr`);
                 this.nextWHOChannel = event.target;
             }
         };
@@ -243,7 +243,7 @@ class Core {
                 udb.seen.sort((a, b) => a.time > b.time);
                 udb.seen = udb.seen.slice(-5);
             } else {
-                this.send(`WHO ${event.target} nuhs%nhuacr`);
+                await this.send(`WHO ${event.target} nuhs%nhuacr`);
             }
         };
 
@@ -260,7 +260,7 @@ class Core {
                         result = this.ctcp[ctcp_message];
                     }
 
-                    irc.notice(event.source.nick, `${ctcp_message} ${result}`);
+                    await irc.notice(event.source.nick, `${ctcp_message} ${result}`);
                 }
             }
         };
