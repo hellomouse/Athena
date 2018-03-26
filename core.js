@@ -31,6 +31,12 @@ class Core {
         this.ISUPPORT = this.state.server.ISUPPORT = {};
         this.channels = this.state.channels;
 
+        this.on_error = this.events.on('ERROR', (irc, event) => {
+            if (event.arguments.join(' ').indexOf('Closing link') <= -1)
+                irc.privmsg('##Athena', 'An error occured, check the console. !att-Athena-admins');
+            log.error(event.arguments.join(' '));
+        });
+
         this.on_ping = this.events.on('PING', irc => {
             // Respond to ping event
             this.send('PONG');
