@@ -57,7 +57,7 @@ class Core {
         };
 
         this.on_welcome = async (irc, event) => {
-            Object.keys(this.config.channels).forEach(channel => {
+            Object.keys(this.config.channels).forEach(async channel => {
                 await irc.join(channel, this.config.channels[channel].key);
             });
         };
@@ -176,7 +176,7 @@ class Core {
 
         this.on_cap = async (irc, event) => this.caps.handler(event);
 
-        this.on_authenticate = async (irc, event) => this.sasl.on_authenticate(event);
+        this.on_authenticate = async (irc, event) => await this.sasl.on_authenticate(event);
 
         this.on_saslfailed = async (irc, event) => this.sasl.on_saslfailed(event);
 
