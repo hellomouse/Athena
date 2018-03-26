@@ -83,7 +83,8 @@ function isMode(mode) {
 * @param {array} modes - array of modes to be applied to/in the channel
 */
 function compileModes(userhost, channel, modes) {
-    const MSGLEN = 512 - Buffer.byteLength(`:${userhost} MODE ${channel} \r\n`); // Calculates characters remaining
+    const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`)
+    const MSGLEN = 512 - msg.byteLength; // Calculates characters remaining
 
     let finalmodes = {};
 
