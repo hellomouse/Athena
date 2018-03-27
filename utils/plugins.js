@@ -1,5 +1,5 @@
 const log = require('./logging');
-const { check_perms } = require('./permissions';)
+const { check_perms } = require('./permissions');
 const { readdir } = require('fs');
 const { join } = require('path');
 
