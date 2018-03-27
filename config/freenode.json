@@ -34,5 +34,9 @@
             "channels":{}
         },
         "owners": ["zirc/botters.wolfy1339", "botters/BWBellairs"]
+    },
+    "ignores": {
+        "global": [],
+        "channels": {}
     }
 }

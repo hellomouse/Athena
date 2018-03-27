@@ -6,10 +6,10 @@ if (!Date.now) Date.now = function() { return new Date(); };
 Date.prototype.time = function() { return this.getUnixTime(); };
 
 function check_ignored(config, host, channel) {
-    const ignores = config.bot.ignores.global;
+    const ignores = config.ignores.global;
 
-    if (Object.keys(config.bot.ignores.channels).includes(channel)) {
-        ignores.concat(config.bot.ignores.channels[channel]);
+    if (Object.keys(config.ignores.channels).includes(channel)) {
+        ignores.concat(config.ignores.channels[channel]);
     }
 
     for (const i of ignores) {
@@ -20,7 +20,7 @@ function check_ignored(config, host, channel) {
             if (host === uhost && is_past) {
                 return true;
             } else if (host === uhost && !is_past) {
-                delete config.bot.ignores.channels[channel][host];
+                delete config.ignores.channels[channel][host];
                 break;
             }
         }
