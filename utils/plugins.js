@@ -44,8 +44,9 @@ class Plugins {
         if (this[args[0]] !== undefined) {
             try {
                 let cmd = this[args[0]];
+                let { perms } = cmd.opts;
 
-                if (check_perms(this.bot.config, event.source.host, event.target, cmd.opts.perms)) {
+                if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
                     cmd(this.bot, event, irc, args.slice(1));
                 } else {
                     irc.reply(event, `No permission to use command ${args[0]}`)
