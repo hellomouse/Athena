@@ -7,6 +7,7 @@ const { strip_formatting } = require('./utils/general');
 /**
 * @func
 * @param {object} thing
+* @return {boolean}
 */
 function isObject(thing) {
     return thing instanceof Object && !(thing instanceof Array);
