@@ -130,7 +130,7 @@ class Core {
             this.state.channels[event.arguments[0]].modes.push(...event.arguments[1].slice(1).split(''));
         });
 
-        this._update_user_modes = (event, mode) => {
+        this._update_user_modes = (irc, event, mode) => {
             let [channel, user] = arguments.slice(0, 2);
             // let [channel, user, setby, timestamp] = event.arguments;
 
@@ -142,11 +142,11 @@ class Core {
             }
         };
 
-        this.on_exceptlist = this.events.on('348', (irc, event) => this._update_user_modes(event, 'e'));
+        this.on_exceptlist = this.events.on('348', (irc, event) => this._update_user_modes(irc, event, 'e'));
 
-        this.on_banlist = this.events.on('367', (irc, event) => this._update_user_modes(event, 'b'));
+        this.on_banlist = this.events.on('367', (irc, event) => this._update_user_modes(irc, event, 'b'));
 
-        this.on_quietlist = this.events.on('728', (irc, event) => this._update_user_modes(event, 'q'));
+        this.on_quietlist = this.events.on('728', (irc, event) => this._update_user_modes(irc, event, 'q'));
 
         this.on_account = this.events.on('ACCOUNT', (irc, event) => {
             this.userdb.change_attr(event.source.nick, 'account', event.target);
