@@ -129,9 +129,9 @@ class Core {
 
             if (user.startsWith('$a:')) {
                 user = user.slice(3);
-                this.channels[channel][user].modes.push(mode);
+                this.channels[channel].users[user].modes.push(mode);
             } else {
-                this.channels[channel][user].modes.push(mode);
+                this.channels[channel].users[user].modes.push(mode);
             }
         };
 
