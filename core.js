@@ -97,6 +97,7 @@ class Core {
 
             for (let i of users) {
                 let user;
+
                 if (i.startsWith('@+')) {
                     user = i.slice(2);
                 } else if (i.startsWith('@') || i.startsWith('+')) {
@@ -106,7 +107,7 @@ class Core {
                 }
 
                 if (!this.channels[channel].names.includes(user)) {
-                    this.channels[channel].names.push(user)
+                    this.channels[channel].names.push(user);
                 }
             }
         });
