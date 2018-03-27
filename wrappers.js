@@ -14,7 +14,7 @@ class ConnectionWrapper {
 
     /**
     * @func
-    * @oaram {string} message - Message being sent to server
+    * @param {string} message - Message being sent to server
     */
     send(message) {
         this.bot.send(message);
