@@ -49,7 +49,7 @@ class Plugins {
                 if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
                     cmd(this.bot, event, irc, args.slice(1));
                 } else {
-                    irc.reply(event, `No permission to use command ${args[0]}`)
+                    irc.reply(event, `No permission to use command ${args[0]}`);
                 }
             } catch (e) {
                 log.error(e.stack);
