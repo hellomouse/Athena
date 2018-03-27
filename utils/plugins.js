@@ -44,10 +44,14 @@ class Plugins {
         if (this[args[0]] !== undefined) {
             try {
                 let cmd = this[args[0]];
-                let { perms } = cmd.opts;
+                let { perms, min_args } = cmd.opts;
 
                 if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
-                    cmd(this.bot, event, irc, args.slice(1));
+                    if (args.length >= min_args) {
+                        cmd(this.bot, event, irc, args.slice(1));
+                    } else {
+                        irc.reply(event, 'Oops, looks like you forgot an argument there.');
+                    }
                 } else {
                     irc.reply(event, `No permission to use command ${args[0]}`);
                 }
