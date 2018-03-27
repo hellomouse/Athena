@@ -17,7 +17,7 @@ function check_perms(config, host, channel, perms=[false, false, false]) {
 
     let [trusted, admin, owner] = perms;
 
-    let is_bot = host.find('/bot/') !== -1 && !(config.perms.bots.hosts.includes(host));
+    let is_bot = host.indexOf('/bot/') !== -1 && !(config.perms.bots.hosts.includes(host));
 
     if (config.perms.bots.channels.includes(channel))
         is_bot = false;
