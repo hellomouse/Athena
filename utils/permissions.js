@@ -11,7 +11,7 @@ function check_perms(config, host, channel, perms=[false, false, false]) {
     let admins = [...config.perms.admins.global, ...config.perms.admins.channels[channel] || []];
     let trustees = [...config.perms.trusted.global, ...config.perms.trusted.channels[channel] || []];
 
-    let is_owner = config.owners.includes(host);
+    let is_owner = config.perms.owners.includes(host);
     let is_admin = admins.includes(host);
     let is_trusted = trustees.includes(host);
 
@@ -19,7 +19,7 @@ function check_perms(config, host, channel, perms=[false, false, false]) {
 
     let is_bot = host.find('/bot/') !== -1 && !(config.perms.bots.hosts.includes(host));
 
-    if (config.bots.channels.includes(channel))
+    if (config.perms.bots.channels.includes(channel))
         is_bot = false;
     let is_ignored = check_ignored(config, host, channel);
 
