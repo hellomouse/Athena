@@ -15,14 +15,14 @@ function check_perms(config, host, channel, owner=false, admin=false, trusted=fa
 
     admins.push(...config.admins.channels[channel] || []);
     trustees.push(...config.trusted.channels[channel] || []);
+    let is_owner = config.owners.includes(host);
+    let is_admin = admins.includes(host);
+    let is_trusted = trustees.includes(host);
 
-    let is_owner = host in config.owners;
-    let is_admin = host in admins;
-    let is_trusted = host in trustees;
 
-    let is_bot = host.find('/bot/') !== -1 && !(host in config.bots.hosts);
+    let is_bot = host.find('/bot/') !== -1 && !(config.bots.hosts.includes(host));
 
-    if (channel in config.bots.channels)
+    if (config.bots.channels.includes(channel))
         is_bot = false;
     let is_ignored = check_ignored(config, host, channel);
 
