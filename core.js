@@ -4,6 +4,10 @@ const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
 const { strip_formatting } = require('./utils/general');
 
+/**
+* @func
+* @param {object} thing
+*/
 function isObject(thing) {
     return thing instanceof Object && !(thing instanceof Array);
 }

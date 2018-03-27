@@ -12,6 +12,10 @@ class ConnectionWrapper {
         this.msg = this.privmsg;
     }
 
+    /**
+    * @func
+    * @oaram {string} message - Message being sent to server
+    */
     send(message) {
         this.bot.send(message);
     }
