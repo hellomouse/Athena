@@ -96,12 +96,17 @@ class Core {
             const users = event.arguments[2].split(' ');
 
             for (let i of users) {
+                let user;
                 if (i.startsWith('@+')) {
-                    this.state.channels[channel].names.push(i.slice(2));
+                    user = i.slice(2);
                 } else if (i.startsWith('@') || i.startsWith('+')) {
-                    this.state.channels[channel].names.push(i.slice(1));
+                    user = i.slice(1);
                 } else {
-                    this.state.channels[channel].names.push(i);
+                    user = i;
+                }
+
+                if (!this.channels[channel].names.includes(user)) {
+                    this.channels[channel].names.push(user)
                 }
             }
         });
