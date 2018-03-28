@@ -182,13 +182,13 @@ class Core {
 
         this.on_privmsg = this.events.on('PRIVMSG', (irc, event) => {
             let args = event.arguments.join(' ').split(' '); // Split arguments by spaces
-            let prefix = '*'
+            let prefix = '*';
 
             if (args[0].startsWith(prefix)) {
                 args[0] = args[0].slice(prefix.length);
                 this.plugins.call_command(event, irc, args);
             }
-            if (event.target.startsWith("#"))
+            if (event.target.startsWith('#'))
                 this._update_seen_db(event, irc, event.source.nick, args.join(' '));
         });
 
