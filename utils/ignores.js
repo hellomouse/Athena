@@ -1,10 +1,6 @@
 const logging = require('./logging');
 /* eslint-disable require-jsdoc, no-extend-native */
 
-Date.prototype.getUnixTime = function() { return this.getTime()/1000|0; };
-if (!Date.now) Date.now = function() { return new Date(); };
-Date.prototype.time = function() { return this.getUnixTime(); };
-
 function check_ignored(config, host, channel) {
     const ignores = config.ignores.global;
 
@@ -15,7 +11,7 @@ function check_ignored(config, host, channel) {
     for (const i of ignores) {
         for (const [uhost, expires] of i) {
             // if duration isn't null, check if it's in the past, else say true
-            const is_past = expires !== null ? new Date().time() > expires : true;
+            const is_past = expires !== null ? Date.now() > expires : true;
 
             if (host === uhost && is_past) {
                 return true;
@@ -38,10 +34,10 @@ function add_ignore(config, irc, event, args) {
     if (args.length > 1) {
         if (args[1] === 'random') {
             duration = Math.floor((Math.random() * 10000) + 100);
-            expires = duration + new Date().getTime();
+            expires = duration + Date.now();
         } else {
             duration = parseInt(args[1]);
-            expires = duration + new Date().getTime();
+            expires = duration + Date.now();
         }
     } else {
         expires = null;
