@@ -1,4 +1,5 @@
-const log = require('./logging.js');
+const log = require('./logging');
+const { check_perms } = require('./permissions');
 const { readdir } = require('fs');
 const { join } = require('path');
 
@@ -43,8 +44,17 @@ class Plugins {
         if (this[args[0]] !== undefined) {
             try {
                 let cmd = this[args[0]];
+                let { perms, min_args } = cmd.opts;
 
-                cmd(this.bot, event, irc, args.slice(1));
+                if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
+                    if (args.length >= min_args) {
+                        cmd(this.bot, event, irc, args.slice(1));
+                    } else {
+                        irc.reply(event, 'Oops, looks like you forgot an argument there.');
+                    }
+                } else {
+                    irc.reply(event, `No permission to use command ${args[0]}`);
+                }
             } catch (e) {
                 log.error(e.stack);
             }

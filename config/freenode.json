@@ -19,5 +19,24 @@
         "key_passphrase": null
     },
     "ssl": true,
-    "bindhost": null
+    "bindhost": null,
+    "perms": {
+        "bots": {
+            "global": [],
+            "channels": {}
+        },
+        "trusted": {
+            "global":[],
+            "channels":{}
+        },
+        "admins": {
+            "global":[],
+            "channels":{}
+        },
+        "owners": ["zirc/botters.wolfy1339", "botters/BWBellairs"]
+    },
+    "ignores": {
+        "global": [],
+        "channels": {}
+    }
 }
