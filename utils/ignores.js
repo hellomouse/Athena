@@ -1,5 +1,4 @@
 const logging = require('./logging');
-/* eslint-disable require-jsdoc, no-extend-native */
 
 /**
 * Function to check if a user is ignored
@@ -43,7 +42,7 @@ function add_ignore(config, irc, event, args) {
     const host = args[0];
     const base_message = 'Ignoring %s for %s seconds';
     const indefinite = 'Ignoring %s indefinately';
-    let duration, expires, i;
+    let duration, expires;
 
     if (args.length > 1) {
         if (args[1] === 'random') {
@@ -56,19 +55,18 @@ function add_ignore(config, irc, event, args) {
     } else {
         expires = null;
     }
+
     const channel = args.length > 2 ? args[2] : null;
+    let ignores;
 
     if (channel !== null) {
-        try {
-            i = config.ignores.channels[channel];
-        } catch (e) {
-            i = config.ignores.channels[channel] = [];
-        }
-        i.push([host, expires]);
+        ignores = config.ignores.channels[channel] = config.ignores.channels[channel] || [];
     } else {
-        i = config.ignores.global;
-        i.push([host, expires]);
+        ignores = config.ignores.global;
     }
+    ignores.push([host, expires]);
+
+
     if (expires !== null) {
         logging.info(channel !== null ? base_message.concat(' in %s') : base_message, host, duration, channel);
     } else {
