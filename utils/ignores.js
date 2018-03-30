@@ -1,6 +1,13 @@
 const logging = require('./logging');
 /* eslint-disable require-jsdoc, no-extend-native */
 
+/**
+* Function to check if a user is ignored
+* @param {object} config - The bot config
+* @param {string} host - The host of the user of which you want to check if they're ignored
+* @param {string} channel - The channel in which you want to check if the user's ignored
+* @return {boolean}
+*/
 function check_ignored(config, host, channel) {
     const ignores = config.ignores.global;
 
@@ -25,6 +32,13 @@ function check_ignored(config, host, channel) {
     return false;
 }
 
+/**
+* Function to add an ignore
+* @param {object} config - The bot config
+* @param {ConnectionWrapper} irc - The IRC command wrappers object
+* @param {string} event - The IRC event class object
+* @param {array} args - The IRC args
+*/
 function add_ignore(config, irc, event, args) {
     const host = args[0];
     const base_message = 'Ignoring %s for %s seconds';
