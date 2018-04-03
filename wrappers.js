@@ -27,7 +27,7 @@ class ConnectionWrapper {
     * @param {object} event - The event object created when parsing the incoming messages.
     * @param {string} message - The message you wish to reply with.
     * @param {string} [background=null]
-    * @param {boolena} [rainbow=false]
+    * @param {boolean} [rainbow=false]
     * @param {string} [style=null]
     */
     reply(event, message, background=null, rainbow=false, style=null) {
@@ -41,7 +41,7 @@ class ConnectionWrapper {
     * @param {string} target - The user or channel you wish to send a PRIVMSG to.
     * @param {string} message - The message you wish to send.
     * @param {string} [background=null]
-    * @param {boolena} [rainbow=false]
+    * @param {boolean} [rainbow=false]
     * @param {string} [style=null]
     */
     privmsg(target, message, background=null, rainbow=false, style=null) {
