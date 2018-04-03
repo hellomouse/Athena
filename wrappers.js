@@ -1,5 +1,6 @@
 const { range } = require('node-python-funcs');
 const { chunks } = require('./utils/general');
+const colors = require('./utils/colors');
 
 /** Class that provides methods for IRC commands */
 class ConnectionWrapper {
@@ -25,21 +26,25 @@ class ConnectionWrapper {
     * @func
     * @param {object} event - The event object created when parsing the incoming messages.
     * @param {string} message - The message you wish to reply with.
+    * @param {string} [background=null]
+    * @param {boolena} [rainbow=false]
+    * @param {string} [style=null]
     */
-    reply(event, message) {
-        if (event.target === this.bot.nickname) {
-            this.privmsg(event.source.nick, message);
-        } else {
-            this.privmsg(event.target, message);
-        }
+    reply(event, message, background=null, rainbow=false, style=null) {
+        let isPRIVMSG = event.target === this.bot.nickname;
+
+        this.privmsg(isPRIVMSG ? event.target : event.source.nick, message, background, rainbow, style);
     }
 
     /**
     * @func
     * @param {string} target - The user or channel you wish to send a PRIVMSG to.
     * @param {string} message - The message you wish to send.
+    * @param {string} [background=null]
+    * @param {boolena} [rainbow=false]
+    * @param {string} [style=null]
     */
-    privmsg(target, message) {
+    privmsg(target, message, background=null, rainbow=false, style=null) {
         const channel = target.startsWith('#') ? target : this.bot.state.channels.keys()[0];
         const db = this.bot.state.channels[channel].users[this.bot.nickname];
         // The maximum length for messages is 512 bytes total including nick, ident & host
@@ -48,6 +53,15 @@ class ConnectionWrapper {
         let msg = Buffer.from(message);
 
         for (let i of range(0, msg.byteLength, MSGLEN)) {
+            let myRe = /\${(\w+)}/g;
+            let myArray;
+
+            while ((myArray = myRe.exec(msg)) !== null) {
+                msg.replace(myArray[0], colors.colors[myArray[1]]);
+            }
+
+            if (rainbow) msg = rainbow(msg);
+            msg = colors.stylize(colors.background(msg, background), style);
             this.bot.send(`PRIVMSG ${target} :${msg.slice(i, i + MSGLEN).toString()}`);
         }
     }
