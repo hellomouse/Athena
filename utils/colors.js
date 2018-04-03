@@ -37,7 +37,7 @@ const colors = {
 const _rainbow = ['red', 'orange', 'yellow', 'green', 'blue', 'navy', 'violet'];
 
 
-function rainbow(string) {
+function make_rainbow(string) {
     let i = 0;
     let colored = '';
 
@@ -52,7 +52,7 @@ function rainbow(string) {
     return colored.concat('\x0F');
 }
 
-function background(string, bg) {
+function add_background(string, bg) {
     let c = string.indexOf('\x03') !== -1;
 
     if (c && bg !== null) {
@@ -72,9 +72,22 @@ function stylize(string, style) {
     return string;
 }
 
+function addStyling(msg, background, rainbow, style) {
+    let myRe = /\${(\w+)}/g;
+    let myArray;
+
+    while ((myArray = myRe.exec(msg)) !== null) {
+        msg.replace(myArray[0], colors.colors[myArray[1]]);
+    }
+
+    if (rainbow) msg = make_rainbow(msg);
+    msg = stylize(add_background(msg, background), style);
+}
+
 module.export = {
     colors,
-    rainbow,
-    background,
-    stylize
+    make_rainbow,
+    add_background,
+    stylize,
+    addStyling
 };

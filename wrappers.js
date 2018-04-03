@@ -53,15 +53,7 @@ class ConnectionWrapper {
         let msg = Buffer.from(message);
 
         for (let i of range(0, msg.byteLength, MSGLEN)) {
-            let myRe = /\${(\w+)}/g;
-            let myArray;
-
-            while ((myArray = myRe.exec(msg)) !== null) {
-                msg.replace(myArray[0], colors.colors[myArray[1]]);
-            }
-
-            if (rainbow) msg = rainbow(msg);
-            msg = colors.stylize(colors.background(msg, background), style);
+            msg = colors.addStyling(msg, background, rainbow, style);
             this.bot.send(`PRIVMSG ${target} :${msg.slice(i, i + MSGLEN).toString()}`);
         }
     }
