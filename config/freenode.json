@@ -22,8 +22,8 @@
     "bindhost": null,
     "perms": {
         "bots": {
-            "global": [],
-            "channels": {}
+            "hosts": [],
+            "channels": []
         },
         "trusted": {
             "global":[],
