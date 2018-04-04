@@ -40,7 +40,7 @@ class ConnectionWrapper {
     */
     privmsg(target, message) {
         const config = this.bot.config;
-        const channel = target.startsWith('#') ? target : this.state.channels.keys()[0];
+        const channel = target.startsWith('#') ? target : this.bot.state.channels.keys()[0];
         const db = this.bot.state.channels[channel].users[config.nickname];
         // The maximum length for messages is 512 bytes total including nick, ident & host
         const MAXLEN = 512 - 2 - Buffer.byteLength(db.hostmask); // 1 for beggining double colon
