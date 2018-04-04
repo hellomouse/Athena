@@ -33,7 +33,7 @@ class ConnectionWrapper {
     reply(event, message, background=null, rainbow=false, style=null) {
         let isPRIVMSG = event.target === this.bot.nickname;
 
-        this.privmsg(isPRIVMSG ? event.target : event.source.nick, message, background, rainbow, style);
+        this.privmsg(isPRIVMSG ? event.source.nick : event.target, message, background, rainbow, style);
     }
 
     /**
