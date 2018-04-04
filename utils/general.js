@@ -5,7 +5,7 @@
 */
 function strip_formatting(msg) {
     /* eslint-disable no-control-regex */
-    let ccodes = ['\\x0f', '\\x16', '\\x1d', '\\x1f', '\\x02', '\\x03([1-9][0-6]?)?,?([1-9][0-6]?)?'];
+    let ccodes = ['\\x0f', '\\x16', '\\x1d', '\\x1f', '\\x02', '\\x03([0-9][0-6]?)?,?([0-9][0-6]?)?'];
     /* eslint-enable no-control-regex */
 
     for (let cc of ccodes)
