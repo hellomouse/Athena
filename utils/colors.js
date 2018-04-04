@@ -77,14 +77,15 @@ function addStyling(msg, background, rainbow, style) {
     let myArray;
 
     while ((myArray = myRe.exec(msg)) !== null) {
-        msg.replace(myArray[0], colors.colors[myArray[1]]);
+        msg.replace(myArray[0], colors[myArray[1]]);
     }
 
     if (rainbow) msg = make_rainbow(msg);
-    msg = stylize(add_background(msg, background), style);
+
+    return stylize(add_background(msg, background), style);
 }
 
-module.export = {
+module.exports = {
     colors,
     make_rainbow,
     add_background,
