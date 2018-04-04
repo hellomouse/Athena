@@ -36,12 +36,16 @@ const colors = {
 
 const _rainbow = ['red', 'orange', 'yellow', 'green', 'blue', 'navy', 'violet'];
 
-
-function make_rainbow(string) {
+/**
+* Colors a message with rainbow colors
+* @param {string} msg - The message you want to add rainbow colors too
+* @return {string} - Returns your message returned with rainbow coloring
+*/
+function make_rainbow(msg) {
     let i = 0;
     let colored = '';
 
-    for (let character of string) {
+    for (let character of msg) {
         if (i > (_rainbow.length - 1)) // We substract one because i starts at 0 and rainbow.length at 1
             i = 0;
 
@@ -52,24 +56,36 @@ function make_rainbow(string) {
     return colored.concat('\x0F');
 }
 
-function add_background(string, bg) {
-    let c = string.indexOf('\x03') !== -1;
+/**
+* Colors a message with rainbow colors
+* @param {string} msg - The message you want to add rainbow colors too
+* @param {string} bg - The message you want to add rainbow colors too
+* @return {string} - Returns your message returned with rainbow coloring
+*/
+function add_background(msg, bg) {
+    let c = msg.indexOf('\x03') !== -1;
 
     if (c && bg !== null) {
-        return `${string.slice(0, 3)},${colors[bg]}${string.slice(3)}`;
+        return `${msg.slice(0, 3)},${colors[bg]}${msg.slice(3)}`;
     } else if (!c && bg !== null) {
-        return `${colors.black},${colors[bg]}${string}\x0F`;
+        return `${colors.black},${colors[bg]}${msg}\x0F`;
     } else if (bg === null) {
-        return string;
+        return msg;
     }
 }
 
-function stylize(string, style) {
+/**
+* Colors a message with rainbow colors
+* @param {string} msg - The message you want to add rainbow colors too
+* @param {string} style - The message you want to add rainbow colors too
+* @return {string} - Returns your message returned with rainbow coloring
+*/
+function stylize(msg, style) {
     if (style !== null) {
-        return `${colors[style.upper()]}${string}`;
+        return `${colors[style.upper()]}${msg}`;
     }
 
-    return string;
+    return msg;
 }
 
 function addStyling(msg, background, rainbow, style) {
