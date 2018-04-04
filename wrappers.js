@@ -50,10 +50,9 @@ class ConnectionWrapper {
         // The maximum length for messages is 512 bytes total including nick, ident & host
         const MAXLEN = 512 - 2 - Buffer.byteLength(db.hostmask); // 1 for beggining double colon
         const MSGLEN = MAXLEN - Buffer.byteLength(`PRIVMSG ${target} :\r\n`);
-        let msg = Buffer.from(message);
+        let msg = Buffer.from(colors.addStyling(message, background, rainbow, style));
 
         for (let i of range(0, msg.byteLength, MSGLEN)) {
-            msg = colors.addStyling(msg, background, rainbow, style);
             this.bot.send(`PRIVMSG ${target} :${msg.slice(i, i + MSGLEN).toString()}`);
         }
     }
