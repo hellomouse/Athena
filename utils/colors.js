@@ -66,9 +66,9 @@ function add_background(msg, bg) {
     let c = msg.indexOf('\x03') !== -1;
 
     if (c && bg !== null) {
-        return `${msg.slice(0, 3)},${colors[bg]}${msg.slice(3)}`;
+        return `${msg.slice(0, 3)},${colors[bg.toUpperCase()].slice(1)}${msg.slice(3)}`;
     } else if (!c && bg !== null) {
-        return `${colors.black},${colors[bg]}${msg}\x0F`;
+        return `${colors.BLACK},${colors[bg.toUpperCase()].slice(1)}${msg}\x0F`;
     } else if (bg === null) {
         return msg;
     }
