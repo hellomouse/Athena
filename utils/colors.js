@@ -49,7 +49,7 @@ function make_rainbow(msg) {
         if (i > (_rainbow.length - 1)) // We substract one because i starts at 0 and rainbow.length at 1
             i = 0;
 
-        colored.concat(`${colors[_rainbow[i].toUpper()]}${character}`);
+        colored.concat(`${colors[_rainbow[i].toUpperCase()]}${character}`);
         i += 1;
     }
 
@@ -82,7 +82,7 @@ function add_background(msg, bg) {
 */
 function stylize(msg, style) {
     if (style !== null) {
-        return `${colors[style.upper()]}${msg}`;
+        return `${colors[style.toUpperCase()]}${msg}`;
     }
 
     return msg;
