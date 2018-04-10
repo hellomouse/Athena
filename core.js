@@ -65,7 +65,7 @@ class Core {
             if (event.source.nick === this.config.nickname) {
                 log.info('Joining %s', channel);
                 if (!this.state.channels.hasOwnProperty(channel)) {
-                    console.debug('Created db for channel ' + channel);
+                    log.debug('Created db for channel %s', channel);
                     this.state.channels[channel] = new Dict({
                         users: {},
                         names: [],

@@ -38,7 +38,6 @@ module.exports = {
             "error",
             "as-needed"
         ],
-        "no-console": "off",
         "one-var": "off",
         "camelcase": "off",
         "max-len": [
