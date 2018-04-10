@@ -65,6 +65,7 @@ class Core {
             if (event.source.nick === this.config.nickname) {
                 log.info('Joining %s', channel);
                 if (!this.state.channels.hasOwnProperty(channel)) {
+                    console.debug('Created db for channel ' + channel);
                     this.state.channels[channel] = new Dict({
                         users: {},
                         names: [],
@@ -186,6 +187,9 @@ class Core {
 
             if (args[0].startsWith(prefix)) {
                 args[0] = args[0].slice(prefix.length);
+                this.plugins.call_command(event, irc, args);
+            } else if ( [this.nickname.concat(':'), this.nickname.concat(',')].includes(args[0])) {
+                args.shift(); // nickname[:/,] isn't the commmand
                 this.plugins.call_command(event, irc, args);
             }
             if (event.target.startsWith('#'))

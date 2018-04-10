@@ -12,6 +12,7 @@
     },
     "caps": ["account-notify", "extended-join", "multi-prefix", "chghost"],
     "sasl": {
+        "method": null,
         "username": null,
         "password": null,
         "cert": null,
@@ -33,7 +34,7 @@
             "global":[],
             "channels":{}
         },
-        "owners": ["zirc/botters.wolfy1339", "botters/BWBellairs"]
+        "owners": []
     },
     "ignores": {
         "global": [],

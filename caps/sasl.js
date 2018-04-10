@@ -23,6 +23,8 @@ class Sasl {
     run(bot, args) {
         const mechanisms = args || ['EXTERNAL', 'PLAIN'];
 
+        if (!this.method) return;
+
         this.bot = bot;
 
         if (mechanisms.indexOf(this.method.toUpperCase()) > -1) {
