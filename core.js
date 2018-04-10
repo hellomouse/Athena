@@ -183,7 +183,7 @@ class Core {
 
         this.on_privmsg = this.events.on('PRIVMSG', (irc, event) => {
             let args = event.arguments.join(' ').split(' '); // Split arguments by spaces
-            let prefix = '*';
+            let prefix = this.config.prefix || '.';
 
             if (args[0].startsWith(prefix)) {
                 args[0] = args[0].slice(prefix.length);
