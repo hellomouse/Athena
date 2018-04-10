@@ -59,7 +59,7 @@ class Plugins {
                 log.error(e.stack);
             }
         } else {
-            irc.reply(event, `Invalid Command: ${args[0]}`);
+            irc.notice(event.source.nick,  `Invalid Command: ${args[0]}`);
         }
     }
 }

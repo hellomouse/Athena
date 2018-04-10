@@ -75,9 +75,9 @@ class Bot extends Core {
             log.info('Connected');
 
             // TODO: Move to auth module
+            this.send('CAP LS 302');
             this.send(`NICK ${this.config.nickname}`);
             this.send(`USER ${this.config.ident} * * :${this.config.realname}`);
-            this.send('CAP LS 302');
         });
 
         this.socket.on('data', recv => {
