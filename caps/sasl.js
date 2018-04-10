@@ -10,7 +10,7 @@ class Sasl {
     constructor(username, password, method) {
         this.username = username;
         this.password = password;
-        this.method = method || 'plain';
+        this.method = method || null;
         this.retries = 0;
         this.name = 'sasl';
     }
