@@ -56,9 +56,9 @@ class ChannelDB extends dict {
 
         if (this[channel].users.keys().includes(nick)) {
             delete temp.seen;
-            this[channel]['users'][nick].update(temp);
+            this[channel].users[nick].update(temp);
         } else {
-            this[channel]['users'][nick] = new dict(temp);
+            this[channel].users[nick] = new dict(temp);
         }
     }
 
