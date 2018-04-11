@@ -61,7 +61,6 @@ class Bot extends Core {
 
         super.init(this.events, this.config, this.state); // Init the core class with these arguments as they couldn't be registered before it's initalisation
 
-        this.config.sasl.method = this.config.sasl.method || 'external';
         this.sasl = new Sasl(this.config.sasl.username, this.config.sasl.password, this.config.sasl.method);
         this.config.caps.push(this.sasl);
         this.caps = new Caps(this);
