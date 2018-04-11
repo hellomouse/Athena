@@ -23,7 +23,10 @@ class Sasl {
     run(bot, args) {
         const mechanisms = args || ['EXTERNAL', 'PLAIN'];
 
-        if (!this.method) return;
+        if (!this.method) {
+            this.bot.send("CAP END");
+            return;
+        }
 
         this.bot = bot;
 
