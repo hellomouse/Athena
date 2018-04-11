@@ -49,7 +49,7 @@ function make_rainbow(msg) {
         if (i > (_rainbow.length - 1)) // We substract one because i starts at 0 and rainbow.length at 1
             i = 0;
 
-        colored.concat(`${colors[_rainbow[i].toUpperCase()]}${character}`);
+        colored += `${colors[_rainbow[i].toUpperCase()]}${character}`;
         i += 1;
     }
 
