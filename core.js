@@ -62,7 +62,7 @@ class Core {
             let channel = event.target;
             let args = event.arguments;
 
-            if (event.source.nick === this.config.nickname) {
+            if (event.source.nick === this.nickname) {
                 log.info('Joining %s', channel);
                 if (!this.state.channels.hasOwnProperty(channel)) {
                     log.debug('Created db for channel %s', channel);
@@ -176,8 +176,8 @@ class Core {
         });
 
         this.on_nick = this.events.on('NICK', (irc, event) => {
-            if (event.source.nick === this.config.nickname) {
-                this.config.nickname = event.arguments[0];
+            if (event.source.nick === this.nickname) {
+                this.nickname = event.arguments[0];
             }
         });
 
