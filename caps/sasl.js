@@ -24,7 +24,11 @@ class Sasl {
         const mechanisms = args || ['EXTERNAL', 'PLAIN'];
 
         if (!this.method) {
-            this.bot.send("CAP END");
+            if (this.username !== undefined && this.password !== undefined) {
+                this.method = 'plain';
+            }
+            this.bot.send('CAP END');
+
             return;
         }
 
