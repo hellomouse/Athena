@@ -27,7 +27,7 @@ class Sasl {
             if (this.username !== undefined && this.password !== undefined) {
                 this.method = 'plain';
             }
-            this.bot.send('CAP END');
+            bot.send('CAP END');
 
             return;
         }
