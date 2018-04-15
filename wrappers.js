@@ -1,4 +1,16 @@
-const { range } = require('node-python-funcs');
+const { range, len } = require('node-python-funcs');
+
+/**
+* Yield successive n-sized chunks from l.
+* @param {array} l
+* @param {number} n
+* @yield {array}
+*/
+function* chunks(l, n) {
+    for (let i of range(0, len(l), n)) {
+        yield l.slice(i, i + n);
+    }
+}
 
 /** Class that provides methods for IRC commands */
 class ConnectionWrapper {
@@ -134,7 +146,7 @@ class ConnectionWrapper {
     * Gives operator status (+o) specified user from the specified channel.
     * @func
     * @param {string} channel - Channel where you wish to give user from.
-    * @param {string} nick - User whom you would like to give operator status to in specified channel.
+    * @param {string|array} nick - User whom you would like to give operator status to in specified channel.
     */
     op(channel, nick) {
         this.mode(channel, nick, '+o');
@@ -144,7 +156,7 @@ class ConnectionWrapper {
     * Removes operator status (-o) specified user from the specified channel.
     * @func
     * @param {string} channel - Channel where you wish to give user from.
-    * @param {string} nick - User whom you would like to remove operator status from specified channel.
+    * @param {string|array} nick - User whom you would like to remove operator status from specified channel.
     */
     deop(channel, nick) {
         this.mode(channel, nick, '-o');
@@ -154,7 +166,7 @@ class ConnectionWrapper {
     * Bans (+b) specified user from the specified channel.
     * @func
     * @param {string} channel - Channel where you wish to ban the user from.
-    * @param {string} nick - User whom you would like to ban from specified channel.
+    * @param {string|array} nick - User whom you would like to ban from specified channel.
     */
     ban(channel, nick) {
         this.mode(channel, nick, '+b');
@@ -164,7 +176,7 @@ class ConnectionWrapper {
     * Unbans (-b) specified user from the specified channel.
     * @func
     * @param {string} channel - Channel where you wish to unban the user from.
-    * @param {string} nick - User whom you would like to unban from specified channel.
+    * @param {string|array} nick - User whom you would like to unban from specified channel.
     */
     unban(channel, nick) {
         this.mode(channel, nick, '-b');
@@ -172,7 +184,7 @@ class ConnectionWrapper {
 
     /**
     * @param {string} channel
-    * @param {string} nick
+    * @param {string|array} nick
     */
     quiet(channel, nick) {
         this.mode(channel, nick, '+q');
@@ -180,7 +192,7 @@ class ConnectionWrapper {
 
     /**
     * @param {string} channel
-    * @param {string} nick
+    * @param {string|array} nick
     */
     unquiet(channel, nick) {
         this.mode(channel, nick, '-q');
@@ -188,7 +200,7 @@ class ConnectionWrapper {
 
     /**
     * @param {string} channel
-    * @param {string} nick
+    * @param {string|array} nick
     */
     unvoice(channel, nick) {
         this.mode(channel, nick, '-v');
@@ -196,7 +208,7 @@ class ConnectionWrapper {
 
     /**
     * @param {string} channel
-    * @param {string} nick
+    * @param {string|arry} nick
     */
     voice(channel, nick) {
         this.mode(channel, nick, '+v');
@@ -204,11 +216,17 @@ class ConnectionWrapper {
 
     /**
     * @param {string} channel
-    * @param {string} nick
+    * @param {string|array} nick
     * @param {string} mode
     */
     mode(channel, nick, mode) {
-        this.bot.send(`MODE ${channel} ${mode} ${nick}`);
+        if (nick instanceof Array) {
+            for (let i of chunks(nick, 4)) {
+                this.bot.send(`MODE ${channel} ${mode[0].concat(mode.slice(1).repeat(4))} ${i.join(' ')}`);
+            }
+        } else {
+            this.bot.send(`MODE ${channel} ${mode} ${nick}`);
+        }
     }
 
     /**
