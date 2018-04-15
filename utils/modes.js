@@ -83,6 +83,7 @@ function isMode(mode) {
 * @param {string} userhost - userhost of bot
 * @param {string} channel - Channel modes could be applied to
 * @param {array} modes - array of modes to be applied to/in the channel
+* @return {object} - The compiled user modes
 */
 function compileModes(userhost, channel, modes) {
     const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`)
@@ -103,6 +104,8 @@ function compileModes(userhost, channel, modes) {
 
         finalmodes[target].push([operator, mode]);
     }
+
+    return finalmodes;
 }
 
 module.exports = {
