@@ -52,7 +52,7 @@ let allModes = [];
 
 for (let i of Object.values(modes)) {
     // Compress all mods into one array
-    allModes.concat(Object.keys(i));
+    allModes = allModes.concat(Object.keys(i));
 }
 
 let requiresParams = ['b', 'e', 'f', 'I', 'j', 'k', 'l', 'q'];
@@ -99,7 +99,7 @@ function compileModes(userhost, channel, modes) {
 
         if (!Object.keys(finalmodes).includes(target)) finalmodes[target] = [];
 
-        finalmodes[target].append([operator, mode]);
+        finalmodes[target].push([operator, mode]);
     }
 }
 
