@@ -16,7 +16,9 @@ let modes = {
         b: 'Ban',
         e: 'Ban exemption',
         I: 'Invite exemption',
-        q: 'Quiet'
+        q: 'Quiet',
+        o: 'Operator',
+        v: 'Voice'
     },
     channel: {
         B: 'amsg restriction',
