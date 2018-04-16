@@ -51,7 +51,7 @@ class Core {
         this.channels = this.state.channels;
 
         this.on_error = this.events.on('ERROR', (irc, event) => {
-            if (event.arguments.join(' ').indexOf('Closing link') <= -1)
+            if (event.arguments.join(' ').indexOf('Closing link') === -1)
                 irc.privmsg('##Athena', 'An error occured, check the console. !att-Athena-admins');
             log.error(event.arguments.join(' '));
         });
