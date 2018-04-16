@@ -4,6 +4,20 @@ const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
 const { strip_formatting } = require('./utils/general');
 
+/* eslint-disable no-extend-native, no-invalid-this */
+Array.prototype.remove = index => {
+    if (typeof index !== 'number') new TypeError('index Should be a number');
+    let new_array = [];
+
+    for (let i=0; i < this.length; i++) {
+        if (i === index) continue;
+        new_array.push(this[i]);
+    }
+
+    return new_array;
+};
+/* eslint-enable no-extend-native, no-invalid-this */
+
 /**
 * @func
 * @param {object} thing
@@ -250,9 +264,7 @@ class Core {
 
         this.on_featurelist = this.events.on('005', (irc, event) => {
             for (let param of event.arguments.slice(0, -1)) {
-                let split = partition(param, '=');
-                let name = split[0];
-                let value = split[2];
+                let [name, value] = partition(param, '=').remove(1);
 
                 if (!Object.keys(this.ISUPPORT).includes(name)) {
                     this.ISUPPORT[name] = {};
@@ -264,10 +276,7 @@ class Core {
                                 let name1, value1;
 
                                 if (param1.indexOf(')') > -1) {
-                                    split = partition(param1, ':');
-
-                                    name1 = split[0];
-                                    value1 = split[2];
+                                    [name1, value1] = partition(param1, ':').remove(1);
                                 }
                                 this.ISUPPORT[name][name1] = value1;
                             } else {
