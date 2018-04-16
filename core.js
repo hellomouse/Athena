@@ -278,11 +278,7 @@ class Core {
                             }
                         }
                     } else {
-                        if (value.indexOf(')') > -1) {
-                            let [name1, value1] = value.split(':');
-
-                            this.ISUPPORT[name][name1] = value1;
-                        } else if (name === 'PREFIX') {
+                        if (name === 'PREFIX') {
                             let count = 0;
 
                             value = value.split(')');
@@ -316,6 +312,10 @@ class Core {
                             this.ISUPPORT[name] = value;
                         }
                     }
+                } else if (value.indexOf(')') > -1) {
+                    let [name1, value1] = value.split(':');
+
+                    this.ISUPPORT[name][name1] = value1;
                 } else {
                     this.ISUPPORT[name] = value;
                 }
