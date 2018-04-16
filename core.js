@@ -291,7 +291,7 @@ class Core {
                             let count = 0;
 
                             value = value.split(')');
-                            value[0] = value[0].lstrip('(');
+                            value[0] = value[0].replace('(', '');
                             let types = value[0].split(new RegExp('^(.*o)(.*h)?(.*)$')).slice(1, -1);
                             let levels = {
                                 op: types[0],
@@ -306,7 +306,7 @@ class Core {
                                 let value1 = value[1][count];
 
                                 count += 1;
-                                for (let level of levels.items()) {
+                                for (let level of Object.entries(levels)) {
                                     if (level[1].indexOf(mode) > -1) {
                                         this.server.prefixes[value1] = {
                                             mode: mode,
