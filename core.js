@@ -5,7 +5,7 @@ const Plugins = require('./utils/plugins');
 const { strip_formatting } = require('./utils/general');
 
 /* eslint-disable no-extend-native, no-invalid-this */
-Array.prototype.remove = index => {
+Array.prototype.remove = function(index) {
     if (typeof index !== 'number') new TypeError('index Should be a number');
     let new_array = [];
 
