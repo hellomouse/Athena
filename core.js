@@ -48,6 +48,7 @@ class Core {
 
         this.nickname = this.config.nickname;
         this.ISUPPORT = this.state.server.ISUPPORT = {};
+        this.server = this.state.server;
         this.channels = this.state.channels;
 
         this.on_error = this.events.on('ERROR', (irc, event) => {
