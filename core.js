@@ -129,7 +129,7 @@ class Core {
             }
         };
 
-        this.on_whox = (irc, event) => {
+        this.on_whospcrpl = (irc, event) => {
             let nick = event.arguments[3];
 
             if (nick !== 'ChanServ') {
