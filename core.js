@@ -334,7 +334,7 @@ class Core {
             }
         };
 
-        for (let i of this) {
+        for (let i of Object.keys(this)) {
             if (i.startsWith('on_')) {
                 this.events.on(i.split('on_')[1].toUpperCase(), this[i]);
             }
