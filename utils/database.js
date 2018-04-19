@@ -23,7 +23,7 @@ class ChannelDB extends dict {
         if (channel !== null) {
             this[channel].users[name][attr] = value;
         } else {
-            for (let chan of this) {
+            for (let chan of Object.keys(this)) {
                 try {
                     this[chan].users[name][attr] = value;
                 } catch (e) {
