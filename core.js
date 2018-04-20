@@ -336,17 +336,10 @@ class Core {
 
         for (let i of Object.keys(this)) {
             if (i.startsWith('on_')) {
-                let numerics = require('./resources/numerics.json');
+                let names = require('./resources/names.json');
                 let name = i.split('on_')[1];
-                let found = false;
 
-                for (let k of Object.keys(numerics)) {
-                    if (numerics[k] === name) {
-                        name = k;
-                        found = true;
-                    }
-                }
-                this.events.on(found ? name : name.toUpperCase(), this[i]);
+                this.events.on(names[name] || name.toUpperCase(), this[i]);
             }
         }
     }
