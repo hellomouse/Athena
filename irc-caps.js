@@ -34,7 +34,7 @@ class Caps {
             for (const c of servcaps) {
                 const [cap, args] = c.trim().split('=');
 
-                if (this.stringcaps.indexOf(cap) > -1) {
+                if (this.stringcaps.includes(cap)) {
                     this.availablecaps.push(cap);
 
                     if (typeof args !== 'undefined') {
@@ -66,7 +66,7 @@ class Caps {
             const newcaps = [];
 
             for (const c of this.stringcaps) {
-                if (servcaps.indexOf(c) > -1) { // Check if the server supports the CAPs we want
+                if (servcaps.includes(c)) { // Check if the server supports the CAPs we want
                     this.availablecaps.push(c); // Add the new CAP to the list of available CAPs
                     newcaps.push(c);
                 }
@@ -77,11 +77,11 @@ class Caps {
             }
         } else if (event.arguments[0] === 'DEL') {
             for (const c of servcaps) {
-                if (this.availablecaps.indexOf(c) > -1) {
+                if (this.availablecaps.includes(c)) {
                     this.availablecaps.splice(this.availablecaps.indexOf(c), 1);
                 }
 
-                if (this.stringcaps.indexOf(c) > -1) {
+                if (this.stringcaps.includes(c)) {
                     const index = this.stringcaps.indexOf(c);
 
                     this.stringcaps.splice(index, 1);

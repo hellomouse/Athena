@@ -34,8 +34,8 @@ class Sasl {
 
         this.bot = bot;
 
-        if (mechanisms.indexOf(this.method.toUpperCase()) > -1) {
-            if (['plain', 'external'].indexOf(this.method) > -1) {
+        if (mechanisms.includes(this.method.toUpperCase())) {
+            if (['plain', 'external'].includes(this.method)) {
                 bot.send(`AUTHENTICATE ${this.method.toUpperCase()}`);
             } else {
                 throw new Error('Not implemented yet');
