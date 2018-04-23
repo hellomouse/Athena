@@ -103,7 +103,7 @@ class Core {
                     this.state.channels.add_entry(channel, nick, hostmask, account);
                 }
 
-                this.send(`WHO ${event.source.nick} nuhs%nhuac`);
+                this.send(`WHO ${event.source.nick} nuhs%nhuacr`);
             }
         });
 
@@ -133,12 +133,12 @@ class Core {
 
             if (nick !== 'ChanServ') {
                 let args = event.arguments;
-                let [ident, host] = args.slice(1, 3);
+                let [channel, ident, host, account, realname] = args;
                 let hostmask = `${nick}!${ident}@${host}`;
-                let channel = args[0];
-                let account = args[4] !== '0' ? args[4] : null;
 
-                this.state.channels.add_entry(channel, nick, hostmask, account);
+                account = account !== '0' ? account : null;
+
+                this.state.channels.add_entry(channel, nick, hostmask, account, realname);
             }
         });
 
@@ -241,7 +241,7 @@ class Core {
                 udb.seen.sort((a, b)=> a.time > b.time);
                 udb.seen = udb.seen.slice(-5);
             } else {
-                this.send(`WHO ${event.target} nuhs%nhuac`);
+                this.send(`WHO ${event.target} nuhs%nhuacr`);
             }
         };
 

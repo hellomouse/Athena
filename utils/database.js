@@ -46,12 +46,14 @@ class ChannelDB extends dict {
         }
     }
 
-    add_entry(channel, nick, hostmask, account) {
+    add_entry(channel, nick, hostmask, account, realname) {
         let temp = {
             hostmask,
             host: hostmask.split('@')[1],
             account,
-            seen: null
+            realname,
+            seen: null,
+            modes: []
         };
 
         if (this[channel].users.keys().includes(nick)) {
@@ -68,7 +70,7 @@ class ChannelDB extends dict {
         try {
             host = `*!*@${this[channel].users[nick].host}`;
         } catch (e) {
-            this[Symbol.from('irc')].send(`WHO ${channel} nuhs%nhuac`);
+            this[Symbol.from('irc')].send(`WHO ${channel} nuhs%nhuacr`);
             host = `*!*@${this[channel].users[nick].host}`;
         }
 
