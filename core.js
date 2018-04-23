@@ -172,8 +172,8 @@ class Core {
             let args = event.arguments;
 
             if (args.length) {
-                this.userdb.change_attr(event.source.nick, 'ident', event.target);
-                this.userdb.change_attr(event.source.nick, 'host', args[0]);
+                this.channels.change_attr(event.source.nick, 'ident', event.target);
+                this.channels.change_attr(event.source.nick, 'host', args[0]);
             } else
                 this.userdb.change_attr(event.source.nick, 'host', event.target);
         });
