@@ -90,7 +90,7 @@ class Core {
                     });
                 }
 
-                this.send(`WHO ${event.target} nuhs%nhuac`);
+                this.send(`WHO ${event.target} nuhs%nhuacr`);
                 this.send(`NAMES ${event.target}`);
                 irc.mode(event.target, '', ''); // Get modes for the DB
             } else {
