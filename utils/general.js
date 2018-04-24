@@ -1,3 +1,5 @@
+const { range, len } = require('node-python-funcs');
+
 /**
 * Strips formatting from IRC messages
 * @param {string} msg
@@ -14,6 +16,19 @@ function strip_formatting(msg) {
     return msg;
 }
 
+/**
+* Yield successive n-sized chunks from l.
+* @param {array} l
+* @param {number} n
+* @yield {array}
+*/
+function* chunks(l, n) {
+    for (let i of range(0, len(l), n)) {
+        yield l.slice(i, i + n);
+    }
+}
+
 module.exports = {
-  strip_formatting
+  strip_formatting,
+  chunks
 };
