@@ -221,10 +221,8 @@ class ConnectionWrapper {
     */
     mode(channel, nick, mode) {
         if (nick instanceof Array) {
-            let length = this.bot.ISUPPORT.MODES;
-
-            for (let i of chunks(nick, length)) {
-                this.bot.send(`MODE ${channel} ${mode[0].concat(mode.slice(1).repeat(length))} ${i.join(' ')}`);
+            for (let i of chunks(nick, this.bot.ISUPPORT.MODES)) {
+                this.bot.send(`MODE ${channel} ${mode[0].concat(mode.slice(1).repeat(i.length))} ${i.join(' ')}`);
             }
         } else {
             this.bot.send(`MODE ${channel} ${mode} ${nick}`);
