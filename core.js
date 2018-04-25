@@ -62,7 +62,7 @@ class Core {
             this.send('PONG');
         };
 
-        this.on_nick_in_use = (irc, event) => {
+        this.on_nicknameinuse = (irc, event) => {
             this.nickname = this.nickname.concat('_');
             irc.nick(this.nickname);
         };
