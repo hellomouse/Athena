@@ -27,7 +27,7 @@ class ConnectionWrapper {
     * @param {string} message - The message you wish to reply with.
     */
     reply(event, message) {
-        if (event.target === this.bot.config.nickname) {
+        if (event.target === this.bot.nickname) {
             this.privmsg(event.source.nick, message);
         } else {
             this.privmsg(event.target, message);
