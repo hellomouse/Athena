@@ -104,6 +104,7 @@ class Core {
                 }
 
                 this.send(`WHO ${event.source.nick} nuhs%nhuacr`);
+                this.nextWHOChannel = event.target;
             }
         });
 
@@ -137,6 +138,7 @@ class Core {
                 let hostmask = `${nick}!${ident}@${host}`;
 
                 account = account !== '0' ? account : null;
+                if (this.nextWHOChannel) channel = channel !== this.nextWHOChannel ? this.nextWHOChannel : channel;
 
                 this.state.channels.add_entry(channel, nick, hostmask, account, realname);
             }
