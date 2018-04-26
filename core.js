@@ -167,7 +167,7 @@ class Core {
         this.on_quietlist = this.events.on('728', (irc, event) => this._update_user_modes(irc, event, 'q'));
 
         this.on_account = this.events.on('ACCOUNT', (irc, event) => {
-            this.userdb.change_attr(event.source.nick, 'account', event.target);
+            this.userdb.change_attr(event.source.nick, 'account', event.target === '*' ? null : event.target);
         });
 
         this.on_chghost = this.events.on('CHGHOST', (irc, event) => {
