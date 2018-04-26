@@ -177,7 +177,7 @@ class Core {
                 this.channels.change_attr(event.source.nick, 'ident', event.target);
                 this.channels.change_attr(event.source.nick, 'host', args[0]);
             } else
-                this.userdb.change_attr(event.source.nick, 'host', event.target);
+                this.channels.change_attr(event.source.nick, 'host', event.target);
         });
 
         this.on_cap = this.events.on('CAP', (irc, event) => this.caps.handler(event));
