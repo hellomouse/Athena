@@ -56,6 +56,8 @@ class ChannelDB extends dict {
             modes: []
         };
 
+        if (this[channel] === undefined) this[channel] = new dict({
+            users: {}, names: [], modes: [], key: null, flags: [] });
         if (this[channel].users.keys().includes(nick)) {
             delete temp.seen;
             this[channel].users[nick].update(temp);
