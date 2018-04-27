@@ -358,7 +358,7 @@ class Core {
     * @func
     * @param {string} message - The message you want to send
     */
-    send(message) {
+    immediateSend(message) {
         this.socket.write(`${message}\r\n`);
         log.debug('[SENT] %s', strip_formatting(message));
     }
