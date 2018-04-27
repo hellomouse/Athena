@@ -1,35 +1,30 @@
 class floodProtection {
 
-    constructor (bot) {
-
+    constructor(bot) {
         this.bot = bot;
         this.bot.sendQueue = [];
 
-        setInterval(this.reduceQueue, 300, this, false);
-        setInterval(this.reduceQueue, 3000, this, true);
+        setInterval(this.reduceQueue, 300, false);
+        setInterval(this.reduceQueue, 3000, true);
 
-        this.bot.send = (message) => {
-
+        this.bot.send = message => {
             this.bot.sendQueue.push(message);
-
-        }
-
+        };
     }
 
-    reduceQueue (that, burst) {
+    reduceQueue(burst) {
+        if (!this.bot.sendQueue) return;
 
-        if (!that.bot.sendQueue) return;
+        for (let i=0; i<4; i++) {
+            let message = this.bot.sendQueue.shift();
 
-        for (let i=0;i<4;i++) {
-            let message = that.bot.sendQueue.shift();
             if (message) {
-                that.bot.immediateSend(message);
+                this.bot.immediateSend(message);
             }
             if (!burst) break;
         }
-
     }
 
 }
 
-module.exports = floodProtection
+module.exports = floodProtection;
