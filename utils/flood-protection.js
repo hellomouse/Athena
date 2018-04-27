@@ -4,8 +4,8 @@ class floodProtection {
         this.bot = bot;
         this.bot.sendQueue = [];
 
-        setInterval(this.reduceQueue, 300, false);
-        setInterval(this.reduceQueue, 3000, true);
+        setInterval(this.reduceQueue.bind(this), 300, false);
+        setInterval(this.reduceQueue.bind(this), 3000, true);
 
         this.bot.send = message => {
             this.bot.sendQueue.push(message);
