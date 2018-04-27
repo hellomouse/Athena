@@ -1,5 +1,12 @@
-class floodProtection {
+/**
+* Class for flood protection methods
+* @class
+*/
+class FloodProtection {
 
+    /**
+    * @param {Bot} bot
+    */
     constructor(bot) {
         this.bot = bot;
         this.bot.sendQueue = [];
@@ -12,6 +19,9 @@ class floodProtection {
         };
     }
 
+    /**
+    * @param {boolean} burst
+    */
     reduceQueue(burst) {
         if (!this.bot.sendQueue) return;
 
@@ -27,4 +37,4 @@ class floodProtection {
 
 }
 
-module.exports = floodProtection;
+module.exports = FloodProtection;

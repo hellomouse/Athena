@@ -3,7 +3,7 @@ const { hasattr, callable, partition } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
 const { strip_formatting } = require('./utils/general');
-const floodProtection = require('./utils/flood-protection');
+const FloodProtection = require('./utils/flood-protection');
 
 /* eslint-disable no-extend-native, no-invalid-this */
 Array.prototype.remove = function(index) {
@@ -52,7 +52,7 @@ class Core {
         this.server = this.state.server;
         this.channels = this.state.channels;
 
-        this.floodProtection = new floodProtection(this);
+        this.floodProtection = new FloodProtection(this);
 
         this.on_error = (irc, event) => {
             if (event.arguments.join(' ').indexOf('Closing link') === -1)
