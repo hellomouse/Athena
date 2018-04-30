@@ -3,6 +3,45 @@ const { check_perms } = require('./permissions');
 const { readdir } = require('fs');
 const { join } = require('path');
 
+class Hooks {
+
+    constructor() {
+        this.regexHooks = {};
+        this.privmsgHooks = {};
+
+        this.hooks = { on_regex: this.on_regex, on_privmsg: this.on_privmsg, that: this };
+    }
+
+    addHook(hookStore, args) {
+        // Test if hooks already exist
+        if (Object.keys(hookStore).includes(args[0])) {
+            hookStore[arg[0]].push(args[1]);
+        }
+
+        hookStore[args[0]] = [args[1]];
+    }
+
+    on_privmsg(message, callback) {
+        this.addHook(this.privmsgHooks, [message, callback]);
+    }
+
+    on_regex(regex, callback) {
+        this.that.addHook(this.that.regexHooks, [regex, callback]);
+    }
+
+    call_regex(irc, event) {
+        for (let regex of Object.keys(this.regexHooks)) {
+            let message = event.arguments[0];
+
+            if (message.match(new RegExp(regex))) {
+                for (let callback of this.regexHooks[regex]) {
+                    callback(irc, event);
+                }
+            }
+        }
+    }
+
+}
 
 /**
  * getDefault - Returns object[key], otherwise
@@ -22,11 +61,13 @@ function getDefault(object, key, def) {
 * Class that holds methods for calling and adding commands
 * @class
 */
-class Plugins {
+class Plugins extends Hooks {
     /**
     * @param {object} bot - The `this` object from the upstream class.
     */
     constructor(bot) {
+        super();
+
         this.bot = bot;
         this.plugins = {};
         readdir('./plugins', (err, files) => {
@@ -34,6 +75,10 @@ class Plugins {
                 const plugin = require('../' + join('plugins', file));
 
                 for (let cmd of Object.keys(plugin)) {
+                    if (cmd == 'main') {
+                        plugin.main(bot, this.hooks);
+                        continue;
+                    }
                     this.set_defaults(plugin[cmd]);
                     this.add_cmd(cmd, plugin[cmd]);
                 }
@@ -103,7 +148,7 @@ class Plugins {
                         if (cmd.opts.auto_help) {
                             irc.reply(event, cmd.opts.help_text);
                         } else {
-                            irc.reply(event, 'Oops, looks like you forgot an argument there.');
+                            irc.reply(event, 'Insufficient arguments');
                         }
                     }
                 } else {

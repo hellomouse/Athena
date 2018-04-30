@@ -213,6 +213,8 @@ class Core {
             }
             if (event.target.startsWith('#'))
                 this._update_seen_db(event, irc, event.source.nick, args.join(' '));
+
+            this.plugins.call_regex(irc, event);
         };
 
         this._get_time = tags => {
