@@ -8,8 +8,7 @@ class Hooks {
     constructor() {
         this.regexHooks = {};
         this.privmsgHooks = {};
-
-        this.hooks = { on_regex: this.on_regex, on_privmsg: this.on_privmsg, that: this };
+        this.includesHooks = {};
     }
 
     addHook(hookStore, args) {
@@ -21,23 +20,49 @@ class Hooks {
         hookStore[args[0]] = [args[1]];
     }
 
+    call_hook(hookStore, irc, event) {
+
+        for (let callback of hookStore) {
+            callback(irc, event)
+        }
+    }
+
     on_privmsg(message, callback) {
         this.addHook(this.privmsgHooks, [message, callback]);
     }
 
     on_regex(regex, callback) {
-        this.that.addHook(this.regexHooks, [regex, callback]);
+        this.addHook(this.regexHooks, [regex, callback]);
+    }
+
+    on_includes(message, callback) {
+        this.addHook(this.includesHooks, [message, callback]);
+    }
+
+    call_privmsg(irc, event) {
+
+        for (let checkMessage of Object.keys(this.privmsgHooks)) {
+
+            if (event.arguments[0] == checkMessage) this.call_hook(this.privmsgHooks[checkMessage], irc, event);
+
+        }
     }
 
     call_regex(irc, event) {
         for (let regex of Object.keys(this.regexHooks)) {
             let message = event.arguments[0];
 
-            if (message.match(new RegExp(regex))) {
-                for (let callback of this.regexHooks[regex]) {
-                    callback(irc, event);
-                }
-            }
+            if (message.match(new RegExp(regex))) this.call_hook(this.regexHooks[regex], irc, event);
+
+        }
+    }
+
+    call_includes(irc, event) {
+
+        for (let includesString of Object.keys(this.includesHooks)) {
+
+            if (event.arguments[0].includes(includesString)) this.call_hook(this.includesHooks[includesString], irc, event);
+
         }
     }
 
@@ -61,13 +86,13 @@ function getDefault(object, key, def) {
 * Class that holds methods for calling and adding commands
 * @class
 */
-class Plugins extends Hooks {
+class Plugins {
     /**
     * @param {object} bot - The `this` object from the upstream class.
     */
     constructor(bot) {
-        super();
 
+        this.hooks = new Hooks();
         this.bot = bot;
         this.plugins = {};
         readdir('./plugins', (err, files) => {
