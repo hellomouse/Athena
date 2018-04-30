@@ -26,7 +26,7 @@ class Hooks {
     }
 
     on_regex(regex, callback) {
-        this.that.addHook(this.that.regexHooks, [regex, callback]);
+        this.that.addHook(this.regexHooks, [regex, callback]);
     }
 
     call_regex(irc, event) {
