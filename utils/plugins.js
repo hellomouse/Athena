@@ -15,7 +15,7 @@ class Hooks {
     addHook(hookStore, args) {
         // Test if hooks already exist
         if (Object.keys(hookStore).includes(args[0])) {
-            hookStore[arg[0]].push(args[1]);
+            hookStore[args[0]].push(args[1]);
         }
 
         hookStore[args[0]] = [args[1]];
