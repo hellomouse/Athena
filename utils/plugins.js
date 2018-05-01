@@ -87,18 +87,7 @@ class Plugins {
         this.hooks = new Hooks();
         this.plugins = {};
 
-        this.bot = {
-            send: bot._send,
-            config_handler: bot.config_handler,
-            config: bot.config,
-            state: bot.state,
-            plugins: bot.plugins,
-            socket: bot.socket,
-            nickname: bot.nickname,
-            sasl: bot.sasl,
-            caps: bot.caps,
-            floodProtection: bot.floodProtection
-        };
+        this.bot = bot;
         readdir('./plugins', (err, files) => {
             for (let file of files) {
                 const plugin = require('../' + join('plugins', file));
@@ -164,7 +153,7 @@ class Plugins {
     * @param {array} args
     */
     call_command(event, irc, args) {
-        irc.send = this.bot.send;
+        irc.send = this.bot._send;
         if (this.plugins[args[0]] !== undefined) {
             try {
                 let cmd = this.plugins[args[0]];
