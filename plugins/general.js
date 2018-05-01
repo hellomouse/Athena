@@ -5,7 +5,7 @@ function todo(bot, event, irc, args) {
     let has_perms = check_perms(bot.config, event.source.host, event.target, [true, false, false]);
 
     if (args[0] === 'add' && has_perms) {
-        bot.todo.push(args.slice(1).join(' '));
+        irc.reply(event, `Added to the todo list. No. ${bot.todo.push(args.slice(1).join(' '))}`);
     } else if (args[0] === 'remove' && has_perms) {
         let index = parseInt(args[1]);
         let text = '';
