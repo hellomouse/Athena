@@ -19,7 +19,7 @@ class FloodProtection {
         * @param {string} message - Message to send (non-flushable)
         **/
         this.bot.send = message => {
-            this.bot.sendQueue.push({ message, root: true, target: this.getTarget(message.message) });
+            this.bot.sendQueue.push({ message, root: true, target: this.getTarget(message) });
         };
 
         /**
@@ -27,7 +27,7 @@ class FloodProtection {
         * @param {string} message - Message to send from plugin (flushable)
         **/
         this.bot._send = message => {
-            this.bot.sendQueue.push({ message, root: false, target: this.getTarget(message.message) });
+            this.bot.sendQueue.push({ message, root: false, target: this.getTarget(message) });
         };
     }
 
