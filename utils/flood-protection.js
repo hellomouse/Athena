@@ -41,7 +41,7 @@ class FloodProtection {
     * @param {string} target
     **/
     flushTarget(target) {
-        this.bot.sendQueue = this.bot.sendQueue.map(element => (element.target !== target && element.root) ? element : undefined);
+        this.bot.sendQueue = this.bot.sendQueue.map(e => (e.target !== target && e.root) ? e : undefined);
     }
 
     /**
