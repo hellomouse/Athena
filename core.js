@@ -200,10 +200,12 @@ class Core {
 
         this.on_privmsg = (irc, event) => {
             let args = event.arguments.join(' ').split(' '); // Split arguments by spaces
-            let prefix = this.config.prefix || '.';
+            let prefix = this.config.prefix || '';
 
             if (args[0].startsWith(prefix)) {
                 args[0] = args[0].slice(prefix.length);
+                this.plugins.call_command(event, irc, args);
+            } else if (event.target[0] !== '#') {
                 this.plugins.call_command(event, irc, args);
             } else if ( [this.nickname, this.nickname.concat(':'), this.nickname.concat(',')].includes(args[0])) {
                 args.shift(); // nickname[:/,] isn't the commmand
