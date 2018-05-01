@@ -43,29 +43,29 @@ class Plugins {
     /**
     * Sets default properties for cmd.opts
     * @func
-    * @param {function} func
+    * @param {function} cmd
     */
     set_defaults(cmd) {
         let opts = cmd.opts;
-        opts.restrictions = getDefault(opts, "restrictions", {});
-        opts.category = getDefault(opts, "category", "general");
+        opts.restrictions = getDefault(opts, 'restrictions', {});
+        opts.category = getDefault(opts, 'category', 'general');
 
         // Display name, if different from function name
-        opts.display_name = getDefault(opts, "display_name", cmd.name);
+        opts.display_name = getDefault(opts, 'display_name', cmd.name);
 
-        opts.hide = getDefault(opts, "hide", false);
-        opts.help_text = getDefault(opts, "help_text", "No help text provided");
+        opts.hide = getDefault(opts, 'hide', false);
+        opts.help_text = getDefault(opts, 'help_text', 'No help text provided');
 
         // Format: [trusted?, admin?, owner?]
-        opts.perms = getDefaults(opts, "perms", [false, false, false]);
+        opts.perms = getDefault(opts, 'perms', [false, false, false]);
 
-        opts.min_args = getDefaults(opts, "min_args", 0);
+        opts.min_args = getDefault(opts, 'min_args', 0);
 
         // Return help_text if command errors
-        opts.auto_help = getDefaults(opts, "auto_help", false);
+        opts.auto_help = getDefault(opts, 'auto_help', false);
 
         // Array of aliases that can be used to call the command instead
-        opts.aliases = getDefaults(opts, "aliases", []);
+        opts.aliases = getDefault(opts, 'aliases', []);
     }
 
     /**
@@ -76,7 +76,7 @@ class Plugins {
     */
     add_cmd(name, func) {
         this[name] = func;
-        for(let alias of func.opts.aliases) {
+        for (let alias of func.opts.aliases) {
             this[alias] = func;
         }
     }
@@ -106,7 +106,7 @@ class Plugins {
                 log.error(e.stack);
 
                 // Auto help
-                if(cmd && cmd.opts.auto_help){
+                if (typeof(cmd) !== 'undefined' && cmd.opts.auto_help){
                     irc.reply(event, cmd.opts.help_text);
                 }
             }
