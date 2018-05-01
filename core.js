@@ -45,7 +45,6 @@ class Core {
         this.events = events;
         this.config = config;
         this.state = state;
-        this.plugins = new Plugins(this);
 
         this.nickname = this.config.nickname;
         this.ISUPPORT = this.state.server.ISUPPORT = {};
@@ -53,6 +52,7 @@ class Core {
         this.channels = this.state.channels;
 
         this.floodProtection = new FloodProtection(this);
+        this.plugins = new Plugins(this);
 
         this.on_error = (irc, event) => {
             if (event.arguments.join(' ').indexOf('Closing link') === -1)

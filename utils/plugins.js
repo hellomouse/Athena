@@ -90,6 +90,7 @@ class Plugins {
         this.bot = {
             send: bot._send,
             config_handler: bot.config_handler,
+            config: bot.config,
             state: bot.state,
             plugins: bot.plugins,
             socket: bot.socket,

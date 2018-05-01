@@ -37,6 +37,14 @@ class FloodProtection {
     }
 
     /**
+    * Flush messages for a target
+    * @param {string} target
+    **/
+    flushTarget(target) {
+        this.bot.sendQueue = this.bot.sendQueue.map(element => (element.target !== target && element.root) ? element : undefined);
+    }
+
+    /**
     * @func
     * @param {string} message
     * @return {string}
@@ -54,12 +62,15 @@ class FloodProtection {
     * @param {boolean} burst - Whether to burst messages
     **/
     reduceQueue(that, burst) {
+        if (!that.bot.sendQueue) return;
+
         for (let i=0; i<4; i++) {
-            let message = this.bot.sendQueue.shift();
+            let message = that.bot.sendQueue.shift();
 
             if (message) {
                 that.bot.immediateSend(message.message);
-            }
+            } else break; // No more messages
+
             if (!burst) break;
         }
     }
