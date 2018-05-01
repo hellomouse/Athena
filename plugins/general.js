@@ -4,6 +4,7 @@ const { check_perms } = require('../utils/permissions');
 function todo(bot, event, irc, args) {
     let has_perms = check_perms(bot.config, event.source.host, event.target, [true, false, false]);
 
+    if (bot.todo === undefined) bot.todo = require('../todo.json');
     if (args[0] === 'add' && has_perms) {
         irc.reply(event, `Added to the todo list. No. ${bot.todo.push(args.slice(1).join(' '))}`);
     } else if (args[0] === 'remove' && has_perms) {

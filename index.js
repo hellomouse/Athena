@@ -64,6 +64,7 @@ class Bot extends Core {
         this.sasl = new Sasl(this.config.sasl.username, this.config.sasl.password, this.config.sasl.method);
         this.config.caps.push(this.sasl);
         this.caps = new Caps(this);
+        this.todo = require('./todo.json');
     }
 
     /**
