@@ -84,9 +84,9 @@ function Eval(bot, event, irc, args) {
 }
 
 function list(bot, event, irc, args) {
-    irc.reply(event, Object.keys(bot.plugins).filter(x => {
+    irc.reply(event, Object.keys(bot.plugins.plugins).filter(x => {
         if (x !== 'bot') {
-            return !bot.plugins[x].opts.hide;
+            return !bot.plugins.plugins[x].opts.hide;
         }
     }).join(', '));
 }
