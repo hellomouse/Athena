@@ -66,7 +66,6 @@ function requiresParam(mode) {
 }
 
 
-
 /**
 * @func
 * @param {string} mode
@@ -84,13 +83,13 @@ function isMode(mode) {
 * @param {array} modes - array of modes to be applied to/in the channel
 * @return {object} - The compiled user modes
 */
-function compileModes(userhost, channel, modes) {
-    const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`)
-    const MSGLEN = 512 - msg.byteLength; // Calculates characters remaining
+function compileModes(userhost, channel, modes_) {
+    const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`);
+    //const MSGLEN = 512 - msg.byteLength; // Calculates characters remaining (unused for now)
 
     let finalmodes = {};
 
-    for (let i of modes) {
+    for (let i of modes_) {
         let reference = i;
         let [mode, target] = reference.split(' '); // ['+o', 'foo']
         let operator;
@@ -119,7 +118,7 @@ function parseUserMode(args) {
     let current_mode = '';
     let modes_arr = [];
 
-    /* Iterate over each character of modes.
+    /* Iterate over each character of modes_.
      * current_mode represents each individual mode (ie +o)
      * current_mode is reset each time a mode is "completed"
      * A list of seperated modes is added to
