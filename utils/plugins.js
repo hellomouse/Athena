@@ -21,9 +21,8 @@ class Hooks {
     }
 
     call_hook(hookStore, irc, event) {
-
         for (let callback of hookStore) {
-            callback(irc, event)
+            callback(irc, event);
         }
     }
 
@@ -40,11 +39,8 @@ class Hooks {
     }
 
     call_privmsg(irc, event) {
-
         for (let checkMessage of Object.keys(this.privmsgHooks)) {
-
-            if (event.arguments[0] == checkMessage) this.call_hook(this.privmsgHooks[checkMessage], irc, event);
-
+            if (event.arguments[0] === checkMessage) this.call_hook(this.privmsgHooks[checkMessage], irc, event);
         }
     }
 
@@ -53,16 +49,13 @@ class Hooks {
             let message = event.arguments[0];
 
             if (message.match(new RegExp(regex))) this.call_hook(this.regexHooks[regex], irc, event);
-
         }
     }
 
     call_includes(irc, event) {
-
         for (let includesString of Object.keys(this.includesHooks)) {
-
-            if (event.arguments[0].includes(includesString)) this.call_hook(this.includesHooks[includesString], irc, event);
-
+            if (event.arguments[0].includes(includesString))
+                this.call_hook(this.includesHooks[includesString], irc, event);
         }
     }
 
@@ -91,7 +84,6 @@ class Plugins {
     * @param {object} bot - The `this` object from the upstream class.
     */
     constructor(bot) {
-
         this.hooks = new Hooks();
         this.bot = bot;
         this.plugins = {};
@@ -100,7 +92,7 @@ class Plugins {
                 const plugin = require('../' + join('plugins', file));
 
                 for (let cmd of Object.keys(plugin)) {
-                    if (cmd == 'main') {
+                    if (cmd === 'main') {
                         plugin.main(bot, this.hooks);
                         continue;
                     }
