@@ -24,8 +24,7 @@ function todo(bot, event, irc, args) {
             return;
         }
         for (let i of Object.entries(bot.todo)) {
-            i[0] += 1;
-            irc.reply(event, i.join('. '));
+            irc.reply(event, `${parseInt(i[0])+1}. ${i[1]}`);
         }
     }
 }
