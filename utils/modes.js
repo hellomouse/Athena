@@ -7,25 +7,29 @@ let modes = {
         w: 'See wallops',
         Z: 'Secure connection'
     },
-    channel: {
+    'channel-users': {
         a: 'Admin',
         b: 'Ban',
+        e: 'Ban exemption',
+        I: 'Invite exemption',
+        q: 'Quiet',
+        o: 'Operator',
+        v: 'Voice'
+    },
+    channel: {
         B: 'amsg restriction',
         c: 'resrict colour codes',
         C: 'CTCP restriction',
-        e: 'Ban exemption',
         f: 'Forward',
         F: 'Enable forwaring',
         g: 'Allow open inviting',
         i: 'Invite only',
-        I: 'Invite exemption',
         j: 'Join throttle',
         k: 'Password protected',
         l: 'Join limit',
         m: 'Moderated',
         n: 'Prevent external messages',
         p: 'Private',
-        q: 'Quiet',
         Q: 'Block forwarded users',
         r: 'Block unidentified users',
         s: 'Secret',
