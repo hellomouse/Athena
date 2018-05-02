@@ -1,7 +1,3 @@
-
-/** TODO: Separate channel modes into actual channels modes
-* and modes that can be set on users in channels
-*/
 let modes = {
     umodes: {
         g: 'Ignore private messages from unidentified users',
@@ -11,29 +7,25 @@ let modes = {
         w: 'See wallops',
         Z: 'Secure connection'
     },
-    'channel-users': {
+    channel: {
         a: 'Admin',
         b: 'Ban',
-        e: 'Ban exemption',
-        I: 'Invite exemption',
-        q: 'Quiet',
-        o: 'Operator',
-        v: 'Voice'
-    },
-    channel: {
         B: 'amsg restriction',
         c: 'resrict colour codes',
         C: 'CTCP restriction',
+        e: 'Ban exemption',
         f: 'Forward',
         F: 'Enable forwaring',
         g: 'Allow open inviting',
         i: 'Invite only',
+        I: 'Invite exemption',
         j: 'Join throttle',
         k: 'Password protected',
         l: 'Join limit',
         m: 'Moderated',
         n: 'Prevent external messages',
         p: 'Private',
+        q: 'Quiet',
         Q: 'Block forwarded users',
         r: 'Block unidentified users',
         s: 'Secret',
@@ -50,63 +42,63 @@ let modes = {
     }
 };
 
-let allModes = [];
-
-for (let i of Object.values(modes)) {
-    // Compress all mods into one array
-    allModes = allModes.concat(Object.keys(i));
-}
-
 let requiresParams = ['b', 'e', 'f', 'I', 'j', 'k', 'l', 'q'];
+const possibleUserModes = ['e', 'I', 'b', 'q', 'o', 'v'];
 
 /**
 * @func
 * @param {string} mode
-* @return {bool}
+* @return {bool} - True if mode requires param
 */
 function requiresParam(mode) {
     return requiresParams.includes(mode);
 }
 
-
 /**
 * @func
-* @param {string} mode
-* @return {bool}
+* @param {array} args  Array in the format [modes, user1, user2...]
+* @return {array}      Array in the format:
 */
-function isMode(mode) {
-    return allModes.includes(mode);
-}
+function parseUserMode(args) {
+    let modes = args[0];
+    let users = args.slice(1);
 
-/**
-* @func
-* @param {string} userhost - userhost of bot
-* @param {string} channel - Channel modes could be applied to
-* @param {array} modes - array of modes to be applied to/in the channel
-*/
-function compileModes(userhost, channel, modes) {
-    const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`)
-    const MSGLEN = 512 - msg.byteLength; // Calculates characters remaining
+    let current_mode = '';
+    let modes_arr = [];
 
-    let finalmodes = {};
-
-    for (let i of modes) {
-        let reference = i;
-        let [mode, target] = reference.split(' '); // ['+o', 'foo']
-        let operator;
-
-        [operator, mode] = mode.split(''); // ['+', 'o'];
-
-        if (!isMode(mode)) continue; // We continue to the next mode
-
-        if (!Object.keys(finalmodes).includes(target)) finalmodes[target] = [];
-
-        finalmodes[target].push([operator, mode]);
+    /* Iterate over each character of modes.
+     * current_mode represents each individual mode (ie +o)
+     * current_mode is reset each time a mode is "completed"
+     * A list of seperated modes is added to
+     * modes_arr */
+    for(let mode of modes) {
+        if(mode === '+' || mode === '-') {
+            current_mode = mode;
+        }
+        else if(possibleUserModes.includes(mode)) {
+            modes_arr.push(current_mode + mode);
+        }
     }
+
+    /* Case with only 1 user */
+    if(users.length == 1) {
+        return [modes_arr.join(''), users[0]];
+    }
+
+    let returned = [];
+    let i = 0;
+
+    for(let user of users) {
+        returned.push([modes_arr[i], user]);
+        i++;
+    }
+
+    return returned;
 }
 
 module.exports = {
     modes,
     requiresParams,
-    requiresParam
+    requiresParam,
+    parseUserMode
 };
