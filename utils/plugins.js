@@ -47,6 +47,7 @@ class Plugins {
     */
     set_defaults(cmd) {
         let opts = cmd.opts;
+
         opts.restrictions = getDefault(opts, 'restrictions', {});
         opts.category = getDefault(opts, 'category', 'general');
 
@@ -97,18 +98,18 @@ class Plugins {
                     if (args.length >= min_args) {
                         cmd(this.bot, event, irc, args.slice(1));
                     } else {
-                        irc.reply(event, 'Oops, looks like you forgot an argument there.');
+                        // Auto help
+                        if (cmd.opts.auto_help) {
+                            irc.reply(event, cmd.opts.help_text);
+                        } else {
+                            irc.reply(event, 'Oops, looks like you forgot an argument there.');
+                        }
                     }
                 } else {
                     irc.reply(event, `No permission to use command ${args[0]}`);
                 }
             } catch (e) {
                 log.error(e.stack);
-
-                // Auto help
-                if (typeof(cmd) !== 'undefined' && cmd.opts.auto_help){
-                    irc.reply(event, cmd.opts.help_text);
-                }
             }
         } else {
             irc.notice(event.source.nick, `Invalid Command: ${args[0]}`);
