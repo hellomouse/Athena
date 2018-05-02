@@ -8,7 +8,7 @@ function todo(bot, event, irc, args) {
     if (args[0] === 'add' && has_perms) {
         irc.reply(event, `Added to the todo list. No. ${bot.todo.push(args.slice(1).join(' '))}`);
     } else if (args[0] === 'remove' && has_perms) {
-        let index = parseInt(args[1]);
+        let index = parseInt(args[1]) - 1; // Parse args[1] and substract 1 to get the Array index
         let text = '';
 
         for (let i of bot.todo[index]) {
@@ -24,6 +24,7 @@ function todo(bot, event, irc, args) {
             return;
         }
         for (let i of Object.entries(bot.todo)) {
+            i[0] += 1;
             irc.reply(event, i.join('. '));
         }
     }
