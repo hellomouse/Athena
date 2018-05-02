@@ -113,7 +113,7 @@ function compileModes(userhost, channel, modes) {
 * @return {array}      Array in the format: [[mode, user]...]
 */
 function parseUserMode(args) {
-    let modes = args[0];
+    let modes_ = args[0];
     let users = args.slice(1);
 
     let current_mode = '';
@@ -124,24 +124,23 @@ function parseUserMode(args) {
      * current_mode is reset each time a mode is "completed"
      * A list of seperated modes is added to
      * modes_arr */
-    for(let mode of modes) {
-        if(mode === '+' || mode === '-') {
+    for (let mode of modes_) {
+        if (mode === '+' || mode === '-') {
             current_mode = mode;
-        }
-        else if(possibleUserModes.includes(mode)) {
+        } else if (possibleUserModes.includes(mode)) {
             modes_arr.push(current_mode + mode);
         }
     }
 
     /* Case with only 1 user */
-    if(users.length == 1) {
+    if (users.length === 1) {
         return [modes_arr.join(''), users[0]];
     }
 
     let returned = [];
     let i = 0;
 
-    for(let user of users) {
+    for (let user of users) {
         returned.push([modes_arr[i], user]);
         i++;
     }
