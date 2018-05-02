@@ -85,8 +85,9 @@ class Plugins {
     */
     constructor(bot) {
         this.hooks = new Hooks();
-        this.bot = bot;
         this.plugins = {};
+
+        this.bot = bot;
         readdir('./plugins', (err, files) => {
             for (let file of files) {
                 const plugin = require('../' + join('plugins', file));
@@ -152,6 +153,7 @@ class Plugins {
     * @param {array} args
     */
     call_command(event, irc, args) {
+        irc.send = this.bot._send;
         if (this.plugins[args[0]] !== undefined) {
             try {
                 let cmd = this.plugins[args[0]];

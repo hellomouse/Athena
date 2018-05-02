@@ -3,6 +3,7 @@ const { hasattr, callable, partition } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
 const { strip_formatting } = require('./utils/general');
+const FloodProtection = require('./utils/flood-protection');
 
 /* eslint-disable no-extend-native, no-invalid-this */
 Array.prototype.remove = function(index) {
@@ -44,12 +45,14 @@ class Core {
         this.events = events;
         this.config = config;
         this.state = state;
-        this.plugins = new Plugins(this);
 
         this.nickname = this.config.nickname;
         this.ISUPPORT = this.state.server.ISUPPORT = {};
         this.server = this.state.server;
         this.channels = this.state.channels;
+
+        this.floodProtection = new FloodProtection(this);
+        this.plugins = new Plugins(this);
 
         this.on_error = (irc, event) => {
             if (event.arguments.join(' ').indexOf('Closing link') === -1)
@@ -355,7 +358,7 @@ class Core {
     * @func
     * @param {string} message - The message you want to send
     */
-    send(message) {
+    immediateSend(message) {
         this.socket.write(`${message}\r\n`);
         log.debug('[SENT] %s', strip_formatting(message));
     }
