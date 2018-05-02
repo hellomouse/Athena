@@ -87,7 +87,7 @@ function compileModes(userhost, channel, modes) {
 /**
 * @func
 * @param {array} args  Array in the format [modes, user1, user2...]
-* @return {array}      Array in the format:
+* @return {array}      Array in the format: [[mode, user]...]
 */
 function parseUserMode(args) {
     let modes = args[0];
