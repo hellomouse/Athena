@@ -80,12 +80,12 @@ function isMode(mode) {
 * @func
 * @param {string} userhost - userhost of bot
 * @param {string} channel - Channel modes could be applied to
-* @param {array} modes - array of modes to be applied to/in the channel
+* @param {array} modes_ - array of modes to be applied to/in the channel
 * @return {object} - The compiled user modes
 */
 function compileModes(userhost, channel, modes_) {
-    const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`);
-    //const MSGLEN = 512 - msg.byteLength; // Calculates characters remaining (unused for now)
+    // const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`); // (Unused)
+    // const MSGLEN = 512 - msg.byteLength; // Calculates characters remaining (unused for now)
 
     let finalmodes = {};
 
