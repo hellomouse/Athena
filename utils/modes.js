@@ -65,6 +65,18 @@ function requiresParam(mode) {
     return requiresParams.includes(mode);
 }
 
+
+
+/**
+* @func
+* @param {string} mode
+* @return {bool}
+*/
+function isMode(mode) {
+    return allModes.includes(mode);
+}
+
+
 /**
 * @func
 * @param {string} userhost - userhost of bot
@@ -141,6 +153,7 @@ module.exports = {
     modes,
     requiresParams,
     requiresParam,
+    isMode,
     compileModes,
     parseUserMode
 };
