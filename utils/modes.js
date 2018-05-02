@@ -46,6 +46,13 @@ let modes = {
     }
 };
 
+let allModes = [];
+
+for (let i of Object.values(modes)) {
+    // Compress all mods into one array
+    allModes = allModes.concat(Object.keys(i));
+}
+
 let requiresParams = ['b', 'e', 'f', 'I', 'j', 'k', 'l', 'q'];
 const possibleUserModes = ['e', 'I', 'b', 'q', 'o', 'v'];
 
