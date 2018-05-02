@@ -28,12 +28,13 @@ class Plugins {
     */
     constructor(bot) {
         this.bot = bot;
+        this.plugins = {};
         readdir('./plugins', (err, files) => {
             for (let file of files) {
                 const plugin = require('../' + join('plugins', file));
 
                 for (let cmd of Object.keys(plugin)) {
-                    this.set_defaults(cmd);
+                    this.set_defaults(plugin[cmd]);
                     this.add_cmd(cmd, plugin[cmd]);
                 }
             }
@@ -76,9 +77,9 @@ class Plugins {
     * @param {function} func
     */
     add_cmd(name, func) {
-        this[name] = func;
+        this.plugins[name] = func;
         for (let alias of func.opts.aliases) {
-            this[alias] = func;
+            this.plugins[alias] = func;
         }
     }
 
@@ -89,9 +90,9 @@ class Plugins {
     * @param {array} args
     */
     call_command(event, irc, args) {
-        if (this[args[0]] !== undefined) {
+        if (this.plugins[args[0]] !== undefined) {
             try {
-                let cmd = this[args[0]];
+                let cmd = this.plugins[args[0]];
                 let { perms, min_args } = cmd.opts;
 
                 if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
