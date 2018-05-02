@@ -56,6 +56,36 @@ function requiresParam(mode) {
 
 /**
 * @func
+* @param {string} userhost - userhost of bot
+* @param {string} channel - Channel modes could be applied to
+* @param {array} modes - array of modes to be applied to/in the channel
+* @return {object} - The compiled user modes
+*/
+function compileModes(userhost, channel, modes) {
+    const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`)
+    const MSGLEN = 512 - msg.byteLength; // Calculates characters remaining
+
+    let finalmodes = {};
+
+    for (let i of modes) {
+        let reference = i;
+        let [mode, target] = reference.split(' '); // ['+o', 'foo']
+        let operator;
+
+        [operator, mode] = mode.split(''); // ['+', 'o'];
+
+        if (!isMode(mode)) continue; // We continue to the next mode
+
+        if (!Object.keys(finalmodes).includes(target)) finalmodes[target] = [];
+
+        finalmodes[target].push([operator, mode]);
+    }
+
+    return finalmodes;
+}
+
+/**
+* @func
 * @param {array} args  Array in the format [modes, user1, user2...]
 * @return {array}      Array in the format:
 */
@@ -100,5 +130,6 @@ module.exports = {
     modes,
     requiresParams,
     requiresParam,
+    compileModes,
     parseUserMode
 };
