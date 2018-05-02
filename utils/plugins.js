@@ -14,7 +14,7 @@ const { join } = require('path');
  * @return {*}
  */
 function getDefault(object, key, def) {
-    return object[key] || def;
+    return object[key] === undefined ? object[key] : def;
 }
 
 
