@@ -4,7 +4,6 @@ const tls = require('tls');
 const fs = require('fs');
 
 const log = require('./utils/logging');
-const config = require('./utils/configHandler');
 const { strip_formatting } = require('./utils/general');
 const Parser = require('./utils/messageParser');
 const Wrappers = require('./wrappers');
@@ -34,9 +33,7 @@ class Bot extends Core {
 
         // Config
         this.config_file_path = config_file_path;
-        this.config_handler = new config.ConfigHandler(config_file_path); // Initalise a new object with the config file
-        this.config_handler.load(true); // Load the config
-        this.config = this.config_handler.config; // Set a shorter variable name since accessing it is easier now
+        this.config = require(config_file_path); // Set a shorter variable name since accessing it is easier now
 
         if (this.config.ssl) {
             this.socket = tls.connect(this.config.irc.port, this.config.irc.host, {
@@ -108,7 +105,11 @@ fs.readdir('config', (error, contents) => {
             const configFile = contents[_];
 
             clients[configFile] = new Bot(`./config/${configFile}`);
-            clients[configFile].connect();
+            try {
+                clients[configFile].connect();
+            } catch (e) {
+                log.error(e.stack);
+            }
         }
     }
 });
