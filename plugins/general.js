@@ -30,9 +30,8 @@ function todo(bot, event, irc, args) {
 }
 
 todo.opts = {
-    perms: [false, false, false],
-    hide: false,
-    min_args: 0
+    min_args: 0,
+    category: 'general'
 };
 
 function ping(bot, event, irc, args) {
@@ -40,9 +39,8 @@ function ping(bot, event, irc, args) {
 }
 
 ping.opts = {
-    perms: [false, false, false],
     min_args: 0,
-    hide: false
+    category: 'general'
 };
 
 function join(bot, event, irc, args) {
@@ -51,7 +49,7 @@ function join(bot, event, irc, args) {
 join.opts = {
     perms: [false, true, true],
     min_args: 1,
-    hide: false
+    category: 'general'
 };
 
 
@@ -62,7 +60,7 @@ function quit(bot, event, irc, args) {
 quit.opts = {
     perms: [false, true, true],
     min_args: 0,
-    hide: false
+    category: 'general'
 };
 
 function Eval(bot, event, irc, args) {
@@ -83,23 +81,31 @@ function Eval(bot, event, irc, args) {
 }
 
 function list(bot, event, irc, args) {
-    irc.reply(event, Object.keys(bot.plugins.plugins).filter(x => {
-        if (x !== 'bot') {
-            return !bot.plugins.plugins[x].opts.hide;
-        }
-    }).join(', '));
+    if (args.length === 0) {
+        // TODO use colours util to create bolded text
+        irc.reply(event, '\x02Categories: \x0f' + bot.plugins.categories.join(', '));
+    } else {
+        irc.reply(event, '\x02Commands in ' + args[0].replace(/\W/g, '')
+            + ': \x0f'
+            + Object.keys(bot.plugins.plugins).filter(x => {
+                let is_right_category = bot.plugins.plugins[x].opts.category.toLowerCase() === args[0];
+                if (x !== 'bot') {
+                    return !bot.plugins.plugins[x].opts.hide && is_right_category;
+                }
+                return is_right_category;
+            }).join(', '));
+    }
 }
 
 list.opts = {
-    perms: [false, false, false],
     min_args: 0,
-    hide: false
+    category: 'general'
 };
 
 Eval.opts = {
     perms: [false, false, true],
     min_args: 1,
-    hide: false
+    category: 'general'
 };
 
 module.exports = {
