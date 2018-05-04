@@ -238,8 +238,6 @@ class Plugins {
             } catch (e) {
                 log.error(e.stack);
             }
-        } else {
-            irc.notice(event.source.nick, `Invalid Command: ${args[0]}`);
         }
     }
 }
