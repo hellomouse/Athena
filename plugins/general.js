@@ -30,8 +30,6 @@ function todo(bot, event, irc, args) {
 }
 
 todo.opts = {
-    perms: [false, false, false],
-    hide: false,
     min_args: 0,
     category: 'general'
 };
@@ -41,9 +39,7 @@ function ping(bot, event, irc, args) {
 }
 
 ping.opts = {
-    perms: [false, false, false],
     min_args: 0,
-    hide: false,
     category: 'general'
 };
 
@@ -53,7 +49,6 @@ function join(bot, event, irc, args) {
 join.opts = {
     perms: [false, true, true],
     min_args: 1,
-    hide: false,
     category: 'general'
 };
 
@@ -65,7 +60,6 @@ function quit(bot, event, irc, args) {
 quit.opts = {
     perms: [false, true, true],
     min_args: 0,
-    hide: false,
     category: 'general'
 };
 
@@ -104,16 +98,13 @@ function list(bot, event, irc, args) {
 }
 
 list.opts = {
-    perms: [false, false, false],
     min_args: 0,
-    hide: false,
     category: 'general'
 };
 
 Eval.opts = {
     perms: [false, false, true],
     min_args: 1,
-    hide: false,
     category: 'general'
 };
 
