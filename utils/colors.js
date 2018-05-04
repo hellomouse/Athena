@@ -254,21 +254,6 @@ class Color extends String {
     }
 }
 
-function make_rainbow(msg) {
-    let i = 0;
-    let colored = '';
-
-    for (let character of msg) {
-        if (i > (_rainbow.length - 1)) // We substract one because i starts at 0 and rainbow.length at 1
-            i = 0;
-
-        colored += `${colors[_rainbow[i].toUpperCase()]}${character}`;
-        i += 1;
-    }
-
-    return colored.concat('\x0F');
-}
-
 /**
 * Colors a message with rainbow colors
 * @param {string} msg - The message you want to add rainbow colors too
@@ -288,14 +273,6 @@ function add_background(msg, bg) {
 }
 
 
-function stylize(msg, style) {
-    if (style !== null) {
-        return `${colors[style.toUpperCase()]}${msg}`;
-    }
-
-    return msg;
-}
-
 function addStyling(msg, background, rainbow, style) {
     let myRe = /\${(\w+)}/g;
     let myArray;
@@ -306,13 +283,11 @@ function addStyling(msg, background, rainbow, style) {
 
     if (rainbow) msg = make_rainbow(msg);
 
-    return stylize(add_background(msg, background), style);
+    return ((...args)=>{})(add_background(msg, background), style);
 }
 
 module.exports = {
     colors,
-    make_rainbow,
     add_background,
-    stylize,
     addStyling
 };
