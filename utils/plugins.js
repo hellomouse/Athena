@@ -3,14 +3,27 @@ const { check_perms } = require('./permissions');
 const { readdir } = require('fs');
 const { join } = require('path');
 
+/**
+ * Contains all the hooks
+ * @class
+ */
 class Hooks {
 
+    /**
+     * constructor - Consutrct a Hooks object
+     */
     constructor() {
         this.regexHooks = {};
         this.privmsgHooks = {};
         this.includesHooks = {};
     }
 
+    /**
+     * addHook - Add a new hook
+     *
+     * @param  {Object} hookStore An object mapping hooks
+     * @param  {Array} args       An array in the format [message, hook (callback funct)]
+     */
     addHook(hookStore, args) {
         // Test if hooks already exist
         if (Object.keys(hookStore).includes(args[0])) {
@@ -20,30 +33,67 @@ class Hooks {
         hookStore[args[0]] = [args[1]];
     }
 
+    /**
+     * call_hook - Call a hook object
+     *
+     * @param  {Object} hookStore An object mapping hooks
+     * @param  {object} irc       ConnectionWrapper object
+     * @param  {object} event     Parser object
+     */
     call_hook(hookStore, irc, event) {
         for (let callback of hookStore) {
             callback(irc, event);
         }
     }
 
+    /**
+     * on_privmsg - PRIVMSG hook
+     *
+     * @param  {String} message    Message to test
+     * @param  {function} callback Function to run
+     */
     on_privmsg(message, callback) {
         this.addHook(this.privmsgHooks, [message, callback]);
     }
 
+    /**
+     * on_regex - REGEX hook
+     *
+     * @param  {RegExp} regex      Regex to check
+     * @param  {function} callback Function to run
+     */
     on_regex(regex, callback) {
         this.addHook(this.regexHooks, [regex, callback]);
     }
 
+    /**
+     * on_includes - includes hook
+     *
+     * @param  {String} message    Message to test
+     * @param  {function} callback Function to run
+     */
     on_includes(message, callback) {
         this.addHook(this.includesHooks, [message, callback]);
     }
 
+    /**
+     * call_privmsg - Call a PRIVMSG hook
+     *
+     * @param  {object} irc   ConnectionWrapper object
+     * @param  {object} event Parser object
+     */
     call_privmsg(irc, event) {
         for (let checkMessage of Object.keys(this.privmsgHooks)) {
             if (event.arguments[0] === checkMessage) this.call_hook(this.privmsgHooks[checkMessage], irc, event);
         }
     }
 
+    /**
+     * call_regex - Call a regex hook
+     *
+     * @param  {object} irc   ConnectionWrapper object
+     * @param  {object} event Parser object
+     */
     call_regex(irc, event) {
         for (let regex of Object.keys(this.regexHooks)) {
             let message = event.arguments[0];
@@ -52,6 +102,12 @@ class Hooks {
         }
     }
 
+    /**
+     * call_includes - Call an includes hook
+     *
+     * @param  {object} irc   ConnectionWrapper object
+     * @param  {object} event Parser object
+     */
     call_includes(irc, event) {
         for (let includesString of Object.keys(this.includesHooks)) {
             if (event.arguments[0].includes(includesString))
@@ -88,6 +144,8 @@ class Plugins {
         this.plugins = {};
 
         this.bot = bot;
+        this.categories = [];
+
         readdir('./plugins', (err, files) => {
             for (let file of files) {
                 const plugin = require('../' + join('plugins', file));
@@ -99,6 +157,10 @@ class Plugins {
                     }
                     this.set_defaults(plugin[cmd]);
                     this.add_cmd(cmd, plugin[cmd]);
+
+                    if (!this.categories.includes(plugin[cmd].opts.category)) {
+                        this.categories.push(plugin[cmd].opts.category);
+                    }
                 }
             }
         });

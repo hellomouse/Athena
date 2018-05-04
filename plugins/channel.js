@@ -25,7 +25,8 @@ function op(bot, event, irc, args) {
 op.opts = {
     perms: [false, true, false],
     hide: false,
-    min_args: 0
+    min_args: 0,
+    category: 'channel'
 };
 function deop(bot, event, irc, args) {
     let [target, nick] = _get_info(event, args);
@@ -35,7 +36,8 @@ function deop(bot, event, irc, args) {
 deop.opts = {
     perms: [false, true, false],
     hide: false,
-    min_args: 0
+    min_args: 0,
+    category: 'channel'
 };
 
 module.exports = {
