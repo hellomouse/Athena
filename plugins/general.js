@@ -85,15 +85,13 @@ function list(bot, event, irc, args) {
         // TODO use colours util to create bolded text
         irc.reply(event, '\x02Categories: \x0f' + bot.plugins.categories.join(', '));
     } else {
-        irc.reply(event, '\x02Commands in ' + args[0].replace(/\W/g, '')
-            + ': \x0f'
-            + Object.keys(bot.plugins.plugins).filter(x => {
-                let is_right_category = bot.plugins.plugins[x].opts.category.toLowerCase() === args[0];
-                if (x !== 'bot') {
-                    return !bot.plugins.plugins[x].opts.hide && is_right_category;
-                }
-                return is_right_category;
-            }).join(', '));
+        let commands = Object.keys(bot.plugins.plugins).filter(x => {
+            let is_right_category = bot.plugins.plugins[x].opts.category.toLowerCase() === args[0];
+
+            return !bot.plugins.plugins[x].opts.hide && is_right_category;
+        }).join(', ');
+
+        irc.reply(event, `\x02Commands in ${args[0].replace(/\W/g, '')}:\x0f ${commands}`);
     }
 }
 
