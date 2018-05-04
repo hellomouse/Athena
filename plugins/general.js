@@ -83,7 +83,7 @@ function Eval(bot, event, irc, args) {
 function list(bot, event, irc, args) {
     if (args.length === 0) {
         // TODO use colours util to create bolded text
-        irc.reply(event, '\x02Categories: \x0f' + bot.plugins.categories.join(', '));
+        irc.reply(event, `\x02Categories:\x0f ${bot.plugins.categories.join(', ')}`);
     } else {
         let commands = Object.keys(bot.plugins.plugins).filter(x => {
             let is_right_category = bot.plugins.plugins[x].opts.category.toLowerCase() === args[0];
