@@ -108,43 +108,52 @@ function compileModes(userhost, channel, modes_) {
 
 /**
 * @func
-* @param {array} args  Array in the format [modes, user1, user2...]
-* @return {array}      Array in the format: [[mode, user]...]
+* @param {object} bot
+* @param {array} args  Array in the format [modes, target1, target2...]
+* @return {array}      Array in the format: [[mode, target, optionalarg]...]
 */
-function parseUserMode(args) {
-    let modes_ = args[0];
-    let users = args.slice(1);
+function parseModes(ISUPPORT, channel, args) {
+    let channelModes = ISUPPORT.CHANMODES || ['e', 'I', 'b', 'q', 'k', 'f', 'l', 'j'];
+    let prefix = Object.keys(ISUPPORT.PREFIX || { o: '@', v: '+' });
+    let set = [...channelModes.slice(0, 3), ...prefix].join('');
+    let unset = [...channelModes.slice(0, 2), ...prefix].join('');
+    // ["eIbq","k","flj","CFLMPQScgimnprstz"] -ISUPPORT CHANMODES
+    // ^ Requires param when un(setting)
+    //          ^ Require param when unsetting. Param '*' sent by server un unsetting
+    //              ^ Require param when setting
+    // Other modes don't require parameters
+    let modes = args[0];
+    let targets = args.slice(1);
 
-    let current_mode = '';
-    let modes_arr = [];
+    let finalmodes = []; // final parsed modes
 
-    /* Iterate over each character of modes_.
-     * current_mode represents each individual mode (ie +o)
-     * current_mode is reset each time a mode is "completed"
-     * A list of seperated modes is added to
-     * modes_arr */
-    for (let mode of modes_) {
-        if (mode === '+' || mode === '-') {
-            current_mode = mode;
-        } else if (possibleUserModes.includes(mode)) {
-            modes_arr.push(current_mode + mode);
+    let setMode = true; // bool to track whether we're setting/unsetting modes
+    let argumentPosition = 0; // positon of target in targets array
+    let readyModes = []; // ['+k', '##Athena', 'potato'] - mode, target, optionalarg
+
+    for (let currentMode of modes) {
+        if (currentMode === '+') {
+            setMode = true; continue;
+        } else if (currentMode === '-') { setMode = false; continue; }
+
+        if (setMode) {
+            if (set.includes(currentMode)) {
+                readyModes = [`+${currentMode}`, channel, `${targets[argumentPosition]}`]
+                argumentPosition++;
+            } else { readyModes = [`+${currentMode}`, channel] }
+        } else {
+            if (unset.includes(currentMode)) {
+                readyModes = [`-${currentMode}`, channel, `${targets[argumentPosition]}`]
+                argumentPosition++;
+            } else { readyModes = [`-${currentMode}`, channel]; }
         }
+
+        finalmodes.push(readyModes);
+        readyModes = [];
+
     }
 
-    /* Case with only 1 user */
-    if (users.length === 1) {
-        return [modes_arr.join(''), users[0]];
-    }
-
-    let returned = [];
-    let i = 0;
-
-    for (let user of users) {
-        returned.push([modes_arr[i], user]);
-        i++;
-    }
-
-    return returned;
+    return finalmodes;
 }
 
 module.exports = {
@@ -153,5 +162,8 @@ module.exports = {
     requiresParam,
     isMode,
     compileModes,
-    parseUserMode
+    parseModes
 };
+
+//let bot = {server:{ISUPPORT:{"CHANMODES":["eIbq","k","flj","CFLMPQScgimnprstz"],"CHANLIMIT":"#:120","PREFIX":{"o":"@","v":"+"}}}}
+//parseModes(bot, '##Athena', ['-cvo+k', 'Athena', 'Athena', 'potato'])

@@ -2,6 +2,7 @@ const Dict = require('node-python-funcs').dict;
 const { hasattr, callable, partition } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
+const Modes = require('./utils/modes');
 const { strip_formatting } = require('./utils/general');
 const FloodProtection = require('./utils/flood-protection');
 
@@ -149,6 +150,14 @@ class Core {
 
         this.on_channelmodeis = (irc, event) => {
             this.state.channels[event.arguments[0]].modes.push(...event.arguments[1].slice(1).split(''));
+        };
+
+        this.on_MODE = (irc, event) => {
+            let modes = Modes.parseModes(this.ISUPPORT, event.target, event.arguments);
+
+            for (let mode of modes) {
+                this.plugins.hooks.call_mode(irc, event, mode);
+            }
         };
 
         this._update_user_modes = (irc, event, mode) => {

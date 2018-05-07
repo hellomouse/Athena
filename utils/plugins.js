@@ -16,6 +16,7 @@ class Hooks {
         this.regexHooks = {};
         this.privmsgHooks = {};
         this.includesHooks = {};
+        this.modesHooks = {};
     }
 
     /**
@@ -26,11 +27,11 @@ class Hooks {
      */
     addHook(hookStore, args) {
         // Test if hooks already exist
-        if (Object.keys(hookStore).includes(args[0])) {
+        if (hookStore[args[0]]) {
             hookStore[args[0]].push(args[1]);
+        } else {
+            hookStore[args[0]] = [args[1]];
         }
-
-        hookStore[args[0]] = [args[1]];
     }
 
     /**
@@ -39,10 +40,11 @@ class Hooks {
      * @param  {Object} hookStore An object mapping hooks
      * @param  {object} irc       ConnectionWrapper object
      * @param  {object} event     Parser object
-     */
-    call_hook(hookStore, irc, event) {
+     * @param  {array}  args      Optional arguments
+    */
+    call_hook(hookStore, irc, event, args) {
         for (let callback of hookStore) {
-            callback(irc, event);
+            callback(irc, event, args);
         }
     }
 
@@ -74,6 +76,15 @@ class Hooks {
      */
     on_includes(message, callback) {
         this.addHook(this.includesHooks, [message, callback]);
+    }
+
+    /**
+     * @param  {string} mode    Modes to test for - '+v Athena'
+     * @param  {function} callback Function to run
+     * Third parmater is parsed mode e.g. [ '-v', '##Athena', 'Athena_' ]
+    */
+    on_mode(mode, callback) {
+        this.addHook(this.modesHooks, [mode, callback]);
     }
 
     /**
@@ -115,6 +126,18 @@ class Hooks {
         }
     }
 
+    /**
+     * @param  {object} irc   ConnectionWrapper object
+     * @param  {object} event Parser object
+     * @param  {array}  mode Parsed mode
+    */
+    call_mode(irc, event, mode) {
+        for (let modesString of Object.keys(this.modesHooks)) {
+            if (modesString === (mode.length === 2 ? `${mode[0]} ${mode[1]}` : `${mode[0]} ${mode[2]}`)) {
+                this.call_hook(this.modesHooks[modesString], irc, event, mode);
+            }
+        }
+    }
 }
 
 /**
