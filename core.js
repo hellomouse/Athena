@@ -2,7 +2,7 @@ const Dict = require('node-python-funcs').dict;
 const { hasattr, callable, partition } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
-const Modes = require('./utils/modes');
+const modesUtils = require('./utils/modes');
 const { strip_formatting } = require('./utils/general');
 const FloodProtection = require('./utils/flood-protection');
 
@@ -153,7 +153,7 @@ class Core {
         };
 
         this.on_MODE = (irc, event) => {
-            let modes = Modes.parseModes(this.ISUPPORT, event.target, event.arguments);
+            let modes = modesUtils.parseModes(this.ISUPPORT, event.target, event.arguments);
 
             for (let mode of modes) {
                 this.plugins.hooks.call_mode(irc, event, mode);
