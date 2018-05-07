@@ -164,6 +164,3 @@ module.exports = {
     compileModes,
     parseModes
 };
-
-//let bot = {server:{ISUPPORT:{"CHANMODES":["eIbq","k","flj","CFLMPQScgimnprstz"],"CHANLIMIT":"#:120","PREFIX":{"o":"@","v":"+"}}}}
-//parseModes(bot, '##Athena', ['-cvo+k', 'Athena', 'Athena', 'potato'])
