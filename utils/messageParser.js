@@ -13,6 +13,8 @@ class User {
         this.host = this.userhost.split('@')[1];
         this.host = this.host || null;
         this.ident = this.ident !== undefined ? this.ident.split('@')[0] : null;
+        this.toString = function() { return userhost; };
+        this.toJSON = this.toString;
     }
 
 }
