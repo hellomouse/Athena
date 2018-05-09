@@ -1,4 +1,5 @@
 const { check_perms } = require('../utils/permissions');
+const log = require('../utils/logging');
 
 /* eslint-disable require-jsdoc */
 function todo(bot, event, irc, args) {
@@ -16,6 +17,13 @@ function todo(bot, event, irc, args) {
         }
         text += '- Done!';
         bot.todo[index] = text;
+        irc.reply(event, `Removed ${index} from todo list`);
+    } else if (args[0] === 'save') {
+        const fs = require('fs');
+
+        fs.writeFile('todo.json', JSON.stringify(bot.todo, null, 2) + '\n', err => {
+            if (err) log.error('An error occured while saving file'); log.error(err.stack);
+        });
     } else {
         irc.reply(event, 'To-do List:');
         if (bot.todo.length === 0) {
