@@ -133,8 +133,6 @@ class Color extends String {
 
     fuchsia() {
         return new Color(`${colors.FUCHSIA}${this}${colors.NORMAL}`);
-
-        return this;
     }
 
     grey() {
