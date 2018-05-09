@@ -8,7 +8,7 @@ function todo(bot, event, irc, args) {
     if (bot.todo === undefined) bot.todo = require('../todo.json');
     if (args[0] === 'add' && has_perms) {
         irc.reply(event, `Added to the todo list. No. ${bot.todo.push(args.slice(1).join(' '))}`);
-    } else if (args[0] === 'remove' && has_perms) {
+    } else if ((args[0] === 'remove' || args[0] === 'done') && has_perms) {
         let index = parseInt(args[1]) - 1; // Parse args[1] and substract 1 to get the Array index
         let text = '';
 
