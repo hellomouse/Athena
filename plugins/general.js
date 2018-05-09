@@ -22,7 +22,10 @@ function todo(bot, event, irc, args) {
         const fs = require('fs');
 
         fs.writeFile('todo.json', JSON.stringify(bot.todo, null, 2) + '\n', err => {
-            if (err) log.error('An error occured while saving file'); log.error(err.stack);
+            if (err) {
+                log.error('An error occured while saving file');
+                log.error(err.stack);
+            }
         });
     } else {
         irc.reply(event, 'To-do List:');
