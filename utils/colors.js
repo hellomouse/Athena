@@ -48,190 +48,130 @@ class Color extends String {
     }
 
     white() {
-        super(`${colors.WHITE}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.WHITE}${this}${colors.NORMAL}`);
     }
 
     black() {
-        super(`${colors.BLACK}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.BLACK}${this}${colors.NORMAL}`);
     }
 
     navy() {
-        super(`${colors.NAVY}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.NAVY}${this}${colors.NORMAL}`);
     }
 
     green() {
-        super(`${colors.GREEN}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.GREEN}${this}${colors.NORMAL}`);
     }
 
     red() {
-        super(`${colors.RED}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.RED}${this}${colors.NORMAL}`);
     }
 
     brown() {
-        super(`${colors.BROWN}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.BROWN}${this}${colors.NORMAL}`);
     }
 
     maroon() {
-        super(`${colors.MAROON}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.MAROON}${this}${colors.NORMAL}`);
     }
 
     purple() {
-        super(`${colors.PURPLE}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.PURPLE}${this}${colors.NORMAL}`);
     }
 
     violet() {
-        super(`${colors.VIOLET}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.VIOLET}${this}${colors.NORMAL}`);
     }
 
     orange() {
-        super(`${colors.ORANGE}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.ORANGE}${this}${colors.NORMAL}`);
     }
 
     yellow() {
-        super(`${colors.YELLOW}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.YELLOW}${this}${colors.NORMAL}`);
     }
 
     lightgreen() {
-        super(`${colors.LIGHTGREEN}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.LIGHTGREEN}${this}${colors.NORMAL}`);
     }
 
     lime() {
-        super(`${colors.LIME}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.LIME}${this}${colors.NORMAL}`);
     }
 
     teal() {
-        super(`${colors.TEAL}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.TEAL}${this}${colors.NORMAL}`);
     }
 
     bluecyan() {
-        super(`${colors.BLUECYAN}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.BLUECYAN}${this}${colors.NORMAL}`);
     }
 
     cyan() {
-        super(`${colors.CYAN}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.CYAN}${this}${colors.NORMAL}`);
     }
 
     aqua() {
-        super(`${colors.AQUA}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.AQUA}${this}${colors.NORMAL}`);
     }
 
     blue() {
-        super(`${colors.BLUE}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.BLUE}${this}${colors.NORMAL}`);
     }
 
     royal() {
-        super(`${colors.ROYAL}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.ROYAL}${this}${colors.NORMAL}`);
     }
 
     lightpurple() {
-        super(`${colors.LIGHTPURPLE}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.LIGHTPURPLE}${this}${colors.NORMAL}`);
     }
 
     pink() {
-        super(`${colors.PINK}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.PINK}${this}${colors.NORMAL}`);
     }
 
     fuchsia() {
-        super(`${colors.FUCHSIA}${this}${colors.NORMAL}`);
+        return new Color(`${colors.FUCHSIA}${this}${colors.NORMAL}`);
 
         return this;
     }
 
     grey() {
-        super(`${colors.GREY}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.GREY}${this}${colors.NORMAL}`);
     }
 
     gray() {
-        super(`${colors.GRAY}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.GRAY}${this}${colors.NORMAL}`);
     }
 
     lightgray() {
-        super(`${colors.LIGHTGRAY}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.LIGHTGRAY}${this}${colors.NORMAL}`);
     }
 
     lightgrey() {
-        super(`${colors.LIGHTGREY}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.LIGHTGREY}${this}${colors.NORMAL}`);
     }
 
     silver() {
-        super(`${colors.SILVER}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.SILVER}${this}${colors.NORMAL}`);
     }
 
 
     bold() {
-        super(`${colors.BOLD}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.BOLD}${this}${colors.NORMAL}`);
     }
 
     italic() {
-        super(`${colors.ITALIC}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.ITALIC}${this}${colors.NORMAL}`);
     }
 
     underline() {
-        super(`${colors.UNDERLINE}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.UNDERLINE}${this}${colors.NORMAL}`);
     }
 
     reverse() {
-        super(`${colors.ITALIC}${this}${colors.NORMAL}`);
-
-        return this;
+        return new Color(`${colors.ITALIC}${this}${colors.NORMAL}`);
     }
 
     /**
@@ -250,7 +190,7 @@ class Color extends String {
             i += 1;
         }
 
-        return colored.concat('\x0F');
+        return new Color(colored.concat('\x0F'));
     }
 }
 
@@ -281,12 +221,11 @@ function addStyling(msg, background, rainbow, style) {
         msg.replace(myArray[0], colors[myArray[1]]);
     }
 
-    if (rainbow) msg = make_rainbow(msg);
-
     return ((...args)=>{})(add_background(msg, background), style);
 }
 
 module.exports = {
+    Color,
     colors,
     add_background,
     addStyling
