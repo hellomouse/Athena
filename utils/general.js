@@ -48,8 +48,8 @@ function post_error(error, irc, event) {
             timeout: 60000
         }, (err, req, res)=> {
             if (err) {
-                irc.privmsg('##Athena', `An error happened while pasting an error: ${e.toString()}`);
-                log.error(e.stack.toString());
+                irc.privmsg('##Athena', `An error happened while pasting an error: ${err.toString()}`);
+                log.error(err.stack.toString());
             } else {
                 irc.msg('##Athena', 'Error: {0}'.format(res.split('\n')[0]));
             }
