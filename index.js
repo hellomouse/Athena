@@ -91,8 +91,12 @@ class Bot extends Core {
 
                 log.debug('[RECV] %s', strip_formatting(data));
 
-                this.events.emit(parse.command, this.irc, parse);
-                this.events.emit('all', this.irc, parse);
+                try {
+                    this.events.emit(parse.command, this.irc, parse);
+                    this.events.emit('all', this.irc, parse);
+                } catch (e) {
+                    log.error(e.stack);
+                }
             }
         });
     }
