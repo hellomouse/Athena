@@ -155,9 +155,16 @@ class Core {
             let [channel, user] = event.arguments.slice(0, 2);
             // let [channel, user, setby, timestamp] = event.arguments;
 
-            if (user.startsWith('$a:')) {
-                user = user.slice(3);
-                this.channels[channel].users[user].modes.push(mode);
+            if (user.startsWith('$')) {
+                switch (user[1]) {
+                    case 'a':
+                        user = user.slice(3);
+                        this.channels[channel].users[user].modes.push(mode);
+                        break;
+                    case 'j':
+                        // TODO: Implement this
+                        break;
+                }
             } else {
                 let re = new RegExp(user.replace(/\*/g, '.+'));
                 let users = this.channels[channel].users.key().filter(x => {
