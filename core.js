@@ -175,7 +175,7 @@ class Core {
                 }
             } else {
                 let re = new RegExp(user.replace(/\*/g, '.+'));
-                let users = this.channels[channel].users.key().filter(x => {
+                let users = this.channels[channel].users.keys().filter(x => {
                     return re.test(this.channels[channel].users[x].hostmask);
                 });
 
