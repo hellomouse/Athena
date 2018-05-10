@@ -156,10 +156,18 @@ class Core {
             // let [channel, user, setby, timestamp] = event.arguments;
 
             if (user.startsWith('$')) {
+                let udb = this.channels[channel].users;
+
                 switch (user[1]) {
                     case 'a':
                         user = user.slice(3);
-                        this.channels[channel].users[user].modes.push(mode);
+                        for (let u of udb.keys()) {
+                            if (udb[u].account === user) {
+                                this.channels[channel].users[user].modes.push(mode);
+                            } else {
+                                continue;
+                            }
+                        }
                         break;
                     case 'j':
                         // TODO: Implement this
