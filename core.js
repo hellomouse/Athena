@@ -170,12 +170,33 @@ class Core {
                         }
                         break;
                     case 'j':
-                        // TODO: Implement this
+                        user = user.slice(3);
+                        if (this.channels.keys().includes(user)) {
+                            this.nextModeChan = user;
+                        } else {
+                            this.nextModeChan = channel;
+                            irc.mode(user.slice(3), 'beI', '');
+                        }
                         break;
                 }
             } else {
                 let re = new RegExp(user.replace(/\*/g, '.+'));
                 let users = this.channels[channel].users.keys().filter(x => {
+                    return re.test(this.channels[channel].users[x].hostmask);
+                });
+
+                for (let u of users)
+                    this.channels[channel].users[u].modes.push(mode);
+            }
+
+            if (this.nextModeChan) {
+                for (let u of this.channels[channel].users.keys()) {
+                    if (this.channels[this.nextModeChan].users.keys().includes(u)) {
+                        this.channels[this.nextModeChan].users[u].modes.push(mode);
+                    }
+                }
+                let re = new RegExp(user.replace(/\*/g, '.+'));
+                let users = this.channels[this.nextModeChan].users.keys().filter(x => {
                     return re.test(this.channels[channel].users[x].hostmask);
                 });
 
