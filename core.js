@@ -159,7 +159,13 @@ class Core {
                 user = user.slice(3);
                 this.channels[channel].users[user].modes.push(mode);
             } else {
-                this.channels[channel].users[user].modes.push(mode);
+                let re = new RegExp(user.replace(/\*/g, '.+'));
+                let users = this.channels[channel].users.key().filter(x => {
+                    return re.test(this.channels[channel].users[x].hostmask);
+                });
+
+                for (let u of users)
+                    this.channels[channel].users[u].modes.push(mode);
             }
         };
 
