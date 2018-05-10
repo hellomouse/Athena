@@ -152,7 +152,7 @@ class Core {
         };
 
         this._update_user_modes = (irc, event, mode) => {
-            let [channel, user] = arguments.slice(0, 2);
+            let [channel, user] = event.arguments.slice(0, 2);
             // let [channel, user, setby, timestamp] = event.arguments;
 
             if (user.startsWith('$a:')) {
