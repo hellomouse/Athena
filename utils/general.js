@@ -46,7 +46,7 @@ function post_error(error, irc, event) {
             json: true,
             body: data,
             timeout: 60000
-        }, (err, req, res)=> {
+        }, (err, req, res) => {
             if (err) {
                 irc.privmsg('##Athena', `An error happened while pasting an error: ${err.toString()}`);
                 log.error(err.stack.toString());
