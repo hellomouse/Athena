@@ -5,20 +5,6 @@ const Plugins = require('./utils/plugins');
 const { strip_formatting } = require('./utils/general');
 const FloodProtection = require('./utils/flood-protection');
 
-/* eslint-disable no-extend-native, no-invalid-this */
-Array.prototype.remove = function(index) {
-    if (typeof index !== 'number') new TypeError('index Should be a number');
-    let new_array = [];
-
-    for (let i=0; i < this.length; i++) {
-        if (i === index) continue;
-        new_array.push(this[i]);
-    }
-
-    return new_array;
-};
-/* eslint-enable no-extend-native, no-invalid-this */
-
 /**
 * @func
 * @param {object} thing
@@ -136,8 +122,7 @@ class Core {
             let nick = event.arguments[3];
 
             if (nick !== 'ChanServ') {
-                let args = [...event.arguments.slice(0, 3), ...event.arguments.slice(4)];
-                let [channel, ident, host, account, realname] = args;
+                let [channel, ident, , host, account, realname] = event.arguments;
                 let hostmask = `${nick}!${ident}@${host}`;
 
                 account = account !== '0' ? account : null;
@@ -282,7 +267,7 @@ class Core {
 
         this.on_featurelist = (irc, event) => {
             for (let param of event.arguments.slice(0, -1)) {
-                let [name, value] = partition(param, '=').remove(1);
+                let [name, , value] = partition(param, '=');
 
                 if (!Object.keys(this.ISUPPORT).includes(name)) {
                     this.ISUPPORT[name] = {};
@@ -294,7 +279,7 @@ class Core {
                                 let name1, value1;
 
                                 if (param1.indexOf(')') > -1) {
-                                    [name1, value1] = partition(param1, ':').remove(1);
+                                    [name1, , value1] = partition(param1, ':');
                                 }
                                 this.ISUPPORT[name][name1] = value1;
                             } else {
