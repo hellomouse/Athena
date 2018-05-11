@@ -31,6 +31,12 @@ function* chunks(l, n) {
 }
 
 
+/**
+ * Submit the error to dpaste and send a link back
+ * @param  {Error} error - The Error object
+ * @param  {ConnectionWrapper} irc
+ * @param  {Parser} event
+ */
 function post_error(error, irc, event) {
     try {
         let data = {
