@@ -56,7 +56,7 @@ class ConnectionWrapper {
     * @func
     */
     ping() {
-        this.bot.send(`PING :${(new Date()).getTime()}`);
+        this.bot.send(`PING :${Date.now()}`);
     }
 
     /**
