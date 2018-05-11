@@ -119,7 +119,7 @@ class Parser {
             /* eslint-disable no-control-regex */
             if (string_args.startsWith('\x01ACTION')) {
                 this.command = 'ACTION';
-                this.arguments = string_args.replace(/\x01/g, '').split(' ');
+                this.arguments = string_args.replace(/\x01/g, '').split(' ').slice(1);
             } else if (string_args.startsWith('\x01')) {
                 this.command = 'CTCP';
                 this.arguments = string_args.replace(/\x01/g, '').split(' ');
