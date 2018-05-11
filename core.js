@@ -152,7 +152,7 @@ class Core {
             this.state.channels[event.arguments[0]].modes.push(...event.arguments[1].slice(1).split(''));
         };
 
-        this.on_MODE = (irc, event) => {
+        this.on_mode = (irc, event) => {
             let modes = modesUtils.parseModes(this.ISUPPORT, event.target, event.arguments);
 
             for (let mode of modes) {

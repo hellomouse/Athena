@@ -108,7 +108,8 @@ function compileModes(userhost, channel, modes_) {
 
 /**
 * @func
-* @param {object} bot
+* @param {object} ISUPPORT
+* @param {string} channel
 * @param {array} args  Array in the format [modes, target1, target2...]
 * @return {array}      Array in the format: [[mode, target, optionalarg]...]
 */
@@ -138,19 +139,18 @@ function parseModes(ISUPPORT, channel, args) {
 
         if (setMode) {
             if (set.includes(currentMode)) {
-                readyModes = [`+${currentMode}`, channel, `${targets[argumentPosition]}`]
+                readyModes = [`+${currentMode}`, channel, `${targets[argumentPosition]}`];
                 argumentPosition++;
-            } else { readyModes = [`+${currentMode}`, channel] }
+            } else { readyModes = [`+${currentMode}`, channel]; }
         } else {
             if (unset.includes(currentMode)) {
-                readyModes = [`-${currentMode}`, channel, `${targets[argumentPosition]}`]
+                readyModes = [`-${currentMode}`, channel, `${targets[argumentPosition]}`];
                 argumentPosition++;
             } else { readyModes = [`-${currentMode}`, channel]; }
         }
 
         finalmodes.push(readyModes);
         readyModes = [];
-
     }
 
     return finalmodes;
