@@ -4,7 +4,7 @@ const { check_ignored } = require('./ignores.js');
 @param {object} config
 @param {string} host
 @param {string} channel
-@param {array} [perms=[false, false, false]]
+@param {array} [perms=Array] - Defaults to [false, false, false]
 @return {boolean}
 */
 function check_perms(config, host, channel, perms=[false, false, false]) {
