@@ -123,8 +123,7 @@ function parseModes(ISUPPORT, channel, args) {
     //          ^ Require param when unsetting. Param '*' sent by server un unsetting
     //              ^ Require param when setting
     // Other modes don't require parameters
-    let modes = args[0];
-    let targets = args.slice(1);
+    let [modes, ...targets] = args;
 
     let finalmodes = []; // final parsed modes
 
