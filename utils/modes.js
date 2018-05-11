@@ -108,9 +108,10 @@ function compileModes(userhost, channel, modes_) {
 
 /**
 * @func
+* @author Bradley Shaw
 * @param {object} ISUPPORT
 * @param {string} channel
-* @param {array} args  Array in the format [modes, target1, target2...]
+* @param {array} args  Array of arguments from the server in the format [modes, target1, target2...]
 * @return {array}      Array in the format: [[mode, target, optionalarg]...]
 */
 function parseModes(ISUPPORT, channel, args) {
