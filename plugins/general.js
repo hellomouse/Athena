@@ -1,5 +1,6 @@
 const { check_perms } = require('../utils/permissions');
 const log = require('../utils/logging');
+const util = require('util');
 
 /* eslint-disable require-jsdoc */
 function todo(bot, event, irc, args) {
@@ -78,16 +79,9 @@ function Eval(bot, event, irc, args) {
     try {
         let result = eval(args.join(' '));
 
-        try {
-            if (result instanceof Object && JSON.stringify(result) !== undefined) {
-                irc.reply(event, JSON.stringify(result).replace(/\r\n|\n|\r/g, ''));
-            } else
-                irc.reply(event, String(result).replace(/\r\n|\n|\r/g, ''));
-        } catch (e) {
-            irc.reply(event, result);
-        }
+        util.inspect(result).split('\n').forEach((line) => irc.reply(event, line));
     } catch (e) {
-        irc.reply(event, e.toString());
+        irc.reply(event, `${e.name} ${e.message}`);
     }
 }
 
