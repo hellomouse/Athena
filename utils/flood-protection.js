@@ -11,7 +11,7 @@ class FloodProtection {
         this.bot = bot;
         this.bot.sendQueue = [];
 
-        setInterval(this.reduceQueue, 300, this, false);
+        setInterval(this.reduceQueue, 700, this, false);
         setInterval(this.reduceQueue, 3000, this, true);
 
         /**
