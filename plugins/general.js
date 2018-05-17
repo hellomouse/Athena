@@ -3,6 +3,25 @@ const log = require('../utils/logging');
 const util = require('util');
 
 /* eslint-disable require-jsdoc */
+function raw(bot,event,irc,args) {
+    irc.send(args.join(" "))
+};
+raw.opts = {
+    perms: [false, true, true]
+};
+
+function flush(b, e, i, a) {
+    if (a.length) {
+        b.floodProtection.flushTarget(args[0])
+    } else {
+        b.floodProtection.flushAll()
+    }
+};
+flush.opts = {
+    perms: [true,true,true],
+    min_args: 0
+};
+
 function todo(bot, event, irc, args) {
     let has_perms = check_perms(bot.config, event.source.host, event.target, [true, false, false]);
 
@@ -112,6 +131,8 @@ Eval.opts = {
 };
 
 module.exports = {
+    raw,
+    flush,
     todo,
     ping,
     quit,

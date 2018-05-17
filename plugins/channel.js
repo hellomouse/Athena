@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 function _get_info(event, args) {
     let target, nick;
 
@@ -33,6 +34,26 @@ function deop(bot, event, irc, args) {
     irc.deop(target, nick);
 }
 deop.opts = {
+    perms: [false, true, false],
+    min_args: 0,
+    category: 'channel'
+};
+function voice(bot, event, irc, args) {
+    let [target, nick] = _get_info(event, args);
+
+    irc.voice(target, nick);
+}
+voice.opts = {
+    perms: [false, true, false],
+    min_args: 0,
+    category: 'channel'
+};
+function devoice(bot, event, irc, args) {
+    let [target, nick] = _get_info(event, args);
+
+    irc.devoice(target, nick);
+}
+devoice.opts = {
     perms: [false, true, false],
     min_args: 0,
     category: 'channel'
