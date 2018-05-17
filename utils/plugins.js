@@ -141,7 +141,7 @@ class Plugins {
     */
     constructor(bot) {
         this.hooks = new Hooks();
-        this.plugins = {};
+        this.commands = {};
 
         this.bot = bot;
         this.categories = [];
@@ -202,9 +202,9 @@ class Plugins {
     * @param {function} func
     */
     add_cmd(name, func) {
-        this.plugins[name] = func;
+        this.commands[name] = func;
         for (let alias of func.opts.aliases) {
-            this.plugins[alias] = func;
+            this.commands[alias] = func;
         }
     }
 
@@ -216,9 +216,9 @@ class Plugins {
     */
     call_command(event, irc, args) {
         irc.send = this.bot._send;
-        if (this.plugins[args[0]] !== undefined) {
+        if (this.commands[args[0]] !== undefined) {
             try {
-                let cmd = this.plugins[args[0]];
+                let cmd = this.commands[args[0]];
                 let { perms, min_args } = cmd.opts;
 
                 if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
