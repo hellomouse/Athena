@@ -62,7 +62,7 @@ class FloodProtection {
     * @param {object} that
     **/
     reduceQueue(that) {
-        if (this.msgQueue.length === 0) {
+        if (that.bot.sendQueue.length === 0) {
             that.canBurst = true;
         } else if (that.canBurst) {
             let i = 0;
@@ -76,7 +76,7 @@ class FloodProtection {
                 i++;
             }
         } else {
-            let text = that.msgQueue.shift();
+            let text = that.bot.sendQueue.shift();
 
             that.bot.immediateSend(text);
             that.canBurst = false;
