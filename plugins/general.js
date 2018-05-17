@@ -90,7 +90,7 @@ function list(bot, event, irc, args) {
         // TODO use colours util to create bolded text
         irc.reply(event, `\x02Categories:\x0f ${bot.plugins.categories.join(', ')}`);
     } else {
-        let commands = Object.keys(bot.plugins.commads).filter(x => {
+        let commands = Object.keys(bot.plugins.commands).filter(x => {
             let is_right_category = bot.plugins.commands[x].opts.category.toLowerCase() === args[0];
 
             return !bot.plugins.commands[x].opts.hide && is_right_category;
