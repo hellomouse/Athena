@@ -90,10 +90,10 @@ function list(bot, event, irc, args) {
         // TODO use colours util to create bolded text
         irc.reply(event, `\x02Categories:\x0f ${bot.plugins.categories.join(', ')}`);
     } else {
-        let commands = Object.keys(bot.plugins.plugins).filter(x => {
-            let is_right_category = bot.plugins.plugins[x].opts.category.toLowerCase() === args[0];
+        let commands = Object.keys(bot.plugins.commads).filter(x => {
+            let is_right_category = bot.plugins.commands[x].opts.category.toLowerCase() === args[0];
 
-            return !bot.plugins.plugins[x].opts.hide && is_right_category;
+            return !bot.plugins.commands[x].opts.hide && is_right_category;
         }).join(', ');
 
         irc.reply(event, `\x02Commands in ${args[0].replace(/\W/g, '')}:\x0f ${commands}`);
