@@ -68,17 +68,18 @@ class FloodProtection {
             let i = 0;
 
             while (i <= that.burstLength) {
-                let message = that.msgQueue.shift();
+                let message = that.bot.sendQueue.shift();
 
                 if (!message) break;
-                that.bot.immediateSend(message);
+                that.bot.immediateSend(message.message);
                 that.canBurst = false;
                 i++;
             }
         } else {
-            let text = that.bot.sendQueue.shift();
+            let message = that.bot.sendQueue.shift();
 
-            that.bot.immediateSend(text);
+            if (!message) return;
+            that.bot.immediateSend(message.message);
             that.canBurst = false;
         }
     }
