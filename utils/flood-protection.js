@@ -1,3 +1,5 @@
+const { range } = require('node-python-funcs');
+
 /**
 * Throttles messages sent by bot
 * @class
@@ -10,9 +12,10 @@ class FloodProtection {
     constructor(bot) {
         this.bot = bot;
         this.bot.sendQueue = [];
+        this.canBurst = false;
+        this.burstLength = 4;
 
-        setInterval(this.reduceQueue, 700, this, false);
-        setInterval(this.reduceQueue, 3000, this, true);
+        setInterval(this.reduceQueue, 700, this);
 
         /**
         * @func
@@ -59,19 +62,23 @@ class FloodProtection {
     /**
     * @func
     * @param {object} that
-    * @param {boolean} burst - Whether to burst messages
     **/
-    reduceQueue(that, burst) {
-        if (!that.bot.sendQueue) return;
+    reduceQueue(that) {
+        if (this.msgQueue.length === 0) {
+            that.canBurst = true;
+        } else if (that.canBurst) {
+            for (let _ of range(that.bot.msgQueue.length, that.burstLength)) {
+                let message = that.msgQueue.shift();
 
-        for (let i=0; i<4; i++) {
-            let message = that.bot.sendQueue.shift();
+                if (!message) break;
+                that.bot.immediateSend(message);
+                that.canBurst = false;
+            }
+        } else {
+            let text = that.msgQueue.shift();
 
-            if (message) {
-                that.bot.immediateSend(message.message);
-            } else break; // No more messages
-
-            if (!burst) break;
+            that.bot.immediateSend(text);
+            that.canBurst = false;
         }
     }
 
