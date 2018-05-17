@@ -1,5 +1,3 @@
-const { range } = require('node-python-funcs');
-
 /**
 * Throttles messages sent by bot
 * @class
@@ -67,12 +65,15 @@ class FloodProtection {
         if (this.msgQueue.length === 0) {
             that.canBurst = true;
         } else if (that.canBurst) {
-            for (let _ of range(that.bot.msgQueue.length, that.burstLength)) {
+            let i = 0;
+
+            while (i <= that.burstLength) {
                 let message = that.msgQueue.shift();
 
                 if (!message) break;
                 that.bot.immediateSend(message);
                 that.canBurst = false;
+                i++;
             }
         } else {
             let text = that.msgQueue.shift();
