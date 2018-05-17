@@ -10,7 +10,7 @@ class FloodProtection {
     constructor(bot) {
         this.bot = bot;
         this.bot.sendQueue = [];
-        this.canBurst = false;
+        this.canBurst = true;
         this.burstLength = 4;
 
         setInterval(this.reduceQueue, 700, this);
