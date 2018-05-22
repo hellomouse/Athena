@@ -24,7 +24,7 @@ class Hooks {
      * @param  {Object} hookStore An object mapping hooks
      * @param  {Array} args       An array in the format [message, hook (callback funct)]
      */
-    addHook(hookStore, args) {
+    async addHook(hookStore, args) {
         // Test if hooks already exist
         if (Object.keys(hookStore).includes(args[0])) {
             hookStore[args[0]].push(args[1]);
@@ -171,7 +171,7 @@ class Plugins {
     * @func
     * @param {function} cmd
     */
-    set_defaults(cmd) {
+    async set_defaults(cmd) {
         let opts = cmd.opts;
 
         opts.restrictions = getDefault(opts, 'restrictions', {});
@@ -201,7 +201,7 @@ class Plugins {
     * @param {string} name
     * @param {function} func
     */
-    add_cmd(name, func) {
+    async add_cmd(name, func) {
         this.commands[name] = func;
         for (let alias of func.opts.aliases) {
             this.commands[alias] = func;

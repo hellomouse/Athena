@@ -17,7 +17,7 @@ class ConnectionWrapper {
     * @func
     * @param {string} message - Message being sent to server
     */
-    send(message) {
+    async send(message) {
         this.bot.send(message);
     }
 

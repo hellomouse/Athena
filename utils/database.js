@@ -19,7 +19,7 @@ class ChannelDB extends dict {
         this[irc] = wrappers;
     }
 
-    change_attr(name, attr, value, channel=null) {
+    async change_attr(name, attr, value, channel=null) {
         if (channel !== null) {
             this[channel].users[name][attr] = value;
         } else {
@@ -33,7 +33,7 @@ class ChannelDB extends dict {
         }
     }
 
-    remove_entry(event, nick) {
+    async remove_entry(event, nick) {
         try {
             delete this[event.target].users[nick];
         } catch (e) {
@@ -46,7 +46,7 @@ class ChannelDB extends dict {
         }
     }
 
-    add_entry(channel, nick, hostmask, account, realname) {
+    async add_entry(channel, nick, hostmask, account, realname) {
         let temp = {
             hostmask,
             host: hostmask.split('@')[1],
@@ -66,7 +66,7 @@ class ChannelDB extends dict {
         }
     }
 
-    get_user_host(channel, nick) {
+    async get_user_host(channel, nick) {
         let host;
 
         try {
@@ -79,7 +79,7 @@ class ChannelDB extends dict {
         return host;
     }
 
-    flush() {
+    async flush() {
         fs.writeFile('userdb.json', JSON.stringify(this, null, 2) + '\n', err => {
             if (err) {
                 log.error('An error was thrown while writing the user DB');
