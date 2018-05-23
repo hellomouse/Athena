@@ -122,7 +122,7 @@ class Core {
             let nick = event.arguments[3];
 
             if (nick !== 'ChanServ') {
-                let [channel, ident, host, ,account, realname] = event.arguments;
+                let [channel, ident, host, , account, realname] = event.arguments;
                 let hostmask = `${nick}!${ident}@${host}`;
 
                 account = account !== '0' ? account : null;
