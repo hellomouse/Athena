@@ -2,7 +2,7 @@ const Dict = require('node-python-funcs').dict;
 const { hasattr, callable, partition } = require('node-python-funcs');
 const log = require('./utils/logging');
 const Plugins = require('./utils/plugins');
-const { strip_formatting } = require('./utils/general');
+const { stripFormatting } = require('./utils/general');
 const FloodProtection = require('./utils/flood-protection');
 
 /**
@@ -189,7 +189,7 @@ class Core {
         this.on_nick = (irc, event) => {
             if (event.source.nick === this.nickname) {
                 this.nickname = event.arguments[0];
-            } /*else {
+            } /* else {
                 this.channels[arguments[0]] = this.channels[event.source.nick];
                 delete this.channels[event.source.nick];
             }*/
