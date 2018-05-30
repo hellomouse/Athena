@@ -354,7 +354,7 @@ class Core {
     */
     immediateSend(message) {
         this.socket.write(`${message}\r\n`);
-        log.debug('[SENT] %s', strip_formatting(message));
+        log.debug('[SENT] %s', stripFormatting(message));
     }
 
 }
