@@ -7,21 +7,21 @@ const logging = require('./logging');
 * @param {string} channel - The channel in which you want to check if the user's ignored
 * @return {boolean}
 */
-function check_ignored(config, host, channel) {
+function checkIgnored(config, host, channel) {
     const ignores = config.ignores.global;
 
     if (Object.keys(config.ignores.channels).includes(channel)) {
-        ignores.concat(config.ignores.channels[channel]);
+        ignores.push(...config.ignores.channels[channel]);
     }
 
     for (const i of ignores) {
         for (const [uhost, expires] of i) {
             // if duration isn't null, check if it's in the past, else say true
-            const is_past = expires !== null ? Date.now() > expires : true;
+            const isPast = expires !== null ? Date.now() > expires : true;
 
-            if (host === uhost && is_past) {
+            if (host === uhost && isPast) {
                 return true;
-            } else if (host === uhost && !is_past) {
+            } else if (host === uhost && !isPast) {
                 delete config.ignores.channels[channel][host];
                 break;
             }
@@ -38,7 +38,7 @@ function check_ignored(config, host, channel) {
 * @param {string} event - The IRC event class object
 * @param {array} args - The IRC args
 */
-function add_ignore(config, irc, event, args) {
+function addIgnore(config, irc, event, args) {
     const host = args[0];
     const base_message = 'Ignoring %s for %s seconds';
     const indefinite = 'Ignoring %s indefinately';
@@ -74,6 +74,6 @@ function add_ignore(config, irc, event, args) {
     }
 }
 module.exports = {
-    check_ignored,
-    add_ignore
+    checkIgnored,
+    addIgnore
 };

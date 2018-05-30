@@ -19,7 +19,7 @@ class ChannelDB extends dict {
         this[irc] = wrappers;
     }
 
-    change_attr(name, attr, value, channel=null) {
+    changeAttr(name, attr, value, channel=null) {
         if (channel !== null) {
             this[channel].users[name][attr] = value;
         } else {
@@ -33,7 +33,7 @@ class ChannelDB extends dict {
         }
     }
 
-    remove_entry(event, nick) {
+    removeEntry(event, nick) {
         try {
             delete this[event.target].users[nick];
         } catch (e) {
@@ -46,7 +46,7 @@ class ChannelDB extends dict {
         }
     }
 
-    add_entry(channel, nick, hostmask, account, realname) {
+    addEntry(channel, nick, hostmask, account, realname) {
         let temp = {
             hostmask,
             host: hostmask.split('@')[1],
@@ -66,7 +66,7 @@ class ChannelDB extends dict {
         }
     }
 
-    get_user_host(channel, nick) {
+    getUserHost(channel, nick) {
         let host;
 
         try {

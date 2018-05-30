@@ -1,5 +1,5 @@
 const log = require('./logging');
-const { check_perms } = require('./permissions');
+const { checkPerms } = require('./permissions');
 const { readdir } = require('fs');
 const { join } = require('path');
 
@@ -40,7 +40,7 @@ class Hooks {
      * @param  {object} irc       ConnectionWrapper object
      * @param  {object} event     Parser object
      */
-    call_hook(hookStore, irc, event) {
+    callHook(hookStore, irc, event) {
         for (let callback of hookStore) {
             callback(irc, event);
         }
@@ -82,7 +82,7 @@ class Hooks {
      * @param  {object} irc   ConnectionWrapper object
      * @param  {object} event Parser object
      */
-    call_privmsg(irc, event) {
+    callPrivmsg(irc, event) {
         for (let checkMessage of Object.keys(this.privmsgHooks)) {
             if (event.arguments[0] === checkMessage) this.call_hook(this.privmsgHooks[checkMessage], irc, event);
         }
@@ -94,7 +94,7 @@ class Hooks {
      * @param  {object} irc   ConnectionWrapper object
      * @param  {object} event Parser object
      */
-    call_regex(irc, event) {
+    callRegex(irc, event) {
         for (let regex of Object.keys(this.regexHooks)) {
             let message = event.arguments[0];
 
@@ -108,7 +108,7 @@ class Hooks {
      * @param  {object} irc   ConnectionWrapper object
      * @param  {object} event Parser object
      */
-    call_includes(irc, event) {
+    callIncludes(irc, event) {
         for (let includesString of Object.keys(this.includesHooks)) {
             if (event.arguments[0].includes(includesString))
                 this.call_hook(this.includesHooks[includesString], irc, event);
@@ -155,8 +155,8 @@ class Plugins {
                         plugin.main(bot, this.hooks);
                         continue;
                     }
-                    this.set_defaults(plugin[cmd]);
-                    this.add_cmd(cmd, plugin[cmd]);
+                    this.setDefaults(plugin[cmd]);
+                    this.addCommand(cmd, plugin[cmd]);
 
                     if (!this.categories.includes(plugin[cmd].opts.category)) {
                         this.categories.push(plugin[cmd].opts.category);
@@ -171,7 +171,7 @@ class Plugins {
     * @func
     * @param {function} cmd
     */
-    set_defaults(cmd) {
+    setDefaults(cmd) {
         let opts = cmd.opts;
 
         opts.restrictions = getDefault(opts, 'restrictions', {});
@@ -201,7 +201,7 @@ class Plugins {
     * @param {string} name
     * @param {function} func
     */
-    add_cmd(name, func) {
+    addCommand(name, func) {
         this.commands[name] = func;
         for (let alias of func.opts.aliases) {
             this.commands[alias] = func;
@@ -214,14 +214,14 @@ class Plugins {
     * @param {ConnectionWrapper} irc
     * @param {array} args
     */
-    call_command(event, irc, args) {
+    callCommand(event, irc, args) {
         irc.send = this.bot._send;
         if (this.commands[args[0]] !== undefined) {
             try {
                 let cmd = this.commands[args[0]];
                 let { perms, min_args } = cmd.opts;
 
-                if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
+                if (checkPerms(this.bot.config, event.source.host, event.target, perms)) {
                     if (args.length >= min_args) {
                         cmd(this.bot, event, irc, args.slice(1));
                     } else {

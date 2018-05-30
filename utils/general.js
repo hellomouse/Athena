@@ -7,7 +7,7 @@ const request = require('request');
 * @param {string} msg
 * @return {string}
 */
-function strip_formatting(msg) {
+function stripFormatting(msg) {
     /* eslint-disable no-control-regex */
     let ccodes = ['\\x0f', '\\x16', '\\x1d', '\\x1f', '\\x02', '\\x03([0-9][0-6]?)?,?([0-9][0-6]?)?'];
     /* eslint-enable no-control-regex */
@@ -37,7 +37,7 @@ function* chunks(l, n) {
  * @param  {ConnectionWrapper} irc
  * @param  {Parser} event
  */
-function post_error(error, irc, event) {
+function postError(error, irc, event) {
     try {
         let data = {
             title: `Athena Error: ${error.toStringr()}`,
@@ -67,7 +67,7 @@ function post_error(error, irc, event) {
 }
 
 module.exports = {
-    post_error,
-    strip_formatting,
+    postError,
+    stripFormatting,
     chunks
 };

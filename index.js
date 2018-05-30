@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const log = require('./utils/logging');
 const config = require('./utils/configHandler');
-const { strip_formatting } = require('./utils/general');
+const { stripFormatting } = require('./utils/general');
 const Parser = require('./utils/messageParser');
 const Wrappers = require('./wrappers');
 const Caps = require('./irc-caps');
@@ -89,7 +89,7 @@ class Bot extends Core {
 
                 const parse = new Parser(data);
 
-                log.debug('[RECV] %s', strip_formatting(data));
+                log.debug('[RECV] %s', stripFormatting(data));
 
                 try {
                     this.events.emit(parse.command, this.irc, parse);
@@ -108,8 +108,8 @@ const clients = {};
 fs.readdir('config', (error, contents) => {
     if (error) log.error('[FATAL] %s', error);
     else {
-        for (let _ = 0; _ < contents.length; _++) {
-            const configFile = contents[_];
+        for (let config of contents) {
+            const configFile = contents[config]
 
             clients[configFile] = new Bot(`./config/${configFile}`);
             clients[configFile].connect();

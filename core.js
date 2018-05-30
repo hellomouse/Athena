@@ -51,12 +51,12 @@ class Core {
             this.send('PONG');
         };
 
-        this.on_nicknameinuse = (irc, event) => {
+        this.on_nicknameinuse = irc => {
             this.nickname = this.nickname.concat('_');
             irc.nick(this.nickname);
         };
 
-        this.on_welcome = (irc, event) => {
+        this.on_welcome = irc => {
             Object.keys(this.config.channels).forEach(channel => {
                 irc.join(channel, this.config.channels[channel].key);
             });
@@ -136,7 +136,7 @@ class Core {
             this.state.channels[event.arguments[0]].modes.push(...event.arguments[1].slice(1).split(''));
         };
 
-        this._update_user_modes = (irc, event, mode) => {
+        this.updateUserModes = (irc, event, mode) => {
             let [channel, user] = event.arguments.slice(0, 2);
             // let [channel, user, setby, timestamp] = event.arguments;
 
@@ -154,11 +154,11 @@ class Core {
             }
         };
 
-        this.on_exceptlist = (irc, event) => this._update_user_modes(irc, event, 'e');
+        this.on_exceptlist = (irc, event) => this.updateUserModes(irc, event, 'e');
 
-        this.on_banlist = (irc, event) => this._update_user_modes(irc, event, 'b');
+        this.on_banlist = (irc, event) => this.updateUserModes(irc, event, 'b');
 
-        this.on_quietlist = (irc, event) => this._update_user_modes(irc, event, 'q');
+        this.on_quietlist = (irc, event) => this.updateUserModes(irc, event, 'q');
 
         this.on_account = (irc, event) => {
             this.channels.change_attr(event.source.nick, 'account', event.target === '*' ? null : event.target);
@@ -182,13 +182,16 @@ class Core {
 
         this.on_saslsuccess = (irc, event) => this.sasl.on_saslsuccess(event);
 
-        this.on_alreadyregistered = (irc, event) => { /* eslint-disable max-len */
+        this.on_alreadyregistered = () => { /* eslint-disable max-len */
             log.error('Either you aren\'t registered and are trying to use SASL or you\'re trying to re-do the USER command');
         };
 
-        this.on_nick = (irc, event) => {
-            if (event.source.nick === this.nickname) {
-                this.nickname = event.arguments[0];
+        this.on_nick = (irc, {source, arguments}) => {
+            if (source.nick === this.nickname) {
+                this.nickname = arguments[0];
+            } else {
+                this.channels[arguments[0]] = this.channels[source.nick];
+                delete this.channels[source.nick];
             }
         };
 
@@ -198,22 +201,22 @@ class Core {
 
             if (args[0].startsWith(prefix)) {
                 args[0] = args[0].slice(prefix.length);
-                this.plugins.call_command(event, irc, args);
+                this.plugins.callCommand(event, irc, args);
             } else if (event.target[0] !== '#') {
-                this.plugins.call_command(event, irc, args);
+                this.plugins.callCommand(event, irc, args);
             } else if ( [this.nickname, this.nickname.concat(':'), this.nickname.concat(',')].includes(args[0])) {
                 args.shift(); // nickname[:/,] isn't the commmand
-                this.plugins.call_command(event, irc, args);
+                this.plugins.callCommand(event, irc, args);
             }
             if (event.target.startsWith('#'))
-                this._update_seen_db(event, irc, event.source.nick, args.join(' '));
+                this.updateSeenDB(event, irc, event.source.nick, args.join(' '));
 
-            this.plugins.hooks.call_regex(irc, event);
-            this.plugins.hooks.call_privmsg(irc, event);
-            this.plugins.hooks.call_includes(irc, event);
+            this.plugins.hooks.callRegex(irc, event);
+            this.plugins.hooks.callPrivmsg(irc, event);
+            this.plugins.hooks.callIncludes(irc, event);
         };
 
-        this._get_time = tags => {
+        this.getTime = tags => {
             let timestamp;
 
             if (tags.length) {
@@ -231,14 +234,14 @@ class Core {
             return timestamp;
         };
 
-        this._update_seen_db = (event, irc, nick, str_args) => {
-            let timestamp = this._get_time(event.tags);
+        this.updateSeenDB = (event, irc, nick, str_args) => {
+            let timestamp = this.getTime(event.tags);
             let udb = this.channels[event.target].users[nick];
 
             if (udb !== undefined) {
                 if (udb.seen === null || udb.seen === undefined)
                     udb.seen = [];
-                udb.seen.push({ time: timestamp, message: strip_formatting(str_args) });
+                udb.seen.push({ time: timestamp, message: stripFormatting(str_args) });
 
                 udb.seen.sort((a, b) => a.time > b.time);
                 udb.seen = udb.seen.slice(-5);
