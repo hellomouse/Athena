@@ -36,5 +36,5 @@ function checkPerms(config, host, channel, perms=[false, false, false]) {
 }
 
 module.exports = {
-    check_perms
+    checkPerms
 };

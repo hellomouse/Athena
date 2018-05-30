@@ -186,13 +186,13 @@ class Core {
             log.error('Either you aren\'t registered and are trying to use SASL or you\'re trying to re-do the USER command');
         };
 
-        this.on_nick = (irc, {source, arguments}) => {
-            if (source.nick === this.nickname) {
-                this.nickname = arguments[0];
-            } else {
-                this.channels[arguments[0]] = this.channels[source.nick];
-                delete this.channels[source.nick];
-            }
+        this.on_nick = (irc, event) => {
+            if (event.source.nick === this.nickname) {
+                this.nickname = event.arguments[0];
+            } /*else {
+                this.channels[arguments[0]] = this.channels[event.source.nick];
+                delete this.channels[event.source.nick];
+            }*/
         };
 
         this.on_privmsg = (irc, event) => {

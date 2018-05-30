@@ -108,8 +108,8 @@ const clients = {};
 fs.readdir('config', (error, contents) => {
     if (error) log.error('[FATAL] %s', error);
     else {
-        for (let config of contents) {
-            const configFile = contents[config]
+        for (let conf of contents) {
+            const configFile = contents[conf];
 
             clients[configFile] = new Bot(`./config/${configFile}`);
             clients[configFile].connect();
