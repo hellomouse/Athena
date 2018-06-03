@@ -34,7 +34,7 @@ class FloodProtection {
 
     /** Deletes all messages except those that aren't set by plugins **/
     flushAll() {
-        this.bot.sendQueue = this.bot.sendQueue.map(element => element.root ? element : undefined);
+        this.bot.sendQueue = this.bot.sendQueue.filter(element => !element.root);
     }
 
     /**
@@ -42,7 +42,7 @@ class FloodProtection {
     * @param {string} target
     **/
     flushTarget(target) {
-        this.bot.sendQueue = this.bot.sendQueue.map(e => (e.target !== target && e.root) ? e : undefined);
+        this.bot.sendQueue = this.bot.sendQueue.filter(e => e.target !== target && e.root);
     }
 
     /**

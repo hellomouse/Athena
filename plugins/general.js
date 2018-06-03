@@ -133,6 +133,7 @@ Eval.opts = {
 module.exports = {
     raw,
     flush,
+    flushq: flush, // alias
     todo,
     ping,
     quit,
