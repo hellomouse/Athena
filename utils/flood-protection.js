@@ -19,7 +19,7 @@ class FloodProtection {
         * @func
         * @param {string} message - Message to send (non-flushable)
         **/
-        this.bot.send = message => {
+        this.bot.send = async message => {
             this.bot.sendQueue.push({ content: message, root: true, target: this.getTarget(message) });
         };
 
