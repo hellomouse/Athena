@@ -10,16 +10,17 @@ raw.opts = {
     perms: [false, true, true]
 };
 
-function flush(b, e, i, a) {
-    if (a.length) {
-        b.floodProtection.flushTarget(args[0])
+function flush(bot, event, irc, args) {
+    if (args.length) {
+        bot.floodProtection.flushTarget(args[0])
     } else {
-        b.floodProtection.flushAll()
+        bot.floodProtection.flushAll()
     }
 };
 flush.opts = {
-    perms: [true,true,true],
-    min_args: 0
+    perms: [true, true, true],
+    min_args: 0,
+    aliases: ['flushq']
 };
 
 function todo(bot, event, irc, args) {
@@ -133,7 +134,6 @@ Eval.opts = {
 module.exports = {
     raw,
     flush,
-    flushq: flush, // alias
     todo,
     ping,
     quit,
