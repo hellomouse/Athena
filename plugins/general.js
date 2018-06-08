@@ -12,9 +12,9 @@ raw.opts = {
 
 function flush(bot, event, irc, args) {
     if (args.length) {
-        bot.floodProtection.flushTarget(args[0])
+        bot.floodProtection.flushTarget(args[0]);
     } else {
-        bot.floodProtection.flushAll()
+        bot.floodProtection.flushAll();
     }
 };
 flush.opts = {
