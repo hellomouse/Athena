@@ -27,7 +27,7 @@ const formatter = winston.format(info => {
 });
 
 /* eslint-disable new-cap */
-const logger = new (winston.createLogger)({
+const logger = winston.Logger({
     /* elsint-enable new-cap */
     transports: [
         new (winston.transports.Console)({
