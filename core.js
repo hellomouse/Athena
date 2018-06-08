@@ -40,29 +40,29 @@ class Core {
         this.floodProtection = new FloodProtection(this);
         this.plugins = new Plugins(this);
 
-        this.on_error = (irc, event) => {
+        this.on_error = async (irc, event) => {
             if (event.arguments.join(' ').indexOf('Closing link') === -1)
                 irc.privmsg('##Athena', 'An error occured, check the console. !att-Athena-admins');
             log.error(event.arguments.join(' '));
         };
 
-        this.on_ping = irc => {
+        this.on_ping = async irc => {
             // Respond to ping event
-            this.send('PONG');
+            await this.send('PONG');
         };
 
-        this.on_nicknameinuse = (irc, event) => {
+        this.on_nicknameinuse = async (irc, event) => {
             this.nickname = this.nickname.concat('_');
             irc.nick(this.nickname);
         };
 
-        this.on_welcome = (irc, event) => {
-            Object.keys(this.config.channels).forEach(channel => {
-                irc.join(channel, this.config.channels[channel].key);
+        this.on_welcome = async (irc, event) => {
+            Object.keys(this.config.channels).forEach(async channel => {
+                await irc.join(channel, this.config.channels[channel].key);
             });
         };
 
-        this.on_join = (irc, event) => {
+        this.on_join = async (irc, event) => {
             let channel = event.target;
             let args = event.arguments;
 
@@ -79,9 +79,9 @@ class Core {
                     });
                 }
 
-                this.send(`WHO ${event.target} nuhs%nhuacr`);
-                this.send(`NAMES ${event.target}`);
-                irc.mode(event.target, '', ''); // Get modes for the DB
+                await this.send(`WHO ${event.target} nuhs%nhuac`);
+                await this.send(`NAMES ${event.target}`);
+                await irc.mode(event.target, '', ''); // Get modes for the DB
             } else {
                 // Extended join methods
                 if (args.length > 0) {
@@ -89,15 +89,15 @@ class Core {
                     let hostmask = event.source.userhost;
                     let account = args[0] !== '*' ? args[0] : null;
 
-                    this.state.channels.add_entry(channel, nick, hostmask, account);
+                    await this.state.channels.add_entry(channel, nick, hostmask, account);
                 }
 
-                this.send(`WHO ${event.source.nick} nuhs%nhuacr`);
+                await this.send(`WHO ${event.source.nick} nuhs%nhuacr`);
                 this.nextWHOChannel = event.target;
             }
         };
 
-        this.on_name = (irc, event) => {
+        this.on_name = async (irc, event) => {
             const channel = event.arguments[1];
             const users = event.arguments[2].split(' ');
 
@@ -118,7 +118,7 @@ class Core {
             }
         };
 
-        this.on_whospcrpl = (irc, event) => {
+        this.on_whospcrpl = async (irc, event) => {
             let nick = event.arguments[3];
 
             if (nick !== 'ChanServ') {
@@ -132,11 +132,11 @@ class Core {
             }
         };
 
-        this.on_channelmodeis = (irc, event) => {
+        this.on_channelmodeis = async (irc, event) => {
             this.state.channels[event.arguments[0]].modes.push(...event.arguments[1].slice(1).split(''));
         };
 
-        this._update_user_modes = (irc, event, mode) => {
+        this._update_user_modes = async (irc, event, mode) => {
             let [channel, user] = event.arguments.slice(0, 2);
             // let [channel, user, setby, timestamp] = event.arguments;
 
@@ -154,17 +154,17 @@ class Core {
             }
         };
 
-        this.on_exceptlist = (irc, event) => this._update_user_modes(irc, event, 'e');
+        this.on_exceptlist = async (irc, event) => this._update_user_modes(irc, event, 'e');
 
-        this.on_banlist = (irc, event) => this._update_user_modes(irc, event, 'b');
+        this.on_banlist = async (irc, event) => this._update_user_modes(irc, event, 'b');
 
-        this.on_quietlist = (irc, event) => this._update_user_modes(irc, event, 'q');
+        this.on_quietlist = async (irc, event) => this._update_user_modes(irc, event, 'q');
 
-        this.on_account = (irc, event) => {
+        this.on_account = async (irc, event) => {
             this.channels.change_attr(event.source.nick, 'account', event.target === '*' ? null : event.target);
         };
 
-        this.on_chghost = (irc, event) => {
+        this.on_chghost = async (irc, event) => {
             let args = event.arguments;
 
             if (args.length) {
@@ -174,11 +174,11 @@ class Core {
                 this.channels.change_attr(event.source.nick, 'host', event.target);
         };
 
-        this.on_cap = (irc, event) => this.caps.handler(event);
+        this.on_cap = async (irc, event) => this.caps.handler(event);
 
-        this.on_authenticate = (irc, event) => this.sasl.on_authenticate(event);
+        this.on_authenticate = async (irc, event) => await this.sasl.on_authenticate(event);
 
-        this.on_saslfailed = (irc, event) => this.sasl.on_saslfailed(event);
+        this.on_saslfailed = async (irc, event) => this.sasl.on_saslfailed(event);
 
         this.on_saslsuccess = (irc, event) => this.sasl.on_saslsuccess(event);
 
@@ -192,28 +192,28 @@ class Core {
             }
         };
 
-        this.on_privmsg = (irc, event) => {
+        this.on_privmsg = async (irc, event) => {
             let args = event.arguments.join(' ').split(' '); // Split arguments by spaces
             let prefix = this.config.prefix || '';
 
             if (args[0].startsWith(prefix)) {
                 args[0] = args[0].slice(prefix.length);
-                this.plugins.call_command(event, irc, args);
+                await this.plugins.call_command(event, irc, args);
             } else if (event.target[0] !== '#') {
-                this.plugins.call_command(event, irc, args);
+                await this.plugins.call_command(event, irc, args);
             } else if ( [this.nickname, this.nickname.concat(':'), this.nickname.concat(',')].includes(args[0])) {
                 args.shift(); // nickname[:/,] isn't the commmand
-                this.plugins.call_command(event, irc, args);
+                await this.plugins.call_command(event, irc, args);
             }
             if (event.target.startsWith('#'))
                 this._update_seen_db(event, irc, event.source.nick, args.join(' '));
 
-            this.plugins.hooks.call_regex(irc, event);
-            this.plugins.hooks.call_privmsg(irc, event);
-            this.plugins.hooks.call_includes(irc, event);
+            await this.plugins.hooks.call_regex(irc, event);
+            await this.plugins.hooks.call_privmsg(irc, event);
+            await this.plugins.hooks.call_includes(irc, event);
         };
 
-        this._get_time = tags => {
+        this._get_time = async tags => {
             let timestamp;
 
             if (tags.length) {
@@ -231,7 +231,7 @@ class Core {
             return timestamp;
         };
 
-        this._update_seen_db = (event, irc, nick, str_args) => {
+        this._update_seen_db = async (event, irc, nick, str_args) => {
             let timestamp = this._get_time(event.tags);
             let udb = this.channels[event.target].users[nick];
 
@@ -243,11 +243,11 @@ class Core {
                 udb.seen.sort((a, b) => a.time > b.time);
                 udb.seen = udb.seen.slice(-5);
             } else {
-                this.send(`WHO ${event.target} nuhs%nhuacr`);
+                await this.send(`WHO ${event.target} nuhs%nhuacr`);
             }
         };
 
-        this.on_ctcp = (irc, event) => {
+        this.on_ctcp = async (irc, event) => {
             if (hasattr(this, 'ctcp')) {
                 let ctcp_message = ' '.join(event.arguments).toUpperCase();
 
@@ -260,12 +260,12 @@ class Core {
                         result = this.ctcp[ctcp_message];
                     }
 
-                    irc.notice(event.source.nick, `${ctcp_message} ${result}`);
+                    await irc.notice(event.source.nick, `${ctcp_message} ${result}`);
                 }
             }
         };
 
-        this.on_featurelist = (irc, event) => {
+        this.on_featurelist = async (irc, event) => {
             for (let param of event.arguments.slice(0, -1)) {
                 let [name, , value] = partition(param, '=');
 
@@ -349,9 +349,11 @@ class Core {
     * @func
     * @param {string} message - The message you want to send
     */
-    immediateSend(message) {
-        this.socket.write(`${message}\r\n`);
-        log.debug('[SENT] %s', strip_formatting(message));
+    async immediateSend(message) {
+        const { promisify } = require('util');
+
+        await promisify(this.socket.write(`${message}\r\n`));
+        await log.debug('[SENT] %s', strip_formatting(message));
     }
 
 }

@@ -24,7 +24,7 @@ class Hooks {
      * @param  {Object} hookStore An object mapping hooks
      * @param  {Array} args       An array in the format [message, hook (callback funct)]
      */
-    addHook(hookStore, args) {
+    async addHook(hookStore, args) {
         // Test if hooks already exist
         if (Object.keys(hookStore).includes(args[0])) {
             hookStore[args[0]].push(args[1]);
@@ -126,7 +126,7 @@ class Hooks {
  * @param  {*} def         Default value if key is not found
  * @return {*}
  */
-function getDefault(object, key, def) {
+async function getDefault(object, key, def) {
     return object[key] !== undefined ? object[key] : def;
 }
 
@@ -171,7 +171,7 @@ class Plugins {
     * @func
     * @param {function} cmd
     */
-    set_defaults(cmd) {
+    async set_defaults(cmd) {
         let opts = cmd.opts;
 
         opts.restrictions = getDefault(opts, 'restrictions', {});
@@ -201,7 +201,7 @@ class Plugins {
     * @param {string} name
     * @param {function} func
     */
-    add_cmd(name, func) {
+    async add_cmd(name, func) {
         this.commands[name] = func;
         for (let alias of func.opts.aliases) {
             this.commands[alias] = func;
@@ -214,14 +214,14 @@ class Plugins {
     * @param {ConnectionWrapper} irc
     * @param {array} args
     */
-    call_command(event, irc, args) {
+    async call_command(event, irc, args) {
         irc.send = this.bot._send;
         if (this.commands[args[0]] !== undefined) {
             try {
                 let cmd = this.commands[args[0]];
                 let { perms, min_args } = cmd.opts;
 
-                if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
+                if (await check_perms(this.bot.config, event.source.host, event.target, perms)) {
                     if (args.length >= min_args) {
                         cmd(this.bot, event, irc, args.slice(1));
                     } else {

@@ -25,7 +25,7 @@ class Caps {
     * @func
     * @param {Parser} event
     */
-    handler(event) {
+    async handler(event) {
         // Main handling code for CAP
         const servcaps = event.arguments[1] !== '*' ? event.arguments[1].split(' ') : event.arguments[2].split(' ');
 
@@ -47,16 +47,16 @@ class Caps {
 
             if (event.arguments[1] !== '*') {
                 if (!this.availablecaps.length) {
-                    this.bot.send('CAP END');
+                    await this.bot.send('CAP END');
                 } else {
-                    this.bot.send(`CAP REQ :${this.availablecaps.join(' ')}`);
+                    await this.bot.send(`CAP REQ :${this.availablecaps.join(' ')}`);
                 }
             }
         } else if (event.arguments[0] === 'ACK') {
             for (const cap of this.caps) { // Iterate over this.caps so we have access to classes
                 if (typeof cap !== 'string' && this.availablecaps.indexOf(cap.name) > -1) { // Check that the cap is in this.availablecaps
                     if (typeof cap.run === 'function') { // Check if the cap has the `run` property
-                        cap.run(this.bot, this.args[cap.name]); // Run the cap with the arguments collected during CAP LS
+                        await cap.run(this.bot, this.args[cap.name]); // Run the cap with the arguments collected during CAP LS
                     } else {
                         continue;
                     }
@@ -73,7 +73,7 @@ class Caps {
             }
 
             if (newcaps.length) {
-                this.bot.send(`CAP REQ :${newcaps.join(' ')}`); // Request the new CAP
+                await this.bot.send(`CAP REQ :${newcaps.join(' ')}`); // Request the new CAP
             }
         } else if (event.arguments[0] === 'DEL') {
             for (const c of servcaps) {

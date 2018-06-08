@@ -3,14 +3,14 @@ const log = require('../utils/logging');
 const util = require('util');
 
 /* eslint-disable require-jsdoc */
-function raw(bot,event,irc,args) {
+async function raw(bot,event,irc,args) {
     irc.send(args.join(" "))
 };
 raw.opts = {
     perms: [false, true, true]
 };
 
-function flush(bot, event, irc, args) {
+async function flush(bot, event, irc, args) {
     if (args.length) {
         bot.floodProtection.flushTarget(args[0])
     } else {
@@ -23,8 +23,8 @@ flush.opts = {
     aliases: ['flushq']
 };
 
-function todo(bot, event, irc, args) {
-    let has_perms = check_perms(bot.config, event.source.host, event.target, [true, false, false]);
+async function todo(bot, event, irc, args) {
+    let has_perms = await check_perms(bot.config, event.source.host, event.target, [true, false, false]);
 
     if (bot.todo === undefined) bot.todo = require('../todo.json');
     if (args[0] === 'add' && has_perms) {
@@ -66,7 +66,7 @@ todo.opts = {
     category: 'general'
 };
 
-function ping(bot, event, irc, args) {
+async function ping(bot, event, irc, args) {
     irc.reply(event, 'Pong');
 }
 
