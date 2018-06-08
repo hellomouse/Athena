@@ -126,7 +126,7 @@ class Hooks {
  * @param  {*} def         Default value if key is not found
  * @return {*}
  */
-function getDefault(object, key, def) {
+async function getDefault(object, key, def) {
     return object[key] !== undefined ? object[key] : def;
 }
 
