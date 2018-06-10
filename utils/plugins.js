@@ -221,11 +221,16 @@ class Plugins {
                 let cmd = this.commands[args[0]];
                 let { perms, min_args } = cmd.opts;
 
-                let isSuperShrug = this.bot.channels[event.target].users[event.source.host].seen.filter(x => {
-                    return new RegExp('=supershrug(?: [0-9])*/').test(x.message);
-                });
-                let is_adsfbot = event.source.host === 'unaffiliated/iczero/bot/jeffbot';
-                let doShrug = is_adsfbot && isSuperShrug.length > 0 && args[0] === 'shrug';
+                let doShrug = false;
+
+                if (event.target.startsWith('#')) {
+                    let isSuperShrug = this.bot.channels[event.target].users[event.source.host].seen.filter(x => {
+                        return new RegExp('=supershrug(?: [0-9])*/').test(x.message);
+                    });
+                    let is_adsfbot = event.source.host === 'unaffiliated/iczero/bot/jeffbot';
+
+                    doShrug = is_adsfbot && isSuperShrug.length > 0 && args[0] === 'shrug';
+                }
 
                 if (check_perms(this.bot.config, event.source.host, event.target, perms) || doShrug) {
                     if (args.length >= min_args) {
