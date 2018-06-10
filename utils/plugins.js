@@ -221,7 +221,13 @@ class Plugins {
                 let cmd = this.commands[args[0]];
                 let { perms, min_args } = cmd.opts;
 
-                if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
+                let isSuperShrug = this.bot.channels[event.target].users[event.source.host].seen.filter(x => {
+                    return new RegExp('=supershrug(?: [0-9])*/').test(x.message);
+                });
+                let is_adsfbot = event.source.host === 'unaffiliated/iczero/bot/jeffbot';
+                let doShrug = is_adsfbot && isSuperShrug.length > 0 && args[0] === 'shrug';
+
+                if (check_perms(this.bot.config, event.source.host, event.target, perms) || doShrug) {
                     if (args.length >= min_args) {
                         cmd(this.bot, event, irc, args.slice(1));
                     } else {
