@@ -25,7 +25,7 @@
     "perms": {
         "bots": {
             "hosts": [],
-            "channels": {}
+            "channels": []
         },
         "trusted": {
             "global": [],
