@@ -224,7 +224,7 @@ class Plugins {
                 let doShrug = false;
 
                 if (event.target.startsWith('#')) {
-                    let isSuperShrug = this.bot.channels[event.target].users[event.source.host].seen.filter(x => {
+                    let isSuperShrug = this.bot.channels[event.target].users[event.source.nick].seen.filter(x => {
                         return new RegExp('=supershrug(?: [0-9])*/').test(x.message);
                     });
                     let is_adsfbot = event.source.host === 'unaffiliated/iczero/bot/jeffbot';
