@@ -25,15 +25,15 @@
     "perms": {
         "bots": {
             "hosts": [],
-            "channels": []
+            "channels": {}
         },
         "trusted": {
-            "global":[],
-            "channels":{}
+            "global": [],
+            "channels": {}
         },
         "admins": {
-            "global":[],
-            "channels":{}
+            "global": [],
+            "channels": {}
         },
         "owners": []
     },
