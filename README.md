@@ -71,4 +71,4 @@ Upon running the bot new instances of itself will be created for each server giv
 ```bash
 node index.js
 ```
-**Note:** Node version must be >= 9.x
+**Note:** Node version must be >= 8.x (>=9.x recommended)
