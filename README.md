@@ -65,7 +65,7 @@ Upon running the bot new instances of itself will be created for each server giv
     }
 }
 ```
-**Note:** If you are copying this config above please remove all comments (Or use the templaye in config/). All config files are JSON (.json)
+**Note:** If you are copying this config above please remove all comments (Or use the template in config/). All config files are JSON (.json)
 
 ## Running
 ```bash
