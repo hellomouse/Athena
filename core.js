@@ -106,8 +106,12 @@ class Core {
 
                 if (i.startsWith('@+')) {
                     user = i.slice(2);
+                    let modes = [this.server.prefixes[i[0]].mode, this.server.prefixes[i[1]].mode];
+
+                    this.channels[channel].users[user].modes.push(...modes);
                 } else if (i.startsWith('@') || i.startsWith('+')) {
                     user = i.slice(1);
+                    this.channels[channel].users[user].modes.push(this.server.prefixes[i[0]].mode);
                 } else {
                     user = i;
                 }
