@@ -217,6 +217,12 @@ class Core {
             this.plugins.hooks.call_includes(irc, event);
         };
 
+        this.events.on('PRIVMSG', (irc, event) => {
+            if (event.target === '##Athena-git' && event.source.nick === 'Athena[Git]') {
+                irc.privmsg('##Athena', event.args.join(' '));
+            }
+        });
+
         this._get_time = tags => {
             let timestamp;
 

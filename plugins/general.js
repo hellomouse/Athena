@@ -3,6 +3,11 @@ const log = require('../utils/logging');
 const util = require('util');
 
 /* eslint-disable require-jsdoc */
+function shrug(bot, event, irc, args) {
+    irc.reply(event, '¯\\_(ツ)_/¯');
+}
+shrug.opts = {};
+
 function raw(bot, event, irc, args) {
     irc.send(args.join(' '));
 }
@@ -18,7 +23,7 @@ function flush(bot, event, irc, args) {
     }
 }
 flush.opts = {
-    perms: [true, true, true],
+    perms: [false, true, true],
     min_args: 0,
     aliases: ['flushq']
 };
@@ -132,6 +137,7 @@ Eval.opts = {
 };
 
 module.exports = {
+    shrug,
     raw,
     flush,
     todo,
