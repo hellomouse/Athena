@@ -3,9 +3,9 @@ const log = require('../utils/logging');
 const util = require('util');
 
 /* eslint-disable require-jsdoc */
-function raw(bot,event,irc,args) {
-    irc.send(args.join(" "))
-};
+function raw(bot, event, irc, args) {
+    irc.send(args.join(' '));
+}
 raw.opts = {
     perms: [false, true, true]
 };
@@ -16,7 +16,7 @@ function flush(bot, event, irc, args) {
     } else {
         bot.floodProtection.flushAll();
     }
-};
+}
 flush.opts = {
     perms: [true, true, true],
     min_args: 0,
@@ -99,7 +99,7 @@ function Eval(bot, event, irc, args) {
     try {
         let result = eval(args.join(' '));
 
-        util.inspect(result).split('\n').forEach((line) => irc.reply(event, line));
+        util.inspect(result).split('\n').forEach(line => irc.reply(event, line));
     } catch (e) {
         irc.reply(event, `${e.name} ${e.message}`);
     }
