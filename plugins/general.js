@@ -46,8 +46,9 @@ function todo(bot, event, irc, args) {
         irc.reply(event, `Removed ${args[0]} from todo list`);
     } else if (args[0] === 'save') {
         const fs = require('fs');
+        const path = require('path');
 
-        fs.writeFile('todo.json', JSON.stringify(bot.todo, null, 2) + '\n', err => {
+        fs.writeFile(path.join(__dirname, '..', 'todo.json'), JSON.stringify(bot.todo, null, 2) + '\n', err => {
             if (err) {
                 log.error('An error occured while saving file');
                 log.error(err.stack);

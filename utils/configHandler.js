@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const log = require('./logging.js');
 
 /** Class that holds the config */
@@ -23,11 +24,11 @@ class ConfigHandler {
         if (sync) {
             this.config = JSON.parse(fs.readFileSync(this.path));
             if (this.config.sasl.cert) {
-                this.config.sasl.cert = fs.readFileSync(this.config.sasl.cert);
+                this.config.sasl.cert = fs.readFileSync(path.join(__dirname, '..', this.config.sasl.cert));
             }
 
             if (this.config.sasl.key) {
-                this.config.sasl.key = fs.readFileSync(this.config.sasl.key);
+                this.config.sasl.key = fs.readFileSync(path.join(__dirname, '..', this.config.sasl.key));
             }
 
             return this.config || {};
@@ -41,7 +42,7 @@ class ConfigHandler {
                 this.config = JSON.parse(contents);
 
                 if (this.config.sasl.cert) {
-                    fs.readFile(this.config.sasl.cert, (err, cnts) => {
+                    fs.readFile(path.join(__dirname, '..', this.config.sasl.cert), (err, cnts) => {
                         if (err) {
                             log.error(err.stack);
                         } else {
@@ -51,7 +52,7 @@ class ConfigHandler {
                 }
 
                 if (this.config.sasl.key) {
-                    fs.readFile(this.config.sasl.key, (err, cnts) => {
+                    fs.readFile(path.join(__dirname, '..', this.config.sasl.key), (err, cnts) => {
                         if (err) {
                             log.error(err.stack);
                         } else {
