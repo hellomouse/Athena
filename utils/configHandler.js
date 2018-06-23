@@ -24,11 +24,17 @@ class ConfigHandler {
         if (sync) {
             this.config = JSON.parse(fs.readFileSync(this.path));
             if (this.config.sasl.cert) {
-                this.config.sasl.cert = fs.readFileSync(path.join(__dirname, '..', this.config.sasl.cert));
+                this.config.sasl.cert = [
+                    fs.readFileSync(path.join(__dirname, '..', this.config.sasl.cert)),
+                    this.config.sasl.cert
+                ];
             }
 
             if (this.config.sasl.key) {
-                this.config.sasl.key = fs.readFileSync(path.join(__dirname, '..', this.config.sasl.key));
+                this.config.sasl.key = [
+                    fs.readFileSync(path.join(__dirname, '..', this.config.sasl.key)),
+                    this.config.sasl.key
+                ];
             }
 
             return this.config || {};
@@ -46,7 +52,7 @@ class ConfigHandler {
                         if (err) {
                             log.error(err.stack);
                         } else {
-                            this.config.sasl.cert = cnts;
+                            this.config.sasl.cert = [cnts, this.config.sasl.cert];
                         }
                     });
                 }
@@ -56,7 +62,7 @@ class ConfigHandler {
                         if (err) {
                             log.error(err.stack);
                         } else {
-                            this.config.sasl.key = cnts;
+                            this.config.sasl.key = [cnts, this.config.sasl.key];
                         }
                     });
                 }
@@ -73,9 +79,13 @@ class ConfigHandler {
     * @async
     */
     async save() {
-        const config = JSON.stringify(this.config);
+        const config = { ...this.config };
 
-        await fs.writeFile(this.path, config, error => {
+        delete config.caps[config.caps.length - 1];
+        config.sasl.cert = config.sasl.cert[1];
+        config.sasl.key = config.sasl.key[1];
+
+        await fs.writeFile(this.path, JSON.stringify(config), error => {
             if (error) {
                 log.error('[CONFIG] ERROR: Failed saving - ', error);
             } else {
