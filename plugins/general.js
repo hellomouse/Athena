@@ -43,7 +43,7 @@ function todo(bot, event, irc, args) {
         }
         text += '- Done!';
         bot.todo[index] = text;
-        irc.reply(event, `Removed ${args[0]} from todo list`);
+        irc.reply(event, `Removed ${index} from todo list`);
     } else if (args[0] === 'save') {
         const fs = require('fs');
         const path = require('path');
