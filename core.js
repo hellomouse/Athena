@@ -97,6 +97,17 @@ class Core {
             }
         };
 
+        this.on_part = (irc, event) => {
+            if (event.source.nick === this.nickname) {
+                if (event.args[0].startsWith('requested by')) {
+                    log.info('Ninja\'d from channel %s, rejoining.', event.target);
+                    irc.join(event.target);
+                } else {
+                    log.info('Left channel %s', event.target);
+                }
+            }
+        };
+
         this.on_name = (irc, event) => {
             const channel = event.arguments[1];
             const users = event.arguments[2].split(' ');
@@ -341,6 +352,13 @@ class Core {
                 } else {
                     this.ISUPPORT[name] = value;
                 }
+            }
+        };
+
+        this.on_kick = (irc, event) => {
+            if (event.args[0] === this.nickname) {
+                log.info('Kicked from %s, rejoining', event.args[0]);
+                irc.join(event.target);
             }
         };
 
