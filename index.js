@@ -2,6 +2,7 @@ const events = require('events');
 const socket = require('net');
 const tls = require('tls');
 const fs = require('fs');
+const path = require('path');
 
 const log = require('./utils/logging');
 const config = require('./utils/configHandler');
@@ -105,13 +106,13 @@ class Bot extends Core {
 
 const clients = {};
 
-fs.readdir('config', (error, contents) => {
+fs.readdir(path.join(__dirname, 'config'), (error, contents) => {
     if (error) log.error('[FATAL] %s', error);
     else {
         for (let _ = 0; _ < contents.length; _++) {
             const configFile = contents[_];
 
-            clients[configFile] = new Bot(`./config/${configFile}`);
+            clients[configFile] = new Bot(path.join(__dirname, `./config/${configFile}`));
             clients[configFile].connect();
         }
     }

@@ -1,6 +1,7 @@
 const log = require('./logging');
 const { check_perms } = require('./permissions');
 const { readdir } = require('fs');
+const path = require('path');
 const { join } = require('path');
 
 /**
@@ -146,7 +147,7 @@ class Plugins {
         this.bot = bot;
         this.categories = [];
 
-        readdir('./plugins', (err, files) => {
+        readdir(path.join(__dirname, '../plugins'), (err, files) => {
             for (let file of files) {
                 const plugin = require('../' + join('plugins', file));
 
