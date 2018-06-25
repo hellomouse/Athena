@@ -82,8 +82,8 @@ class ConfigHandler {
         const config = { ...this.config };
 
         delete config.caps[config.caps.length - 1];
-        config.sasl.cert = config.sasl.cert[1];
-        config.sasl.key = config.sasl.key[1];
+        if (config.sasl.cert) config.sasl.cert = config.sasl.cert[1];
+        if (config.sasl.key) config.sasl.key = config.sasl.key[1];
 
         await fs.writeFile(this.path, JSON.stringify(config), error => {
             if (error) {
