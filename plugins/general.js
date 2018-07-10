@@ -43,7 +43,7 @@ function todo(bot, event, irc, args) {
         }
         text += '- Done!';
         bot.todo[index] = text;
-        irc.reply(event, `Removed ${index} from todo list`);
+        irc.reply(event, `Removed ${args[1]} from todo list`);
     } else if (args[0] === 'save') {
         const fs = require('fs');
         const path = require('path');
@@ -52,6 +52,8 @@ function todo(bot, event, irc, args) {
             if (err) {
                 log.error('An error occured while saving file');
                 log.error(err.stack);
+            } else {
+                irc.reply(event, 'ToDo saved!');
             }
         });
     } else {
