@@ -1,8 +1,30 @@
 const { check_perms } = require('../utils/permissions');
+const path = require('path');
+const fs = require('fs');
 const log = require('../utils/logging');
 const util = require('util');
 
 /* eslint-disable require-jsdoc */
+function reload(bot, event, irc, args) {
+    if (args.length) {
+        for (let i of args) {
+            const fpath = path.join('..', 'plugins', i);
+
+            delete require.cache[require.resolve(fpath)];
+            const plugin = require(fpath);
+
+            bot.plugins.loadplugin(plugin);
+        }
+        irc.reply(event, 'Reloaded');
+    } else {
+        bot.plugins.loadPluginDir();
+        irc.reply(event, 'Reloaded');
+    }
+}
+reload.opts = {
+    perms: [true, true, true]
+};
+
 function shrug(bot, event, irc, args) {
     irc.reply(event, '¯\\_(ツ)_/¯');
 }
@@ -45,9 +67,6 @@ function todo(bot, event, irc, args) {
         bot.todo[index] = text;
         irc.reply(event, `Removed ${args[1]} from todo list`);
     } else if (args[0] === 'save') {
-        const fs = require('fs');
-        const path = require('path');
-
         fs.writeFile(path.join(__dirname, '..', 'todo.json'), JSON.stringify(bot.todo, null, 2) + '\n', err => {
             if (err) {
                 log.error('An error occured while saving file');
@@ -140,6 +159,7 @@ Eval.opts = {
 };
 
 module.exports = {
+    reload,
     shrug,
     raw,
     flush,

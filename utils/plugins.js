@@ -146,25 +146,41 @@ class Plugins {
 
         this.bot = bot;
         this.categories = [];
+        this.loadPluginDir();
+    }
 
-        readdir(path.join(__dirname, '../plugins'), (err, files) => {
+    /**
+    * Loads all plugins from the plugin directory
+    */
+    loadPluginDir() {
+        readdir(path.join(__dirname, '..', 'plugins'), (err, files) => {
+            if (err) return;
             for (let file of files) {
                 const plugin = require('../' + join('plugins', file));
 
-                for (let cmd of Object.keys(plugin)) {
-                    if (cmd === 'main') {
-                        plugin.main(bot, this.hooks);
-                        continue;
-                    }
-                    this.set_defaults(plugin[cmd]);
-                    this.add_cmd(cmd, plugin[cmd]);
-
-                    if (!this.categories.includes(plugin[cmd].opts.category)) {
-                        this.categories.push(plugin[cmd].opts.category);
-                    }
-                }
+                this.loadPlugin(plugin);
             }
         });
+    }
+
+    /**
+    * Loads a specific plugin
+    * @func
+    * @param {object} plugin - The module object
+    */
+    loadPlugin(plugin) {
+        for (let cmd of Object.keys(plugin)) {
+            if (cmd === 'main') {
+                plugin.main(this.bot, this.hooks);
+                continue;
+            }
+            this.set_defaults(plugin[cmd]);
+            this.add_cmd(cmd, plugin[cmd]);
+
+            if (!this.categories.includes(plugin[cmd].opts.category)) {
+                this.categories.push(plugin[cmd].opts.category);
+            }
+        }
     }
 
     /**
