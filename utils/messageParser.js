@@ -1,4 +1,5 @@
 const { split } = require('node-python-funcs');
+const { Transform } = require('stream');
 
 /** Class that gets different values from a users hostmask */
 class User {
@@ -18,7 +19,7 @@ class User {
 }
 
 /** Class that parses messages and returns different information about it */
-class Parser {
+class IRCMessage {
 
     /**
     * @func
@@ -130,5 +131,36 @@ class Parser {
     }
 }
 
+/** Stream-based IRC message parser */
+class Parser extends Transform {
+  /**
+   * Constructs a new Parser
+   * @param {Object} opts Options for the parser
+   * @param {String} opts.encoding The encoding for data coming in
+   */
+    constructor(opts) {
+        super({ readableObjectMode: true });
+        if (!opts) opts = {};
+        this.opts = opts;
+        this.encoding = opts.encoding || 'utf-8';
+        this._partialData = '';
+    }
+
+  /**
+   * Push data to the stream to be parsed
+   * @param {Buffer} data The data to process
+   * @param {String} encoding The encoding of the string
+   * @param {Function} callback Called when the chunk is processed
+   */
+    _transform(data, encoding, callback) {
+        data = this._partialData + data.toString(this.encoding);
+        let messages = data.split(/[\r\n]+/g);
+
+        this._partialData = messages.splice(-1, 1); // store partial line for later
+        messages = messages.filter(m => m !== '');
+        for (let message of messages) this.push(new IRCMessage(message));
+        callback(null);
+    }
+}
 
 module.exports = Parser;
