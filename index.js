@@ -73,6 +73,7 @@ class Bot extends Core {
     * @function
     */
     connect() {
+        this.parser = new Parser();
         this.socket.once('connect', () => {
             log.info('Connected');
 
@@ -80,22 +81,14 @@ class Bot extends Core {
             this.send('CAP LS 302');
             this.send(`NICK ${this.config.nickname}`);
             this.send(`USER ${this.config.ident} * * :${this.config.realname}`);
-        }).on('data', recv => {
-            const parsed = recv.toString().split('\r\n');
+        }).pipe(this.parser).on('data', event => {
+            log.debug('[RECV] %s', strip_formatting(event.raw));
 
-            for (const data of parsed) {
-                if (!data) continue; // Get rid of pesky new lines
-
-                const parse = new Parser(data);
-
-                log.debug('[RECV] %s', strip_formatting(data));
-
-                try {
-                    this.events.emit(parse.command, this.irc, parse);
-                    this.events.emit('all', this.irc, parse);
-                } catch (e) {
-                    log.error(e.stack);
-                }
+            try {
+                this.events.emit(event.command, this.irc, event);
+                this.events.emit('all', this.irc, event);
+            } catch (e) {
+                log.error(e.stack);
             }
         }).on('error', err => {
             log.error(err.stack);
