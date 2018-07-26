@@ -28,6 +28,8 @@ class ConfigHandler {
                     fs.readFileSync(path.join(__dirname, '..', this.config.sasl.cert)),
                     this.config.sasl.cert
                 ];
+            } else {
+                this.config.sasl.cert = [undefined];
             }
 
             if (this.config.sasl.key) {
@@ -35,6 +37,8 @@ class ConfigHandler {
                     fs.readFileSync(path.join(__dirname, '..', this.config.sasl.key)),
                     this.config.sasl.key
                 ];
+            } else {
+                this.config.sasl.key = [undefined];
             }
 
             return this.config || {};
