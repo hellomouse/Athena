@@ -112,7 +112,7 @@ fs.readdir(path.join(__dirname, 'config'), (error, contents) => {
         for (let _ = 0; _ < contents.length; _++) {
             const configFile = contents[_];
 
-            clients[configFile] = new Bot(path.join(__dirname, `./config/${configFile}`));
+            clients[configFile] = new Bot(path.join(__dirname, 'config', configFile));
             clients[configFile].connect();
         }
     }
