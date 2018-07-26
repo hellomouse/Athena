@@ -40,7 +40,7 @@ function* chunks(l, n) {
 function post_error(error, irc, event) {
     try {
         let data = {
-            title: `Athena Error: ${error.toStringr()}`,
+            title: `Athena Error: ${error.toString()}`,
             content: error.stack.toString(),
             syntax: 'javascript',
             'expiry-days': '10',
