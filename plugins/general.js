@@ -5,6 +5,47 @@ const log = require('../utils/logging');
 const util = require('util');
 
 /* eslint-disable require-jsdoc */
+function exec(bot, event, irc, args) {
+    let cprocess = require('child_process').exec(args.join(' '), { shell: '/bin/bash' });
+
+    bot.config.processes.push(cprocess);
+    let outpart = '';
+
+    function send(data='') {
+        data = (outpart + data).split('\n');
+        outpart = data[data.length - 1];
+        for (let i = 0; i < data.length - 1; i++) irc.reply(event, data[i]);
+    }
+    cprocess.stdout.on('data', send);
+    cprocess.stderr.on('data', send);
+    cprocess.on('exit', (code, signal) => {
+        if (outpart !== '') {
+            irc.reply(event, outpart);
+            outpart = '';
+        }
+        irc.reply(event, `Process's exit code is ${signal || code}`);
+    });
+    cprocess.on('error', () => irc.reply(event, 'Error while running process'));
+    cprocess.on('close', () => {
+        bot.config.processes.splice(bot.config.processes.indexOf(cprocess), 1);
+    });
+}
+exec.opts = {
+    perms: [true, true, true]
+};
+
+function killprocess(bot, event, irc, args) {
+    let oldest = bot.config.processes.pop();
+
+    if (oldest) {
+        oldest.kill();
+    }
+    irc.reply(event, 'Done');
+}
+killprocess.opts = {
+    perms: [true, true, true]
+};
+
 function reload(bot, event, irc, args) {
     if (args.length) {
         for (let i of args) {
@@ -18,6 +59,10 @@ function reload(bot, event, irc, args) {
         irc.reply(event, 'Reloaded');
     } else {
         bot.plugins.loadPluginDir();
+        delete require.cache[require.resolve('../core.js')];
+        const core = (require('../core.js'))();
+
+        core.init(bot.events, bot.config, bot.state);
         irc.reply(event, 'Reloaded');
     }
 }
@@ -159,6 +204,7 @@ Eval.opts = {
 };
 
 module.exports = {
+    exec,
     reload,
     shrug,
     raw,
