@@ -25,8 +25,8 @@
   },
   "homepage": "https://github.com/hellomouse/Athena#readme",
   "devDependencies": {
-    "eslint": "^5.2.0",
-    "eslint-config-google": "^0.9.1"
+    "@hellomouse/eslint-config-wolfy1339": "^1.0.0",
+    "eslint": "^5.2.0"
   },
   "dependencies": {
     "node-python-funcs": "^0.0.5",
