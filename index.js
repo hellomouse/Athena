@@ -80,9 +80,7 @@ class Bot extends Core {
             this.send('CAP LS 302');
             this.send(`NICK ${this.config.nickname}`);
             this.send(`USER ${this.config.ident} * * :${this.config.realname}`);
-        });
-
-        this.socket.on('data', recv => {
+        }).on('data', recv => {
             const parsed = recv.toString().split('\r\n');
 
             for (let data of parsed) {
