@@ -99,6 +99,9 @@ class Bot extends Core {
                     log.error(e.stack);
                 }
             }
+        }).on('error', err => {
+            log.error(err.stack);
+            this.socket.close();
         });
     }
 
