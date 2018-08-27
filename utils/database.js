@@ -9,7 +9,7 @@ class ChannelDB extends dict {
         let contents = {};
 
         try {
-            contents = JSON.parse(fs.readFileSync(path.join(__dirname, '../userdb.json')).toString());
+            contents = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'userdb.json')).toString());
         } catch (err) {
             log.error('An error occured while loading the database file.');
             log.error(err.stack);
@@ -81,7 +81,7 @@ class ChannelDB extends dict {
     }
 
     flush() {
-        fs.writeFile(path.join(__dirname, '../userdb.json'), JSON.stringify(this, null, 2) + '\n', err => {
+        fs.writeFile(path.join(__dirname, '../userdb.json'), `${JSON.stringify(this, null, 2)}\n`, err => {
             if (err) {
                 log.error('An error was thrown while writing the user DB');
                 log.error(err.stack);

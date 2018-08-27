@@ -157,7 +157,7 @@ class Plugins {
             if (err) return;
             for (let file of files) {
                 if (!file.endsWith('.js')) continue; // Don't attempt to load other files and folders
-                const plugin = require('../' + join('plugins', file));
+                const plugin = require(join('..', 'plugins', file));
 
                 this.loadPlugin(plugin);
             }
