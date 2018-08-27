@@ -41,9 +41,10 @@ class Core {
         this.plugins = new Plugins(this);
 
         this.on_error = (irc, event) => {
-            if (event.arguments.join(' ').indexOf('Closing link') === -1)
+            if (!event.arguments.join(' ').includes('Closing link')) {
                 irc.privmsg('##Athena', 'An error occured, check the console. !att-Athena-admins');
-            log.error(event.arguments.join(' '));
+                log.error(event.arguments.join(' '));
+            }
         };
 
         this.on_ping = irc => {
