@@ -4,7 +4,9 @@
   "description": "Simple, functional IRC Bot written in node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -31,9 +33,11 @@
   "dependencies": {
     "node-python-funcs": "^0.0.5",
     "request": "^2.87.0",
-    "winston": "^3.0.0"
+    "winston": "^3.0.0",
+    "snyk": "^1.316.1"
   },
   "engines": {
     "node": ">=8"
-  }
+  },
+  "snyk": true
 }
