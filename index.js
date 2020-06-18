@@ -41,7 +41,7 @@ class Bot extends Core {
 
         if (this.config.ssl) {
             this.socket = tls.connect(this.config.irc.port, this.config.irc.host, {
-                localaddress: this.config.bindhost,
+                localAddress: this.config.bindhost,
                 cert: this.config.sasl.cert[0],
                 key: this.config.sasl.key[0],
                 passphrase: this.config.sasl.key_passphrase
