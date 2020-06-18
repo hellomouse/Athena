@@ -29,7 +29,7 @@
     "eslint": "^7.2.0"
   },
   "dependencies": {
-    "node-python-funcs": "^0.0.5",
+    "node-python-funcs": "^0.1.3",
     "request": "^2.87.0",
     "winston": "^3.2.1"
   },
