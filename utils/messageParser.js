@@ -50,7 +50,7 @@ class Parser {
             tags = tags.slice(1).split(';'); // Let's find the tags!
 
             for (let tag of tags) {
-                if ('=' in tag) {
+                if (tag.includes('=')) {
                     tag = split(tag, '=', 1);
                     const tag_parsed = {};
 

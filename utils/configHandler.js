@@ -41,6 +41,8 @@ class ConfigHandler {
                 this.config.sasl.key = [undefined];
             }
 
+            this.config.processes = [];
+
             return this.config || {};
         }
 
@@ -73,6 +75,8 @@ class ConfigHandler {
 
                 log.info('[CONFIG] Loaded config from %s', this.path);
             }
+
+            this.config.processes = [];
 
             return this.config || {};
         });

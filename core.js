@@ -56,6 +56,7 @@ class Core {
             this.nickname = this.nickname.concat('_');
             irc.nick(this.nickname);
         };
+        this.on_unavailresource = this.on_nicknameinuse;
 
         this.on_welcome = (irc, event) => {
             Object.keys(this.config.channels).forEach(channel => {
