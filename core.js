@@ -296,12 +296,12 @@ class Core {
                     this.ISUPPORT[name] = {};
                 }
                 if (value !== '') {
-                    if (value.indexOf(',') > -1) {
+                    if (value.includes(',')) {
                         for (let param1 of value.split(',')) {
-                            if (value.indexOf(')') > -1) {
+                            if (value.includes(')')) {
                                 let name1, value1;
 
-                                if (param1.indexOf(')') > -1) {
+                                if (param1.includes(')')) {
                                     [name1, , value1] = partition(param1, ':');
                                 }
                                 this.ISUPPORT[name][name1] = value1;
@@ -333,7 +333,7 @@ class Core {
 
                                 count += 1;
                                 for (let level of Object.entries(levels)) {
-                                    if (level[1].indexOf(mode) > -1) {
+                                    if (level[1].includes(mode)) {
                                         this.server.prefixes[value1] = {
                                             mode: mode,
                                             level: level[0]
@@ -347,7 +347,7 @@ class Core {
                             this.ISUPPORT[name] = value;
                         }
                     }
-                } else if (value.indexOf(')') > -1) {
+                } else if (value.includes(')')) {
                     let [name1, value1] = value.split(':');
 
                     this.ISUPPORT[name][name1] = value1;
