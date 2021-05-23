@@ -22,7 +22,7 @@ class ConfigHandler {
     async load(sync) {
         // We would normally load config once when bot is run
         if (sync) {
-            this.config = JSON.parse(fs.readFileSync(this.path));
+            this.config = JSON.parse(fs.readFileSync(this.path).toString());
             if (this.config.sasl.cert) {
                 this.config.sasl.cert = [
                     fs.readFileSync(path.join(__dirname, '..', this.config.sasl.cert)),
