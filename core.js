@@ -255,13 +255,9 @@ class Core {
             let timestamp;
 
             if (tags.length) {
-                for (let i of tags) {
-                    if (i['time'] !== undefined) {
-                        timestamp = Date.parse(i['time']);
-                    } else {
-                        continue;
-                    }
-                }
+                const timeTag = tags.filter(tag => tag.time !== undefined)[0];
+                timestamp = timeTag ? Date.parse(timeTag['time']) : Date.now();
+
             } else {
                 timestamp = Date.now();
             }
