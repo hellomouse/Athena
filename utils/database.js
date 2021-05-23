@@ -15,7 +15,7 @@ class ChannelDB extends dict {
             log.error(err.stack);
         }
         super(contents);
-        let irc = Symbol();
+        let irc = Symbol("irc");
 
         this[irc] = wrappers;
     }
@@ -73,7 +73,7 @@ class ChannelDB extends dict {
         try {
             host = `*!*@${this[channel].users[nick].host}`;
         } catch (e) {
-            this[Symbol.from('irc')].send(`WHO ${channel} nuhs%nhuacr`);
+            this[Symbol.for('irc')].send(`WHO ${channel} nuhs%nhuacr`);
             host = `*!*@${this[channel].users[nick].host}`;
         }
 
