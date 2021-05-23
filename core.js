@@ -206,6 +206,21 @@ class Core {
         this.on_nick = (irc, event) => {
             if (event.source.nick === this.nickname) {
                 this.nickname = event.arguments[0];
+            } else {
+                const nick = event.source.nick;
+                const to_nick = event.arguments[0];
+                for (let chan of this.channels.keys()) {
+                    const chandb = this.channels[chan].users;
+                    for (let user of chandb.values()) {
+                        if (user.host == event.source.host) {
+                            bot.channels[chan].users[to_nick] = chandb[nick];
+                            bot.channels[chan].users[to_nick].hostmask = event.source;
+                            delete bot.channels[chan].users[nick];
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
         };
 
