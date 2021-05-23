@@ -62,7 +62,7 @@ class Parser {
             }
         }
 
-        if (raw_msg.indexOf(' :') > -1) { // Check to see if there are arguments
+        if (raw_msg.includes(' :')) { // Check to see if there are arguments
             [raw_msg, argument] = split(raw_msg, ' :', 1);
 
             /* [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
