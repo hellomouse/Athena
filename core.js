@@ -213,8 +213,8 @@ class Core {
                     const chandb = this.channels[chan].users;
                     for (let user of chandb.values()) {
                         if (user.host == event.source.host) {
-                            bot.channels[chan].users[to_nick] = chandb[nick];
-                            bot.channels[chan].users[to_nick].hostmask = event.source;
+                            this.channels[chan].users[to_nick] = chandb[nick];
+                            this.channels[chan].users[to_nick].hostmask = event.source;
                             delete bot.channels[chan].users[nick];
                             break;
                         }
