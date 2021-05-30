@@ -123,9 +123,11 @@ class Core {
                     user = i.slice(2);
                     const modes = [this.server.prefixes[i[0]].mode, this.server.prefixes[i[1]].mode];
 
+                    this.channels[channel].users[user] ||= new Dict({ modes: [] });
                     this.channels[channel].users[user].modes.push(...modes);
                 } else if (prefixes.includes(i[0])) {
                     user = i.slice(1);
+                    this.channels[channel].users[user] ||= new Dict({ modes: [] });
                     this.channels[channel].users[user].modes.push(this.server.prefixes[i[0]].mode);
                 } else {
                     user = i;
