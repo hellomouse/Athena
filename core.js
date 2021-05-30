@@ -110,7 +110,7 @@ class Core {
             }
         };
 
-        this.on_name = (irc, event) => {
+        this.on_namereply = (irc, event) => {
             const channel = event.arguments[1];
             const users = event.arguments[2].split(' ');
 
