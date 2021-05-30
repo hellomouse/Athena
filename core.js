@@ -221,7 +221,7 @@ class Core {
                         if (user.host === event.source.host) {
                             this.channels[chan].users[to_nick] = chandb[nick];
                             this.channels[chan].users[to_nick].hostmask = event.source;
-                            delete bot.channels[chan].users[nick];
+                            delete this.channels[chan].users[nick];
                             break;
                         }
                     }

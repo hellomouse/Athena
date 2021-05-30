@@ -48,7 +48,7 @@ class Bot extends Core {
             });
         } else {
             this.socket = socket.connect({
-                localaddress: this.config.bindhost,
+                localAddress: this.config.bindhost,
                 port: this.config.irc.port,
                 host: this.config.irc.host
             });
