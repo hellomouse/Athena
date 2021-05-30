@@ -9,10 +9,10 @@ const request = require('request');
 */
 function strip_formatting(msg) {
     /* eslint-disable no-control-regex */
-    let ccodes = ['\\x0f', '\\x16', '\\x1d', '\\x1f', '\\x02', '\\x03([0-9][0-6]?)?,?([0-9][0-6]?)?'];
+    const ccodes = ['\\x0f', '\\x16', '\\x1d', '\\x1f', '\\x02', '\\x03([0-9][0-6]?)?,?([0-9][0-6]?)?'];
     /* eslint-enable no-control-regex */
 
-    for (let cc of ccodes)
+    for (const cc of ccodes)
         msg = msg.replace(new RegExp(cc, 'g'), '');
 
     return msg;
@@ -25,7 +25,7 @@ function strip_formatting(msg) {
 * @yield {array}
 */
 function* chunks(l, n) {
-    for (let i of range(0, len(l), n)) {
+    for (const i of range(0, len(l), n)) {
         yield l.slice(i, i + n);
     }
 }
@@ -39,7 +39,7 @@ function* chunks(l, n) {
  */
 function post_error(error, irc, event) {
     try {
-        let data = {
+        const data = {
             title: `Athena Error: ${error.toString()}`,
             content: error.stack.toString(),
             syntax: 'javascript',

@@ -65,12 +65,12 @@ class Core {
         };
 
         this.on_join = (irc, event) => {
-            let channel = event.target;
-            let args = event.arguments;
+            const channel = event.target;
+            const args = event.arguments;
 
             if (event.source.nick === this.nickname) {
                 log.info('Joining %s', channel);
-                if (!this.state.channels.hasOwnProperty(channel)) {
+                if (!Object.prototype.hasOwnProperty.call(this.state.channels, channel)) {
                     log.debug('Created db for channel %s', channel);
                     this.state.channels[channel] = new Dict({
                         users: {},
@@ -87,9 +87,9 @@ class Core {
             } else {
                 // Extended join methods
                 if (args.length > 0) {
-                    let nick = event.source.nick;
-                    let hostmask = event.source.userhost;
-                    let account = args[0] !== '*' ? args[0] : null;
+                    const nick = event.source.nick;
+                    const hostmask = event.source.userhost;
+                    const account = args[0] !== '*' ? args[0] : null;
 
                     this.state.channels.add_entry(channel, nick, hostmask, account);
                 }
@@ -114,15 +114,17 @@ class Core {
             const channel = event.arguments[1];
             const users = event.arguments[2].split(' ');
 
-            for (let i of users) {
+            for (const i of users) {
                 let user;
 
-                if (i.startsWith('@+')) {
+                const prefixes = Object.keys(this.server.prefixes);
+
+                if (i.startsWith(prefixes.join(''))) {
                     user = i.slice(2);
-                    let modes = [this.server.prefixes[i[0]].mode, this.server.prefixes[i[1]].mode];
+                    const modes = [this.server.prefixes[i[0]].mode, this.server.prefixes[i[1]].mode];
 
                     this.channels[channel].users[user].modes.push(...modes);
-                } else if (i.startsWith('@') || i.startsWith('+')) {
+                } else if (prefixes.includes(i[0])) {
                     user = i.slice(1);
                     this.channels[channel].users[user].modes.push(this.server.prefixes[i[0]].mode);
                 } else {
@@ -136,11 +138,11 @@ class Core {
         };
 
         this.on_whospcrpl = (irc, event) => {
-            let nick = event.arguments[3];
+            const nick = event.arguments[3];
 
             if (nick !== 'ChanServ') {
                 let [channel, ident, host, , account, realname] = event.arguments;
-                let hostmask = `${nick}!${ident}@${host}`;
+                const hostmask = `${nick}!${ident}@${host}`;
 
                 account = account !== '0' ? account : null;
                 if (this.nextWHOChannel) channel = channel !== this.nextWHOChannel ? this.nextWHOChannel : channel;
@@ -161,12 +163,12 @@ class Core {
                 user = user.slice(3);
                 this.channels[channel].users[user].modes.push(mode);
             } else {
-                let re = new RegExp(user.replace(/\*/g, '.+'));
-                let users = this.channels[channel].users.key().filter(x => {
+                const re = new RegExp(user.replace(/\*/g, '.+'));
+                const users = this.channels[channel].users.key().filter(x => {
                     return re.test(this.channels[channel].users[x].hostmask);
                 });
 
-                for (let u of users)
+                for (const u of users)
                     this.channels[channel].users[u].modes.push(mode);
             }
         };
@@ -181,8 +183,8 @@ class Core {
             this.channels.change_attr(event.source.nick, 'account', event.target === '*' ? null : event.target);
         };
 
-        this.on_chghost = (irc, event) => {
-            let args = event.arguments;
+        this.on_CHGHOST = (irc, event) => {
+            const args = event.arguments;
 
             if (args.length) {
                 this.channels.change_attr(event.source.nick, 'ident', event.target);
@@ -209,10 +211,12 @@ class Core {
             } else {
                 const nick = event.source.nick;
                 const to_nick = event.arguments[0];
-                for (let chan of this.channels.keys()) {
+
+                for (const chan of this.channels.keys()) {
                     const chandb = this.channels[chan].users;
-                    for (let user of chandb.values()) {
-                        if (user.host == event.source.host) {
+
+                    for (const user of chandb.values()) {
+                        if (user.host === event.source.host) {
                             this.channels[chan].users[to_nick] = chandb[nick];
                             this.channels[chan].users[to_nick].hostmask = event.source;
                             delete bot.channels[chan].users[nick];
@@ -225,8 +229,8 @@ class Core {
         };
 
         this.on_privmsg = (irc, event) => {
-            let args = event.arguments.join(' ').split(' '); // Split arguments by spaces
-            let prefix = this.config.prefix || '';
+            const args = event.arguments.join(' ').split(' '); // Split arguments by spaces
+            const prefix = this.config.prefix || '';
 
             if (args[0].startsWith(prefix)) {
                 args[0] = args[0].slice(prefix.length);
@@ -256,8 +260,8 @@ class Core {
 
             if (tags.length) {
                 const timeTag = tags.filter(tag => tag.time !== undefined)[0];
-                timestamp = timeTag ? Date.parse(timeTag['time']) : Date.now();
 
+                timestamp = timeTag ? Date.parse(timeTag['time']) : Date.now();
             } else {
                 timestamp = Date.now();
             }
@@ -266,8 +270,8 @@ class Core {
         };
 
         this._update_seen_db = (event, irc, nick, str_args) => {
-            let timestamp = this._get_time(event.tags);
-            let udb = this.channels[event.target].users[nick];
+            const timestamp = this._get_time(event.tags);
+            const udb = this.channels[event.target].users[nick];
 
             if (udb !== undefined) {
                 if (udb.seen === null || udb.seen === undefined)
@@ -283,7 +287,7 @@ class Core {
 
         this.on_ctcp = (irc, event) => {
             if (hasattr(this, 'ctcp')) {
-                let ctcp_message = ' '.join(event.arguments).toUpperCase();
+                const ctcp_message = ' '.join(event.arguments).toUpperCase();
 
                 if (Object.keys(this.ctcp).includes(ctcp_message)) {
                     let result;
@@ -300,7 +304,7 @@ class Core {
         };
 
         this.on_featurelist = (irc, event) => {
-            for (let param of event.arguments.slice(0, -1)) {
+            for (const param of event.arguments.slice(0, -1)) {
                 let [name, , value] = partition(param, '=');
 
                 if (!Object.keys(this.ISUPPORT).includes(name)) {
@@ -308,7 +312,7 @@ class Core {
                 }
                 if (value !== '') {
                     if (value.includes(',')) {
-                        for (let param1 of value.split(',')) {
+                        for (const param1 of value.split(',')) {
                             if (value.includes(')')) {
                                 let name1, value1;
 
@@ -329,8 +333,8 @@ class Core {
 
                             value = value.split(')');
                             value[0] = value[0].replace('(', '');
-                            let types = value[0].split(new RegExp('^(.*o)(.*h)?(.*)$')).slice(1, -1);
-                            let levels = {
+                            const types = value[0].split(new RegExp('^(.*o)(.*h)?(.*)$')).slice(1, -1);
+                            const levels = {
                                 op: types[0],
                                 halfop: types[1] || '',
                                 voice: types[2]
@@ -338,12 +342,12 @@ class Core {
 
                             this.server.prefixes = {};
 
-                            for (let mode of value[0]) {
-                                let name1 = mode;
-                                let value1 = value[1][count];
+                            for (const mode of value[0]) {
+                                const name1 = mode;
+                                const value1 = value[1][count];
 
                                 count += 1;
-                                for (let level of Object.entries(levels)) {
+                                for (const level of Object.entries(levels)) {
                                     if (level[1].includes(mode)) {
                                         this.server.prefixes[value1] = {
                                             mode: mode,
@@ -359,7 +363,7 @@ class Core {
                         }
                     }
                 } else if (value.includes(')')) {
-                    let [name1, value1] = value.split(':');
+                    const [name1, value1] = value.split(':');
 
                     this.ISUPPORT[name][name1] = value1;
                 } else {
@@ -375,10 +379,10 @@ class Core {
             }
         };
 
-        for (let i of Object.keys(this)) {
+        for (const i of Object.keys(this)) {
             if (i.startsWith('on_')) {
-                let names = require('./resources/names.json');
-                let name = i.split('on_')[1];
+                const names = require('./resources/names.json');
+                const name = i.split('on_')[1];
 
                 this.events.on(names[name] || name.toUpperCase(), this[i]);
             }

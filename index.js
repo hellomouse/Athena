@@ -83,7 +83,7 @@ class Bot extends Core {
         }).on('data', recv => {
             const parsed = recv.toString().split('\r\n');
 
-            for (let data of parsed) {
+            for (const data of parsed) {
                 if (!data) continue; // Get rid of pesky new lines
 
                 const parse = new Parser(data);

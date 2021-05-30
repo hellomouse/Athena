@@ -8,20 +8,20 @@ const { check_ignored } = require('./ignores.js');
 @return {boolean}
 */
 function check_perms(config, host, channel, perms=[false, false, false]) {
-    let admins = [...config.perms.admins.global, ...config.perms.admins.channels[channel] || []];
-    let trustees = [...config.perms.trusted.global, ...config.perms.trusted.channels[channel] || []];
+    const admins = [...config.perms.admins.global, ...config.perms.admins.channels[channel] || []];
+    const trustees = [...config.perms.trusted.global, ...config.perms.trusted.channels[channel] || []];
 
-    let is_owner = config.perms.owners.includes(host);
-    let is_admin = admins.includes(host);
-    let is_trusted = trustees.includes(host);
+    const is_owner = config.perms.owners.includes(host);
+    const is_admin = admins.includes(host);
+    const is_trusted = trustees.includes(host);
 
-    let [trusted, admin, owner] = perms;
+    const [trusted, admin, owner] = perms;
 
     let is_bot = host.includes('/bot/') && !(config.perms.bots.hosts.includes(host));
 
     if (config.perms.bots.channels.includes(channel))
         is_bot = false;
-    let is_ignored = check_ignored(config, host, channel);
+    const is_ignored = check_ignored(config, host, channel);
 
     if (owner && is_owner)
         return true;

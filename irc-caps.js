@@ -28,7 +28,7 @@ class Caps {
     handler(event) {
         // Main handling code for CAP
         const servcaps = event.arguments[1] !== '*' ? event.arguments[1].split(' ') : event.arguments[2].split(' ');
-        const capsfunctions = this.caps.filter(cap => typeof cap !== 'string' && this.availablecaps.includes(cap.name))
+        const capsfunctions = this.caps.filter(cap => typeof cap !== 'string' && this.availablecaps.includes(cap.name));
 
         if (event.arguments[0] === 'LS') {
             // Don't blindly assume server supports our requested caps, even though server sends a CAP NACK response
@@ -63,7 +63,7 @@ class Caps {
                     }
                 }
             } else {
-                this.bot.send("CAP END")
+                this.bot.send('CAP END');
             }
         } else if (event.arguments[0] === 'NEW') {
             const newcaps = [];

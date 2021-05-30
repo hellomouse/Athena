@@ -52,7 +52,7 @@ class FloodProtection {
     **/
     getTarget(message) {
         if (!message) return;
-        let splitMessage = message.split(' ');
+        const splitMessage = message.split(' ');
 
         if (splitMessage.length > 1) return splitMessage[1];
     }
@@ -68,7 +68,7 @@ class FloodProtection {
             let i = 0;
 
             while (i <= that.burstLength) {
-                let message = that.bot.sendQueue.shift();
+                const message = that.bot.sendQueue.shift();
 
                 if (!message) break;
                 that.bot.immediateSend(message.content);
@@ -76,7 +76,7 @@ class FloodProtection {
                 i++;
             }
         } else {
-            let message = that.bot.sendQueue.shift();
+            const message = that.bot.sendQueue.shift();
 
             if (!message) return;
             that.bot.immediateSend(message.content);

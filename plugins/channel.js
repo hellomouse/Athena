@@ -19,7 +19,7 @@ function _get_info(event, args) {
     return [target, nick];
 }
 function op(bot, event, irc, args) {
-    let [target, nick] = _get_info(event, args);
+    const [target, nick] = _get_info(event, args);
 
     irc.op(target, nick);
 }
@@ -29,7 +29,7 @@ op.opts = {
     category: 'channel'
 };
 function deop(bot, event, irc, args) {
-    let [target, nick] = _get_info(event, args);
+    const [target, nick] = _get_info(event, args);
 
     irc.deop(target, nick);
 }
@@ -39,7 +39,7 @@ deop.opts = {
     category: 'channel'
 };
 function voice(bot, event, irc, args) {
-    let [target, nick] = _get_info(event, args);
+    const [target, nick] = _get_info(event, args);
 
     irc.voice(target, nick);
 }
@@ -49,7 +49,7 @@ voice.opts = {
     category: 'channel'
 };
 function devoice(bot, event, irc, args) {
-    let [target, nick] = _get_info(event, args);
+    const [target, nick] = _get_info(event, args);
 
     irc.devoice(target, nick);
 }

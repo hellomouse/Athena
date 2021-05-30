@@ -6,7 +6,7 @@ const util = require('util');
 
 /* eslint-disable require-jsdoc */
 function exec(bot, event, irc, args) {
-    let cprocess = require('child_process').exec(args.join(' '), { shell: '/bin/bash' });
+    const cprocess = require('child_process').exec(args.join(' '), { shell: '/bin/bash' });
 
     bot.config.processes.push(cprocess);
     let outpart = '';
@@ -35,7 +35,7 @@ exec.opts = {
 };
 
 function killprocess(bot, event, irc, args) {
-    let oldest = bot.config.processes.pop();
+    const oldest = bot.config.processes.pop();
 
     if (oldest) {
         oldest.kill();
@@ -48,7 +48,7 @@ killprocess.opts = {
 
 function reload(bot, event, irc, args) {
     if (args.length) {
-        for (let i of args) {
+        for (const i of args) {
             const fpath = path.join('..', 'plugins', i);
 
             delete require.cache[require.resolve(fpath)];
@@ -96,16 +96,16 @@ flush.opts = {
 };
 
 function todo(bot, event, irc, args) {
-    let has_perms = check_perms(bot.config, event.source.host, event.target, [true, false, false]);
+    const has_perms = check_perms(bot.config, event.source.host, event.target, [true, false, false]);
 
     if (bot.todo === undefined) bot.todo = require('../todo.json');
     if (args[0] === 'add' && has_perms) {
         irc.reply(event, `Added to the todo list. No. ${bot.todo.push(args.slice(1).join(' '))}`);
     } else if ((args[0] === 'remove' || args[0] === 'done') && has_perms) {
-        let index = parseInt(args[1]) - 1; // Parse args[1] and substract 1 to get the Array index
+        const index = parseInt(args[1]) - 1; // Parse args[1] and substract 1 to get the Array index
         let text = '';
 
-        for (let i of bot.todo[index]) {
+        for (const i of bot.todo[index]) {
             text += `\u0336${i}`;
         }
         text += '- Done!';
@@ -127,7 +127,7 @@ function todo(bot, event, irc, args) {
 
             return;
         }
-        for (let i of Object.entries(bot.todo)) {
+        for (const i of Object.entries(bot.todo)) {
             irc.reply(event, `${parseInt(i[0])+1}. ${i[1]}`);
         }
     }
@@ -169,7 +169,7 @@ quit.opts = {
 
 function Eval(bot, event, irc, args) {
     try {
-        let result = eval(args.join(' '));
+        const result = eval(args.join(' '));
 
         util.inspect(result).split('\n').forEach(line => irc.reply(event, line));
     } catch (e) {
@@ -182,8 +182,8 @@ function list(bot, event, irc, args) {
         // TODO use colours util to create bolded text
         irc.reply(event, `\x02Categories:\x0f ${bot.plugins.categories.join(', ')}`);
     } else {
-        let commands = Object.keys(bot.plugins.commands).filter(x => {
-            let is_right_category = bot.plugins.commands[x].opts.category.toLowerCase() === args[0];
+        const commands = Object.keys(bot.plugins.commands).filter(x => {
+            const is_right_category = bot.plugins.commands[x].opts.category.toLowerCase() === args[0];
 
             return !bot.plugins.commands[x].opts.hide && is_right_category;
         }).join(', ');

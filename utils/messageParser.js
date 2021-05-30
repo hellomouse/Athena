@@ -114,7 +114,7 @@ class Parser {
         }
 
         if (this.type === 'privmsg') {
-            let string_args = this.arguments.join(' ');
+            const string_args = this.arguments.join(' ');
 
             /* eslint-disable no-control-regex */
             if (string_args.startsWith('\x01ACTION')) {

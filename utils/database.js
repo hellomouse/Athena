@@ -15,7 +15,7 @@ class ChannelDB extends dict {
             log.error(err.stack);
         }
         super(contents);
-        let irc = Symbol("irc");
+        const irc = Symbol('irc');
 
         this[irc] = wrappers;
     }
@@ -24,7 +24,7 @@ class ChannelDB extends dict {
         if (channel !== null) {
             this[channel].users[name][attr] = value;
         } else {
-            for (let chan of Object.keys(this)) {
+            for (const chan of Object.keys(this)) {
                 try {
                     this[chan].users[name][attr] = value;
                 } catch (e) {
@@ -38,7 +38,7 @@ class ChannelDB extends dict {
         try {
             delete this[event.target].users[nick];
         } catch (e) {
-            for (let i of this[event.target].users.values()) {
+            for (const i of this[event.target].users.values()) {
                 if (i.host === event.source.host) {
                     delete this[event.target].users[i.hostmask.split('!')[0]];
                     break;
@@ -48,7 +48,7 @@ class ChannelDB extends dict {
     }
 
     add_entry(channel, nick, hostmask, account, realname) {
-        let temp = {
+        const temp = {
             hostmask,
             host: hostmask.split('@')[1],
             account,

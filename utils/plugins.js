@@ -42,7 +42,7 @@ class Hooks {
      * @param  {object} event     Parser object
      */
     call_hook(hookStore, irc, event) {
-        for (let callback of hookStore) {
+        for (const callback of hookStore) {
             callback(irc, event);
         }
     }
@@ -84,7 +84,7 @@ class Hooks {
      * @param  {object} event Parser object
      */
     call_privmsg(irc, event) {
-        for (let checkMessage of Object.keys(this.privmsgHooks)) {
+        for (const checkMessage of Object.keys(this.privmsgHooks)) {
             if (event.arguments[0] === checkMessage) this.call_hook(this.privmsgHooks[checkMessage], irc, event);
         }
     }
@@ -96,8 +96,8 @@ class Hooks {
      * @param  {object} event Parser object
      */
     call_regex(irc, event) {
-        for (let regex of Object.keys(this.regexHooks)) {
-            let message = event.arguments[0];
+        for (const regex of Object.keys(this.regexHooks)) {
+            const message = event.arguments[0];
 
             if (message.match(new RegExp(regex))) this.call_hook(this.regexHooks[regex], irc, event);
         }
@@ -110,7 +110,7 @@ class Hooks {
      * @param  {object} event Parser object
      */
     call_includes(irc, event) {
-        for (let includesString of Object.keys(this.includesHooks)) {
+        for (const includesString of Object.keys(this.includesHooks)) {
             if (event.arguments[0].includes(includesString))
                 this.call_hook(this.includesHooks[includesString], irc, event);
         }
@@ -155,7 +155,7 @@ class Plugins {
     loadPluginDir() {
         readdir(path.join(__dirname, '..', 'plugins'), (err, files) => {
             if (err) return;
-            for (let file of files) {
+            for (const file of files) {
                 if (!file.endsWith('.js')) continue; // Don't attempt to load other files and folders
                 const plugin = require(join('..', 'plugins', file));
 
@@ -170,7 +170,7 @@ class Plugins {
     * @param {object} plugin - The module object
     */
     loadPlugin(plugin) {
-        for (let cmd of Object.keys(plugin)) {
+        for (const cmd of Object.keys(plugin)) {
             if (cmd === 'main') {
                 plugin.main(this.bot, this.hooks);
                 continue;
@@ -190,7 +190,7 @@ class Plugins {
     * @param {function} cmd
     */
     set_defaults(cmd) {
-        let opts = cmd.opts;
+        const opts = cmd.opts;
 
         opts.restrictions = getDefault(opts, 'restrictions', {});
         opts.category = getDefault(opts, 'category', 'general');
@@ -221,7 +221,7 @@ class Plugins {
     */
     add_cmd(name, func) {
         this.commands[name] = func;
-        for (let alias of func.opts.aliases) {
+        for (const alias of func.opts.aliases) {
             this.commands[alias] = func;
         }
     }
@@ -236,8 +236,8 @@ class Plugins {
         irc.send = this.bot._send;
         if (this.commands[args[0]] !== undefined) {
             try {
-                let cmd = this.commands[args[0]];
-                let { perms, min_args } = cmd.opts;
+                const cmd = this.commands[args[0]];
+                const { perms, min_args } = cmd.opts;
 
                 if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
                     if (args.length >= min_args) {
