@@ -8,6 +8,7 @@ const request = require('request');
 * @return {string}
 */
 function strip_formatting(msg) {
+    if (!msg) return msg;
     /* eslint-disable no-control-regex */
     const ccodes = ['\\x0f', '\\x16', '\\x1d', '\\x1f', '\\x02', '\\x03([0-9][0-6]?)?,?([0-9][0-6]?)?'];
     /* eslint-enable no-control-regex */
