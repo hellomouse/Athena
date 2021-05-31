@@ -69,3 +69,8 @@ typings/
 
 # JSDoc output
 out/*
+
+# Visual Studio
+.vs/
+*.njsproj
+*.sln

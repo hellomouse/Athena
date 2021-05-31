@@ -1,4 +1,4 @@
-let modes = {
+const modes = {
     umodes: {
         g: 'Ignore private messages from unidentified users',
         i: 'Invisible',
@@ -48,12 +48,12 @@ let modes = {
 
 let allModes = [];
 
-for (let i of Object.values(modes)) {
+for (const i of Object.values(modes)) {
     // Compress all mods into one array
     allModes = allModes.concat(Object.keys(i));
 }
 
-let requiresParams = ['b', 'e', 'f', 'I', 'j', 'k', 'l', 'q'];
+const requiresParams = ['b', 'e', 'f', 'I', 'j', 'k', 'l', 'q'];
 const possibleUserModes = ['e', 'I', 'b', 'q', 'o', 'v'];
 
 /**
@@ -87,10 +87,10 @@ function compileModes(userhost, channel, modes_) {
     // const msg = Buffer.from(`:${userhost} MODE ${channel} \r\n`); // (Unused)
     // const MSGLEN = 512 - msg.byteLength; // Calculates characters remaining (unused for now)
 
-    let finalmodes = {};
+    const finalmodes = {};
 
-    for (let i of modes_) {
-        let reference = i;
+    for (const i of modes_) {
+        const reference = i;
         let [mode, target] = reference.split(' '); // ['+o', 'foo']
         let operator;
 
@@ -112,18 +112,18 @@ function compileModes(userhost, channel, modes_) {
 * @return {array}      Array in the format: [[mode, user]...]
 */
 function parseUserMode(args) {
-    let modes_ = args[0];
-    let users = args.slice(1);
+    const modes_ = args[0];
+    const users = args.slice(1);
 
     let current_mode = '';
-    let modes_arr = [];
+    const modes_arr = [];
 
     /* Iterate over each character of modes_.
      * current_mode represents each individual mode (ie +o)
      * current_mode is reset each time a mode is "completed"
      * A list of seperated modes is added to
      * modes_arr */
-    for (let mode of modes_) {
+    for (const mode of modes_) {
         if (mode === '+' || mode === '-') {
             current_mode = mode;
         } else if (possibleUserModes.includes(mode)) {
@@ -136,10 +136,10 @@ function parseUserMode(args) {
         return [modes_arr.join(''), users[0]];
     }
 
-    let returned = [];
+    const returned = [];
     let i = 0;
 
-    for (let user of users) {
+    for (const user of users) {
         returned.push([modes_arr[i], user]);
         i++;
     }

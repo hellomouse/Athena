@@ -1,7 +1,7 @@
 {
 
     "irc": {
-        "host": "irc.freenode.net",
+        "host": "irc.libera.chat",
         "port": 6697
     },
     "nickname": "Athena",
@@ -28,12 +28,12 @@
             "channels": []
         },
         "trusted": {
-            "global":[],
-            "channels":{}
+            "global": [],
+            "channels": {}
         },
         "admins": {
-            "global":[],
-            "channels":{}
+            "global": [],
+            "channels": {}
         },
         "owners": []
     },

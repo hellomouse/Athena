@@ -1,5 +1,6 @@
 const { dict } = require('node-python-funcs');
 const fs = require('fs');
+const path = require('path');
 const log = require('./logging');
 
 /* eslint-disable require-jsdoc, new-cap */
@@ -8,13 +9,13 @@ class ChannelDB extends dict {
         let contents = {};
 
         try {
-            contents = JSON.parse(fs.readFileSync('userdb.json').toString());
+            contents = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'userdb.json')).toString());
         } catch (err) {
             log.error('An error occured while loading the database file.');
             log.error(err.stack);
         }
         super(contents);
-        let irc = Symbol();
+        const irc = Symbol('irc');
 
         this[irc] = wrappers;
     }
@@ -23,7 +24,7 @@ class ChannelDB extends dict {
         if (channel !== null) {
             this[channel].users[name][attr] = value;
         } else {
-            for (let chan of Object.keys(this)) {
+            for (const chan of Object.keys(this)) {
                 try {
                     this[chan].users[name][attr] = value;
                 } catch (e) {
@@ -37,7 +38,7 @@ class ChannelDB extends dict {
         try {
             delete this[event.target].users[nick];
         } catch (e) {
-            for (let i of this[event.target].users.values()) {
+            for (const i of this[event.target].users.values()) {
                 if (i.host === event.source.host) {
                     delete this[event.target].users[i.hostmask.split('!')[0]];
                     break;
@@ -47,7 +48,7 @@ class ChannelDB extends dict {
     }
 
     add_entry(channel, nick, hostmask, account, realname) {
-        let temp = {
+        const temp = {
             hostmask,
             host: hostmask.split('@')[1],
             account,
@@ -72,7 +73,7 @@ class ChannelDB extends dict {
         try {
             host = `*!*@${this[channel].users[nick].host}`;
         } catch (e) {
-            this[Symbol.from('irc')].send(`WHO ${channel} nuhs%nhuacr`);
+            this[Symbol.for('irc')].send(`WHO ${channel} nuhs%nhuacr`);
             host = `*!*@${this[channel].users[nick].host}`;
         }
 
@@ -80,7 +81,7 @@ class ChannelDB extends dict {
     }
 
     flush() {
-        fs.writeFile('userdb.json', JSON.stringify(this, null, 2) + '\n', err => {
+        fs.writeFile(path.join(__dirname, '../userdb.json'), `${JSON.stringify(this, null, 2)}\n`, err => {
             if (err) {
                 log.error('An error was thrown while writing the user DB');
                 log.error(err.stack);

@@ -106,7 +106,7 @@
     "users": "393",
     "endofusers": "394",
     "nousers": "395",
-    "chghost": "396",
+    "hosthidden": "396",
     "nosuchnick": "401",
     "nosuchserver": "402",
     "nosuchchannel": "403",

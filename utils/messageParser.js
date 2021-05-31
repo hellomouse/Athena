@@ -1,4 +1,5 @@
 const { split } = require('node-python-funcs');
+const { Transform } = require('stream');
 
 /** Class that gets different values from a users hostmask */
 class User {
@@ -18,7 +19,7 @@ class User {
 }
 
 /** Class that parses messages and returns different information about it */
-class Parser {
+class IRCMessage {
 
     /**
     * @func
@@ -50,7 +51,7 @@ class Parser {
             tags = tags.slice(1).split(';'); // Let's find the tags!
 
             for (let tag of tags) {
-                if ('=' in tag) {
+                if (tag.includes('=')) {
                     tag = split(tag, '=', 1);
                     const tag_parsed = {};
 
@@ -62,7 +63,7 @@ class Parser {
             }
         }
 
-        if (raw_msg.indexOf(' :') > -1) { // Check to see if there are arguments
+        if (raw_msg.includes(' :')) { // Check to see if there are arguments
             [raw_msg, argument] = split(raw_msg, ' :', 1);
 
             /* [RECV] :BWBellairs!~bwbellair@botters/BWBellairs PRIVMSG ##Athena :Argument-1 Argument-2 Argument-3 etc
@@ -114,12 +115,12 @@ class Parser {
         }
 
         if (this.type === 'privmsg') {
-            let string_args = this.arguments.join(' ');
+            const string_args = this.arguments.join(' ');
 
             /* eslint-disable no-control-regex */
             if (string_args.startsWith('\x01ACTION')) {
                 this.command = 'ACTION';
-                this.arguments = string_args.replace(/\x01/g, '').split(' ');
+                this.arguments = string_args.replace(/\x01/g, '').split(' ').slice(1);
             } else if (string_args.startsWith('\x01')) {
                 this.command = 'CTCP';
                 this.arguments = string_args.replace(/\x01/g, '').split(' ');
@@ -130,5 +131,36 @@ class Parser {
     }
 }
 
+/** Stream-based IRC message parser */
+class Parser extends Transform {
+  /**
+   * Constructs a new Parser
+   * @param {Object} opts Options for the parser
+   * @param {String} opts.encoding The encoding for data coming in
+   */
+    constructor(opts) {
+        super({ readableObjectMode: true });
+        if (!opts) opts = {};
+        this.opts = opts;
+        this.encoding = opts.encoding || 'utf-8';
+        this._partialData = '';
+    }
+
+  /**
+   * Push data to the stream to be parsed
+   * @param {Buffer} data The data to process
+   * @param {String} encoding The encoding of the string
+   * @param {Function} callback Called when the chunk is processed
+   */
+    _transform(data, encoding, callback) {
+        data = this._partialData + data.toString(this.encoding);
+        let messages = data.split(/[\r\n]+/g);
+
+        this._partialData = messages.splice(-1, 1); // store partial line for later
+        messages = messages.filter(m => m !== '');
+        for (let message of messages) this.push(new IRCMessage(message));
+        callback(null);
+    }
+}
 
 module.exports = Parser;

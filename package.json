@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BWBellairs/Athena.git"
+    "url": "git+https://github.com/hellomouse/Athena.git"
   },
   "keywords": [
     "irc",
@@ -21,18 +21,20 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BWBellairs/Athena/issues"
+    "url": "https://github.com/hellomouse/Athena/issues"
   },
-  "homepage": "https://github.com/BWBellairs/Athena#readme",
+  "homepage": "https://github.com/hellomouse/Athena#readme",
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-google": "^0.9.1"
+    "@hellomouse/eslint-config-wolfy1339": "^1.3.0",
+    "eslint": "^7.27.0",
+    "eslint-plugin-jsdoc": "^35.1.0"
   },
   "dependencies": {
-    "node-python-funcs": "^0.0.5",
-    "winston": "^3.0.0-rc3"
+    "node-python-funcs": "^0.1.3",
+    "request": "^2.88.2",
+    "winston": "^3.3.3"
   },
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   }
 }

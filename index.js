@@ -2,6 +2,7 @@ const events = require('events');
 const socket = require('net');
 const tls = require('tls');
 const fs = require('fs');
+const path = require('path');
 
 const log = require('./utils/logging');
 const config = require('./utils/configHandler');
@@ -40,14 +41,14 @@ class Bot extends Core {
 
         if (this.config.ssl) {
             this.socket = tls.connect(this.config.irc.port, this.config.irc.host, {
-                localaddress: this.config.bindhost,
-                cert: this.config.sasl.cert,
-                key: this.config.sasl.key,
+                localAddress: this.config.bindhost,
+                cert: this.config.sasl.cert[0],
+                key: this.config.sasl.key[0],
                 passphrase: this.config.sasl.key_passphrase
             });
         } else {
             this.socket = socket.connect({
-                localaddress: this.config.bindhost,
+                localAddress: this.config.bindhost,
                 port: this.config.irc.port,
                 host: this.config.irc.host
             });
@@ -72,6 +73,7 @@ class Bot extends Core {
     * @function
     */
     connect() {
+        this.parser = new Parser();
         this.socket.once('connect', () => {
             log.info('Connected');
 
@@ -79,21 +81,18 @@ class Bot extends Core {
             this.send('CAP LS 302');
             this.send(`NICK ${this.config.nickname}`);
             this.send(`USER ${this.config.ident} * * :${this.config.realname}`);
-        });
+        }).pipe(this.parser).on('data', event => {
+            log.debug('[RECV] %s', strip_formatting(event.raw));
 
-        this.socket.on('data', recv => {
-            const parsed = recv.toString().split('\r\n');
-
-            for (let data of parsed) {
-                if (!data) continue; // Get rid of pesky new lines
-
-                const parse = new Parser(data);
-
-                log.debug('[RECV] %s', strip_formatting(data));
-
-                this.events.emit(parse.command, this.irc, parse);
-                this.events.emit('all', this.irc, parse);
+            try {
+                this.events.emit(event.command, this.irc, event);
+                this.events.emit('all', this.irc, event);
+            } catch (e) {
+                log.error(e.stack);
             }
+        }).on('error', err => {
+            log.error(err.stack);
+            this.socket.close();
         });
     }
 
@@ -101,13 +100,13 @@ class Bot extends Core {
 
 const clients = {};
 
-fs.readdir('config', (error, contents) => {
+fs.readdir(path.join(__dirname, 'config'), (error, contents) => {
     if (error) log.error('[FATAL] %s', error);
     else {
         for (let _ = 0; _ < contents.length; _++) {
             const configFile = contents[_];
 
-            clients[configFile] = new Bot(`./config/${configFile}`);
+            clients[configFile] = new Bot(path.join(__dirname, 'config', configFile));
             clients[configFile].connect();
         }
     }

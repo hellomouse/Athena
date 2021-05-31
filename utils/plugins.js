@@ -1,6 +1,7 @@
 const log = require('./logging');
 const { check_perms } = require('./permissions');
 const { readdir } = require('fs');
+const path = require('path');
 const { join } = require('path');
 
 /**
@@ -41,7 +42,7 @@ class Hooks {
      * @param  {object} event     Parser object
      */
     call_hook(hookStore, irc, event) {
-        for (let callback of hookStore) {
+        for (const callback of hookStore) {
             callback(irc, event);
         }
     }
@@ -83,7 +84,7 @@ class Hooks {
      * @param  {object} event Parser object
      */
     call_privmsg(irc, event) {
-        for (let checkMessage of Object.keys(this.privmsgHooks)) {
+        for (const checkMessage of Object.keys(this.privmsgHooks)) {
             if (event.arguments[0] === checkMessage) this.call_hook(this.privmsgHooks[checkMessage], irc, event);
         }
     }
@@ -95,8 +96,8 @@ class Hooks {
      * @param  {object} event Parser object
      */
     call_regex(irc, event) {
-        for (let regex of Object.keys(this.regexHooks)) {
-            let message = event.arguments[0];
+        for (const regex of Object.keys(this.regexHooks)) {
+            const message = event.arguments[0];
 
             if (message.match(new RegExp(regex))) this.call_hook(this.regexHooks[regex], irc, event);
         }
@@ -109,7 +110,7 @@ class Hooks {
      * @param  {object} event Parser object
      */
     call_includes(irc, event) {
-        for (let includesString of Object.keys(this.includesHooks)) {
+        for (const includesString of Object.keys(this.includesHooks)) {
             if (event.arguments[0].includes(includesString))
                 this.call_hook(this.includesHooks[includesString], irc, event);
         }
@@ -141,29 +142,46 @@ class Plugins {
     */
     constructor(bot) {
         this.hooks = new Hooks();
-        this.plugins = {};
+        this.commands = {};
 
         this.bot = bot;
         this.categories = [];
+        this.loadPluginDir();
+    }
 
-        readdir('./plugins', (err, files) => {
-            for (let file of files) {
-                const plugin = require('../' + join('plugins', file));
+    /**
+    * Loads all plugins from the plugin directory
+    */
+    loadPluginDir() {
+        readdir(path.join(__dirname, '..', 'plugins'), (err, files) => {
+            if (err) return;
+            for (const file of files) {
+                if (!file.endsWith('.js')) continue; // Don't attempt to load other files and folders
+                const plugin = require(join('..', 'plugins', file));
 
-                for (let cmd of Object.keys(plugin)) {
-                    if (cmd === 'main') {
-                        plugin.main(bot, this.hooks);
-                        continue;
-                    }
-                    this.set_defaults(plugin[cmd]);
-                    this.add_cmd(cmd, plugin[cmd]);
-
-                    if (!this.categories.includes(plugin[cmd].opts.category)) {
-                        this.categories.push(plugin[cmd].opts.category);
-                    }
-                }
+                this.loadPlugin(plugin);
             }
         });
+    }
+
+    /**
+    * Loads a specific plugin
+    * @func
+    * @param {object} plugin - The module object
+    */
+    loadPlugin(plugin) {
+        for (const cmd of Object.keys(plugin)) {
+            if (cmd === 'main') {
+                plugin.main(this.bot, this.hooks);
+                continue;
+            }
+            this.set_defaults(plugin[cmd]);
+            this.add_cmd(cmd, plugin[cmd]);
+
+            if (!this.categories.includes(plugin[cmd].opts.category)) {
+                this.categories.push(plugin[cmd].opts.category);
+            }
+        }
     }
 
     /**
@@ -172,7 +190,7 @@ class Plugins {
     * @param {function} cmd
     */
     set_defaults(cmd) {
-        let opts = cmd.opts;
+        const opts = cmd.opts;
 
         opts.restrictions = getDefault(opts, 'restrictions', {});
         opts.category = getDefault(opts, 'category', 'general');
@@ -202,9 +220,9 @@ class Plugins {
     * @param {function} func
     */
     add_cmd(name, func) {
-        this.plugins[name] = func;
-        for (let alias of func.opts.aliases) {
-            this.plugins[alias] = func;
+        this.commands[name] = func;
+        for (const alias of func.opts.aliases) {
+            this.commands[alias] = func;
         }
     }
 
@@ -216,10 +234,10 @@ class Plugins {
     */
     call_command(event, irc, args) {
         irc.send = this.bot._send;
-        if (this.plugins[args[0]] !== undefined) {
+        if (this.commands[args[0]] !== undefined) {
             try {
-                let cmd = this.plugins[args[0]];
-                let { perms, min_args } = cmd.opts;
+                const cmd = this.commands[args[0]];
+                const { perms, min_args } = cmd.opts;
 
                 if (check_perms(this.bot.config, event.source.host, event.target, perms)) {
                     if (args.length >= min_args) {
@@ -238,8 +256,6 @@ class Plugins {
             } catch (e) {
                 log.error(e.stack);
             }
-        } else {
-            irc.notice(event.source.nick, `Invalid Command: ${args[0]}`);
         }
     }
 }

@@ -5,20 +5,6 @@ const Plugins = require('./utils/plugins');
 const { strip_formatting } = require('./utils/general');
 const FloodProtection = require('./utils/flood-protection');
 
-/* eslint-disable no-extend-native, no-invalid-this */
-Array.prototype.remove = function(index) {
-    if (typeof index !== 'number') new TypeError('index Should be a number');
-    let new_array = [];
-
-    for (let i=0; i < this.length; i++) {
-        if (i === index) continue;
-        new_array.push(this[i]);
-    }
-
-    return new_array;
-};
-/* eslint-enable no-extend-native, no-invalid-this */
-
 /**
 * @func
 * @param {object} thing
@@ -55,9 +41,10 @@ class Core {
         this.plugins = new Plugins(this);
 
         this.on_error = (irc, event) => {
-            if (event.arguments.join(' ').indexOf('Closing link') === -1)
+            if (!event.arguments.join(' ').includes('Closing link')) {
                 irc.privmsg('##Athena', 'An error occured, check the console. !att-Athena-admins');
-            log.error(event.arguments.join(' '));
+                log.error(event.arguments.join(' '));
+            }
         };
 
         this.on_ping = irc => {
@@ -69,6 +56,7 @@ class Core {
             this.nickname = this.nickname.concat('_');
             irc.nick(this.nickname);
         };
+        this.on_unavailresource = this.on_nicknameinuse;
 
         this.on_welcome = (irc, event) => {
             Object.keys(this.config.channels).forEach(channel => {
@@ -77,12 +65,12 @@ class Core {
         };
 
         this.on_join = (irc, event) => {
-            let channel = event.target;
-            let args = event.arguments;
+            const channel = event.target;
+            const args = event.arguments;
 
             if (event.source.nick === this.nickname) {
                 log.info('Joining %s', channel);
-                if (!this.state.channels.hasOwnProperty(channel)) {
+                if (!Object.prototype.hasOwnProperty.call(this.state.channels, channel)) {
                     log.debug('Created db for channel %s', channel);
                     this.state.channels[channel] = new Dict({
                         users: {},
@@ -99,9 +87,9 @@ class Core {
             } else {
                 // Extended join methods
                 if (args.length > 0) {
-                    let nick = event.source.nick;
-                    let hostmask = event.source.userhost;
-                    let account = args[0] !== '*' ? args[0] : null;
+                    const nick = event.source.nick;
+                    const hostmask = event.source.userhost;
+                    const account = args[0] !== '*' ? args[0] : null;
 
                     this.state.channels.add_entry(channel, nick, hostmask, account);
                 }
@@ -111,17 +99,36 @@ class Core {
             }
         };
 
-        this.on_name = (irc, event) => {
+        this.on_part = (irc, event) => {
+            if (event.source.nick === this.nickname) {
+                if (event.args[0].startsWith('requested by')) {
+                    log.info('Ninja\'d from channel %s, rejoining.', event.target);
+                    irc.join(event.target);
+                } else {
+                    log.info('Left channel %s', event.target);
+                }
+            }
+        };
+
+        this.on_namereply = (irc, event) => {
             const channel = event.arguments[1];
             const users = event.arguments[2].split(' ');
 
-            for (let i of users) {
+            for (const i of users) {
                 let user;
 
-                if (i.startsWith('@+')) {
+                const prefixes = Object.keys(this.server.prefixes);
+
+                if (i.startsWith(prefixes.join(''))) {
                     user = i.slice(2);
-                } else if (i.startsWith('@') || i.startsWith('+')) {
+                    const modes = [this.server.prefixes[i[0]].mode, this.server.prefixes[i[1]].mode];
+
+                    this.channels[channel].users[user] ||= new Dict({ modes: [] });
+                    this.channels[channel].users[user].modes.push(...modes);
+                } else if (prefixes.includes(i[0])) {
                     user = i.slice(1);
+                    this.channels[channel].users[user] ||= new Dict({ modes: [] });
+                    this.channels[channel].users[user].modes.push(this.server.prefixes[i[0]].mode);
                 } else {
                     user = i;
                 }
@@ -133,12 +140,11 @@ class Core {
         };
 
         this.on_whospcrpl = (irc, event) => {
-            let nick = event.arguments[3];
+            const nick = event.arguments[3];
 
             if (nick !== 'ChanServ') {
-                let args = [...event.arguments.slice(0, 3), ...event.arguments.slice(4)];
-                let [channel, ident, host, account, realname] = args;
-                let hostmask = `${nick}!${ident}@${host}`;
+                let [channel, ident, host, , account, realname] = event.arguments;
+                const hostmask = `${nick}!${ident}@${host}`;
 
                 account = account !== '0' ? account : null;
                 if (this.nextWHOChannel) channel = channel !== this.nextWHOChannel ? this.nextWHOChannel : channel;
@@ -152,14 +158,20 @@ class Core {
         };
 
         this._update_user_modes = (irc, event, mode) => {
-            let [channel, user] = arguments.slice(0, 2);
+            let [channel, user] = event.arguments.slice(0, 2);
             // let [channel, user, setby, timestamp] = event.arguments;
 
             if (user.startsWith('$a:')) {
                 user = user.slice(3);
                 this.channels[channel].users[user].modes.push(mode);
             } else {
-                this.channels[channel].users[user].modes.push(mode);
+                const re = new RegExp(user.replace(/\*/g, '.+'));
+                const users = this.channels[channel].users.key().filter(x => {
+                    return re.test(this.channels[channel].users[x].hostmask);
+                });
+
+                for (const u of users)
+                    this.channels[channel].users[u].modes.push(mode);
             }
         };
 
@@ -173,8 +185,8 @@ class Core {
             this.channels.change_attr(event.source.nick, 'account', event.target === '*' ? null : event.target);
         };
 
-        this.on_chghost = (irc, event) => {
-            let args = event.arguments;
+        this.on_CHGHOST = (irc, event) => {
+            const args = event.arguments;
 
             if (args.length) {
                 this.channels.change_attr(event.source.nick, 'ident', event.target);
@@ -198,12 +210,29 @@ class Core {
         this.on_nick = (irc, event) => {
             if (event.source.nick === this.nickname) {
                 this.nickname = event.arguments[0];
+            } else {
+                const nick = event.source.nick;
+                const to_nick = event.arguments[0];
+
+                for (const chan of this.channels.keys()) {
+                    const chandb = this.channels[chan].users;
+
+                    for (const user of chandb.values()) {
+                        if (user.host === event.source.host) {
+                            this.channels[chan].users[to_nick] = chandb[nick];
+                            this.channels[chan].users[to_nick].hostmask = event.source;
+                            delete this.channels[chan].users[nick];
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
         };
 
         this.on_privmsg = (irc, event) => {
-            let args = event.arguments.join(' ').split(' '); // Split arguments by spaces
-            let prefix = this.config.prefix || '';
+            const args = event.arguments.join(' ').split(' '); // Split arguments by spaces
+            const prefix = this.config.prefix || '';
 
             if (args[0].startsWith(prefix)) {
                 args[0] = args[0].slice(prefix.length);
@@ -222,17 +251,19 @@ class Core {
             this.plugins.hooks.call_includes(irc, event);
         };
 
+        this.events.on('PRIVMSG', (irc, event) => {
+            if (event.target === '##Athena-git' && event.source.nick === 'Athena[Git]') {
+                irc.privmsg('##Athena', event.args.join(' '));
+            }
+        });
+
         this._get_time = tags => {
             let timestamp;
 
             if (tags.length) {
-                for (let i of tags) {
-                    if (i['time'] !== undefined) {
-                        timestamp = Date.parse(i['time']);
-                    } else {
-                        continue;
-                    }
-                }
+                const timeTag = tags.filter(tag => tag.time !== undefined)[0];
+
+                timestamp = timeTag ? Date.parse(timeTag['time']) : Date.now();
             } else {
                 timestamp = Date.now();
             }
@@ -241,15 +272,15 @@ class Core {
         };
 
         this._update_seen_db = (event, irc, nick, str_args) => {
-            let timestamp = this._get_time(event.tags);
-            let udb = this.channels[event.target].users[nick];
+            const timestamp = this._get_time(event.tags);
+            const udb = this.channels[event.target].users[nick];
 
             if (udb !== undefined) {
                 if (udb.seen === null || udb.seen === undefined)
                     udb.seen = [];
                 udb.seen.push({ time: timestamp, message: strip_formatting(str_args) });
 
-                udb.seen.sort((a, b)=> a.time > b.time);
+                udb.seen.sort((a, b) => a.time > b.time);
                 udb.seen = udb.seen.slice(-5);
             } else {
                 this.send(`WHO ${event.target} nuhs%nhuacr`);
@@ -258,7 +289,7 @@ class Core {
 
         this.on_ctcp = (irc, event) => {
             if (hasattr(this, 'ctcp')) {
-                let ctcp_message = ' '.join(event.arguments).toUpperCase();
+                const ctcp_message = ' '.join(event.arguments).toUpperCase();
 
                 if (Object.keys(this.ctcp).includes(ctcp_message)) {
                     let result;
@@ -275,20 +306,20 @@ class Core {
         };
 
         this.on_featurelist = (irc, event) => {
-            for (let param of event.arguments.slice(0, -1)) {
-                let [name, value] = partition(param, '=').remove(1);
+            for (const param of event.arguments.slice(0, -1)) {
+                let [name, , value] = partition(param, '=');
 
                 if (!Object.keys(this.ISUPPORT).includes(name)) {
                     this.ISUPPORT[name] = {};
                 }
                 if (value !== '') {
-                    if (value.indexOf(',') > -1) {
-                        for (let param1 of value.split(',')) {
-                            if (value.indexOf(')') > -1) {
+                    if (value.includes(',')) {
+                        for (const param1 of value.split(',')) {
+                            if (value.includes(')')) {
                                 let name1, value1;
 
-                                if (param1.indexOf(')') > -1) {
-                                    [name1, value1] = partition(param1, ':').remove(1);
+                                if (param1.includes(')')) {
+                                    [name1, , value1] = partition(param1, ':');
                                 }
                                 this.ISUPPORT[name][name1] = value1;
                             } else {
@@ -304,8 +335,8 @@ class Core {
 
                             value = value.split(')');
                             value[0] = value[0].replace('(', '');
-                            let types = value[0].split(new RegExp('^(.*o)(.*h)?(.*)$')).slice(1, -1);
-                            let levels = {
+                            const types = value[0].split(new RegExp('^(.*o)(.*h)?(.*)$')).slice(1, -1);
+                            const levels = {
                                 op: types[0],
                                 halfop: types[1] || '',
                                 voice: types[2]
@@ -313,13 +344,13 @@ class Core {
 
                             this.server.prefixes = {};
 
-                            for (let mode of value[0]) {
-                                let name1 = mode;
-                                let value1 = value[1][count];
+                            for (const mode of value[0]) {
+                                const name1 = mode;
+                                const value1 = value[1][count];
 
                                 count += 1;
-                                for (let level of Object.entries(levels)) {
-                                    if (level[1].indexOf(mode) > -1) {
+                                for (const level of Object.entries(levels)) {
+                                    if (level[1].includes(mode)) {
                                         this.server.prefixes[value1] = {
                                             mode: mode,
                                             level: level[0]
@@ -333,8 +364,8 @@ class Core {
                             this.ISUPPORT[name] = value;
                         }
                     }
-                } else if (value.indexOf(')') > -1) {
-                    let [name1, value1] = value.split(':');
+                } else if (value.includes(')')) {
+                    const [name1, value1] = value.split(':');
 
                     this.ISUPPORT[name][name1] = value1;
                 } else {
@@ -343,10 +374,17 @@ class Core {
             }
         };
 
-        for (let i of Object.keys(this)) {
+        this.on_kick = (irc, event) => {
+            if (event.args[0] === this.nickname) {
+                log.info('Kicked from %s, rejoining', event.args[0]);
+                irc.join(event.target);
+            }
+        };
+
+        for (const i of Object.keys(this)) {
             if (i.startsWith('on_')) {
-                let names = require('./resources/names.json');
-                let name = i.split('on_')[1];
+                const names = require('./resources/names.json');
+                const name = i.split('on_')[1];
 
                 this.events.on(names[name] || name.toUpperCase(), this[i]);
             }
@@ -359,6 +397,7 @@ class Core {
     * @param {string} message - The message you want to send
     */
     immediateSend(message) {
+        if (!message) return;
         this.socket.write(`${message}\r\n`);
         log.debug('[SENT] %s', strip_formatting(message));
     }
