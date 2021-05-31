@@ -1,5 +1,6 @@
 const { range } = require('node-python-funcs');
 const { chunks } = require('./utils/general');
+const colors = require('./utils/colors');
 
 /** Class that provides methods for IRC commands */
 class ConnectionWrapper {
@@ -25,27 +26,31 @@ class ConnectionWrapper {
     * @func
     * @param {object} event - The event object created when parsing the incoming messages.
     * @param {string} message - The message you wish to reply with.
+    * @param {string} [background=null]
+    * @param {boolean} [rainbow=false]
+    * @param {string} [style=null]
     */
-    reply(event, message) {
-        if (event.target === this.bot.nickname) {
-            this.privmsg(event.source.nick, message);
-        } else {
-            this.privmsg(event.target, message);
-        }
+    reply(event, message, background=null, rainbow=false, style=null) {
+        let isPRIVMSG = event.target === this.bot.nickname;
+
+        this.privmsg(isPRIVMSG ? event.source.nick : event.target, message, background, rainbow, style);
     }
 
     /**
     * @func
     * @param {string} target - The user or channel you wish to send a PRIVMSG to.
     * @param {string} message - The message you wish to send.
+    * @param {string} [background=null]
+    * @param {boolean} [rainbow=false]
+    * @param {string} [style=null]
     */
-    privmsg(target, message) {
+    privmsg(target, message, background=null, rainbow=false, style=null) {
         const channel = target.startsWith('#') ? target : this.bot.state.channels.keys()[0];
         const db = this.bot.state.channels[channel].users[this.bot.nickname];
         // The maximum length for messages is 512 bytes total including nick, ident & host
         const MAXLEN = 512 - 2 - Buffer.byteLength(db.hostmask); // 1 for beggining double colon
         const MSGLEN = MAXLEN - Buffer.byteLength(`PRIVMSG ${target} :\r\n`);
-        const msg = Buffer.from(message);
+        const msg = Buffer.from(colors.addStyling(message, background, rainbow, style));
 
         for (const i of range(0, msg.byteLength, MSGLEN)) {
             this.bot.send(`PRIVMSG ${target} :${msg.slice(i, i + MSGLEN).toString()}`);
